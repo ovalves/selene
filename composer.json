@@ -1,0 +1,32 @@
+{
+    "name": "vindite/vindite",
+    "description": "simple microframework",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vinicius Oliveira",
+            "email": "vinicius_o.a@live.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Vindite\\": "src/Vindite"
+        }
+    },
+    "keywords": [
+        "framework",
+        "middleware",
+        "psr",
+        "psr-7",
+        "psr-11",
+        "psr-15"
+    ],
+    "require": {
+        "php": "^7.2",
+        "fig/http-message-util": "^1.1.2",
+        "psr/container": "^1.0",
+        "psr/http-message": "^1.0.1",
+        "psr/http-server-middleware": "^1.0"
+    }
+}
