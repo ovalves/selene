@@ -14,15 +14,15 @@ class Logger
      * Define o nome do arquivo de logs
      */
     const LOGGER_FILENAME = '/log/app.log';
-    
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        file_put_contents(self::LOGGER_FILENAME, '');
+        \file_put_contents(self::LOGGER_FILENAME, '');
     }
-    
+
     /**
      * Escreve uma linha no arquivo de log
      *
@@ -31,13 +31,13 @@ class Logger
      */
     public function write($message) : void
     {
-        date_default_timezone_set('America/Sao_Paulo');
+        \date_default_timezone_set('America/Sao_Paulo');
         $time = date("Y-m-d H:i:s");
-            
+
         $text = "$time :: $message\n";
-                
-        $handler = fopen(self::LOGGER_FILENAME, 'a');
-        fwrite($handler, $text);
-        fclose($handler);
+
+        $handler = \fopen(self::LOGGER_FILENAME, 'a');
+        \fwrite($handler, $text);
+        \fclose($handler);
     }
 }

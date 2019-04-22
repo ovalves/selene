@@ -33,7 +33,7 @@ final class Delete extends GrammarAbstract
         $this->checkTable();
         $where = $this->getWhere();
 
-        $stringSql = str_replace(
+        $stringSql = \str_replace(
             [
                 '__TABLENAME__',
                 '__WHERE__'

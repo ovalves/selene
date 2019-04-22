@@ -13,6 +13,7 @@ use Vindite\Database\Builder\Where;
 use Vindite\Database\Builder\Join;
 use Vindite\Database\Builder\Group;
 use PDOStatement;
+use Vindite\Database\DatabaseException;
 
 /**
  * Responsavel por disponibilizar os métodos comuns entre as classes de builder de query
@@ -109,7 +110,7 @@ abstract class GrammarAbstract
      */
     final public function table(string $table) : self
     {
-        $this->table = addslashes($table);
+        $this->table = \addslashes($table);
         return $this;
     }
 
@@ -151,10 +152,10 @@ abstract class GrammarAbstract
     final public function checkFields() : bool
     {
         if (empty($this->fields)) {
-            throw new \Exception("Erro ao processar a query os campos não podem ser vazios");
+            throw new DatabaseException("Erro ao processar a query os campos não podem ser vazios");
         }
 
-        if (is_array($this->fields)) {
+        if (\is_array($this->fields)) {
             $this->prepare($this->fields);
             return true;
         }
@@ -171,7 +172,7 @@ abstract class GrammarAbstract
     final public function checkTable() : void
     {
         if (empty($this->table)) {
-            throw new \Exception("Tabela não encontrada", 500);
+            throw new DatabaseException("Tabela não encontrada", 500);
         }
     }
 
@@ -185,14 +186,14 @@ abstract class GrammarAbstract
     {
         $prepared = [];
         foreach ($data as $key => $value) {
-            if (is_scalar($value)) {
-                $this->bindParam[] = str_pad($key, strlen($key) + 1, ':', STR_PAD_LEFT);
+            if (\is_scalar($value)) {
+                $this->bindParam[] = \str_pad($key, \strlen($key) + 1, ':', STR_PAD_LEFT);
                 $this->values[] = $this->escape($value);
                 $prepared[$key] = $this->escape($key);
             }
         }
 
-        $this->fields = array_keys($prepared);
+        $this->fields = \array_keys($prepared);
     }
 
     /**
@@ -203,15 +204,15 @@ abstract class GrammarAbstract
      */
     protected function escape($value)
     {
-        if (!is_scalar($value)) {
+        if (!\is_scalar($value)) {
             return "null";
         }
 
-        if (is_string($value) and (!empty($value))) {
-            return addslashes($value);
+        if (\is_string($value) and (!empty($value))) {
+            return \addslashes($value);
         }
 
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value ? 'true': 'false';
         }
 

@@ -10,6 +10,7 @@ namespace Vindite\Database;
 
 use PDO;
 use Vindite\Database\Connection;
+use Vindite\Database\DatabaseException;
 
 /**
  * Responsável por executar as transações com a base de dados
@@ -41,7 +42,7 @@ final class Transaction
     public function open() : PDO
     {
         if (empty($this->connection)) {
-            throw new Exception("Error Processing Request", 1);
+            throw new DatabaseException("Não há conexão ativa");
         }
 
         if ($this->connection instanceof PDO) {
@@ -66,7 +67,7 @@ final class Transaction
     public function rollback() : void
     {
         if (!$this->connection) {
-            throw new Exception("Error Processing Request", 1);
+            throw new DatabaseException("Não há conexão ativa");
         }
 
         $this->connection->rollback();
@@ -79,7 +80,7 @@ final class Transaction
     public function close() : void
     {
         if (!$this->connection) {
-            throw new Exception("Error Processing Request", 1);
+            throw new DatabaseException("Não há conexão ativa");
         }
 
         $this->connection->commit();

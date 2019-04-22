@@ -9,8 +9,6 @@
 namespace Vindite\Container;
 
 use Psr\Container\ContainerInterface;
-use Throwable;
-use function class_exists;
 use Vindite\Container\ContainerException;
 
 /**
@@ -90,7 +88,7 @@ class Container implements ContainerInterface
                     continue;
                 }
 
-                if (!is_array($value) && class_exists($value)) {
+                if (!\is_array($value) && \class_exists($value)) {
                     $this->dependencies[$key] = new $value;
                     continue;
                 }
@@ -100,7 +98,7 @@ class Container implements ContainerInterface
 
             $this->containers[$this->prefix] = new $container(...$this->dependencies);
             return $this->containers[$this->prefix];
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw new ContainerException($e->getMessage(), $e->getCode());
         }
     }

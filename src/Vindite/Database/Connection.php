@@ -9,7 +9,7 @@
 namespace Vindite\Database;
 
 use PDO;
-use Exception;
+use Vindite\Database\DatabaseException;
 
 /**
  * Responsável por criar uma conexão com a base de dados
@@ -23,16 +23,16 @@ final class Connection
      */
     public function open(string $configFile) : PDO
     {
-        if (!file_exists("App/Config/{$configFile}.ini")) {
-            throw new Exception(
-                sprintf(
+        if (!\file_exists("App/Config/{$configFile}.ini")) {
+            throw new DatabaseException(
+                \sprintf(
                     "O arquivo de configuração (%s) de base de dados não foi encontrado",
                     $configFile
                 )
             );
         }
 
-        $configFile = parse_ini_file("App/Config/{$configFile}.ini");
+        $configFile = \parse_ini_file("App/Config/{$configFile}.ini");
 
         // lê as informações contidas no arquivo
         $user = isset($configFile['user']) ? $configFile['user'] : null;

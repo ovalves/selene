@@ -9,11 +9,6 @@
             "email": "vinicius_o.a@live.com"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "Vindite\\": "src/Vindite"
-        }
-    },
     "keywords": [
         "framework",
         "middleware",

@@ -36,12 +36,12 @@ final class Update extends GrammarAbstract
         $where = $this->getWhere();
         $join  = $this->getJoin();
 
-        $bindParams = array_merge(
+        $bindParams = \array_merge(
             $this->getBindUpdateValues(),
             $where->getWherePayload()
         );
 
-        $stringSql = str_replace(
+        $stringSql = \str_replace(
             [
                 '__TABLENAME__',
                 '__JOIN__',
@@ -76,7 +76,7 @@ final class Update extends GrammarAbstract
      */
     private function makeSetClause() : string
     {
-        $setClauses = array_combine($this->fields, $this->bindParam);
+        $setClauses = \array_combine($this->fields, $this->bindParam);
 
         $setString = '';
         foreach ($setClauses as $key => $value) {
@@ -96,6 +96,6 @@ final class Update extends GrammarAbstract
      */
     private function getBindUpdateValues() : array
     {
-        return array_combine($this->bindParam, $this->values);
+        return \array_combine($this->bindParam, $this->values);
     }
 }

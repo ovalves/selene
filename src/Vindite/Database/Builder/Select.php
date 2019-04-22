@@ -38,7 +38,7 @@ final class Select extends GrammarAbstract
         $join  = $this->getJoin();
         $group = $this->getGroup();
 
-        $stringSql = str_replace(
+        $stringSql = \str_replace(
             [
                 '__FIELDS__',
                 '__TABLENAME__',

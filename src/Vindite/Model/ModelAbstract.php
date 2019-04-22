@@ -25,7 +25,7 @@ abstract class ModelAbstract
      */
     public function getEntity() : string
     {
-        $class = get_class($this);
-        return constant("{$class}::TABLENAME");
+        $class = \get_class($this);
+        return \constant("{$class}::TABLENAME");
     }
 }

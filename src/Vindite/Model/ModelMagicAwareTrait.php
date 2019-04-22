@@ -25,8 +25,8 @@ trait ModelMagicAwareTrait
     protected function __set($prop, $value)
     {
         $calledMethod = $this->parseMagicMethodName('set', $prop);
-        if (method_exists($this, $calledMethod)) {
-            return call_user_func(array($this, $calledMethod), $value);
+        if (\method_exists($this, $calledMethod)) {
+            return \call_user_func([$this, $calledMethod], $value);
         }
 
         $this->changeProperty($prop, $value);
@@ -40,11 +40,11 @@ trait ModelMagicAwareTrait
     protected function __get($prop)
     {
         $calledMethod = $this->parseMagicMethodName('get', $prop);
-        if (method_exists($this, $calledMethod)){
-            return call_user_func(array($this, $calledMethod));
+        if (\method_exists($this, $calledMethod)) {
+            return \call_user_func([$this, $calledMethod]);
         }
 
-        if (isset($this->data[$prop])){
+        if (isset($this->data[$prop])) {
             return $this->data[$prop];
         }
     }
@@ -68,7 +68,7 @@ trait ModelMagicAwareTrait
      */
     protected function parseMagicMethodName(string $type, string $prop) : string
     {
-        return lcfirst($type).ucfirst($prop);
+        return \lcfirst($type).\ucfirst($prop);
     }
 
     /**
@@ -81,7 +81,7 @@ trait ModelMagicAwareTrait
      */
     protected function changeProperty($prop, $value) : bool
     {
-        if (is_null($value)) {
+        if (\is_null($value)) {
             unset($this->data[$prop]);
             return false;
         }

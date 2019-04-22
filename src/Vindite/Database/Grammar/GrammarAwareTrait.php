@@ -21,7 +21,7 @@ trait GrammarAwareTrait
      * @var array
      */
     protected $grammar = [
-        DatabaseConstant::INSERT   => 'INSERT INTO __TABLENAME__ ( __FIELDS__ ) VALUES ( __VALUES__ )',
+        DatabaseConstant::INSERT => 'INSERT INTO __TABLENAME__ ( __FIELDS__ ) VALUES ( __VALUES__ )',
         DatabaseConstant::SELECT => 'SELECT __FIELDS__ FROM __TABLENAME__ __JOIN__ __WHERE__ __GROUP__',
         DatabaseConstant::UPDATE => 'UPDATE __TABLENAME__ __JOIN__ SET __FIELDS__ __WHERE__',
         DatabaseConstant::DELETE => 'DELETE FROM __TABLENAME__ __WHERE__',

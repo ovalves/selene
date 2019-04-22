@@ -32,7 +32,7 @@ final class Insert extends GrammarAbstract
         $this->checkFields();
         $this->checkTable();
 
-        $stringSql = str_replace(
+        $stringSql = \str_replace(
             [
                 '__TABLENAME__',
                 '__FIELDS__',
@@ -40,8 +40,8 @@ final class Insert extends GrammarAbstract
             ],
             [
                 $this->table,
-                implode(',', $this->fields),
-                implode(',', $this->bindParam)
+                \implode(',', $this->fields),
+                \implode(',', $this->bindParam)
             ],
             $this->grammar[DatabaseConstant::INSERT]
         );
@@ -51,7 +51,7 @@ final class Insert extends GrammarAbstract
         }
 
         $stmt = $this->transaction->open()->prepare($stringSql);
-        if (!$stmt->execute(array_combine($this->bindParam, $this->values))) {
+        if (!$stmt->execute(\array_combine($this->bindParam, $this->values))) {
             throw new GrammarException("Erro ao executar o statement");
         }
 

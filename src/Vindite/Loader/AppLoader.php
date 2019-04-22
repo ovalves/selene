@@ -23,7 +23,7 @@ class AppLoader
      * @var array
      */
     protected $directories;
-    
+
     /**
      * Adiciona um diretório a a fila de diretórios
      */
@@ -31,15 +31,15 @@ class AppLoader
     {
         $this->directories[] = $directory;
     }
-    
+
     /**
      * Inicia o finder para encontrar os diretórios da aplicação
      */
     public function load()
     {
-        spl_autoload_register([$this, 'finder']);
+        \spl_autoload_register([$this, 'finder']);
     }
-    
+
     /**
      * Procura uma classe da aplicação e carrega
      */
@@ -48,9 +48,9 @@ class AppLoader
         if (empty($this->directories)) {
             return false;
         }
-        
-        if (!array_walk($this->directories, [$this, 'finderClassInDirectory'], $class)) {
-            array_walk_recursive($this->directories, [$this, 'finderRecursiveInDirectory'], $class);
+
+        if (!\array_walk($this->directories, [$this, 'finderClassInDirectory'], $class)) {
+            \array_walk_recursive($this->directories, [$this, 'finderRecursiveInDirectory'], $class);
         }
     }
 
@@ -68,7 +68,7 @@ class AppLoader
             return false;
         }
 
-        if (file_exists("{$directory}/{$class}.php")) {
+        if (\file_exists("{$directory}/{$class}.php")) {
             require_once "{$directory}/{$class}.php";
             return true;
         }
@@ -95,16 +95,16 @@ class AppLoader
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        if (!file_exists($recursiveDirectory)) {
+        if (!\file_exists($recursiveDirectory)) {
             return false;
         }
 
         foreach ($recursiveDirectory as $entry) {
-            if (!is_dir($entry)) {
+            if (!\is_dir($entry)) {
                 return false;
             }
 
-            if (!file_exists("{$entry}/{$class}.php")) {
+            if (!\file_exists("{$entry}/{$class}.php")) {
                 return false;
             }
 

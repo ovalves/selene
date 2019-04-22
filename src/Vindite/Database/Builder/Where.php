@@ -62,30 +62,30 @@ final class Where
                 $evaluate = $this->checkGrammarEvaluate($clause);
                 $demand   = $this->checkGrammarDemand($clause);
                 $this->checkGrammarBind($clause);
- 
-                if (is_string($demand)) {
-                    $parsedDemand = str_pad($demand, strlen($demand) + 1, ':', STR_PAD_LEFT);
+
+                if (\is_string($demand)) {
+                    $parsedDemand = \str_pad($demand, \strlen($demand) + 1, ':', STR_PAD_LEFT);
                 }
 
                 $this->whereString .= "{$demand}{$evaluate}{$parsedDemand}";
                 $this->dataPayload[$demand] = $data;
             }
-            
-            if (next($where)) {
-                $this->whereString .= " AND "; 
+
+            if (\next($where)) {
+                $this->whereString .= " AND ";
             }
         }
     }
 
     /**
      * Verifica se foi passado um tipo valido de avaliação na clausula where
-     * 
+     *
      * @param string $clause
      * @return string
      */
     protected function checkGrammarEvaluate($clause) : string
     {
-        preg_match('/(=|!=|in|not in|<>|>|<|\?){1}/', $clause, $grammarClause);
+        \preg_match('/(=|!=|in|not in|<>|>|<|\?){1}/', $clause, $grammarClause);
         if (!$grammarClause[0]) {
             throw new GrammarException("Error Processing Request");
         }
@@ -101,7 +101,7 @@ final class Where
      */
     protected function checkGrammarDemand($clause) : string
     {
-        preg_match('/^([\w\-]+)/', $clause, $grammarDemand);
+        \preg_match('/^([\w\-]+)/', $clause, $grammarDemand);
         if (!$grammarDemand[0]) {
             throw new GrammarException("Error Processing Request");
         }
@@ -117,7 +117,7 @@ final class Where
      */
     protected function checkGrammarBind($clause) : string
     {
-        preg_match('/(\?{1})$/', $clause, $grammarBind);
+        \preg_match('/(\?{1})$/', $clause, $grammarBind);
         if (!$grammarBind[0]) {
             throw new GrammarException("Error Processing Request");
         }
