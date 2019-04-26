@@ -48,4 +48,4 @@ Please see https://github.com/vindite/vindite-skeleton for more examples.
 
 ## License
 
-The Vindite Microframework is licensed under the MIT license. See [License File](LICENSE.md) for more information.
+The Vindite Microframework is licensed under the MIT license. See [License File](LICENSE) for more information.
