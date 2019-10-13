@@ -74,14 +74,15 @@ trait RouteAwareTrait
     public function resolveResourceArgument(string $routeResource, string $calledResource) : bool
     {
         if (empty($routeResource)) {
-            throw new RouteException("Error Processing Request", 1);
+            throw new RouteException("O recurso solicitado não existe", 404);
         }
 
         if (empty($calledResource)) {
-            throw new RouteException("Error Processing Request", 1);
+            throw new RouteException("O recurso solicitado não existe", 404);
         }
 
         preg_match_all('/(\{\w+\})/', $routeResource, $matches);
+
         if (empty($matches[0])) {
             return $routeResource === $calledResource;
         }

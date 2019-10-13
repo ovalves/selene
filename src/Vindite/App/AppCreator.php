@@ -38,6 +38,16 @@ final class AppCreator
     const REQUEST = 'request';
 
     /**
+     * Define o container de autenticação
+     */
+    const AUTH = 'auth';
+
+    /**
+     * Define o container da sessão
+     */
+    const SESSION = 'session';
+
+    /**
      * Define  container da view
      */
     const VIEW = 'view';
@@ -83,21 +93,20 @@ final class AppCreator
         $this->makeRequest();
         $this->makeMiddleware();
         $this->makeRouter();
+        $this->makeSession();
+        $this->makeAuth();
         $this->makeView();
         $this->injectAppRootPathOnView();
         $this->injectViewOnRouterDispatcher();
     }
 
     /**
-     * Criando o container da request
+     * Criando o container da request e suas dependencias
      *
      * @return void
      */
     private function makeRequest() : void
     {
-        /**
-         * Criando o container da request e suas dependencias
-         */
         self::container(self::REQUEST)->set(
             \Vindite\Request\Request::class,
             [
@@ -120,7 +129,7 @@ final class AppCreator
     }
 
     /**
-     * Criando o container da view
+     * Criando o container da view e suas dependencias
      *
      * @return void
      */
@@ -145,6 +154,36 @@ final class AppCreator
             [
                 self::container()->get(self::REQUEST),
                 self::container()->get(self::MIDDLEWARE)
+            ]
+        );
+    }
+
+    /**
+     * Criando o objeto da sessão e suas dependencias
+     *
+     * @return Vindite\Session\Session
+     */
+    private function makeSession() : void
+    {
+        self::container(self::SESSION)->set(
+            \Vindite\Session\Session::class,
+            [
+                $_SESSION
+            ]
+        );
+    }
+
+    /**
+     * Criando o objeto de autenticação e suas dependencias
+     *
+     * @return Vindite\Auth\Auth
+     */
+    private function makeAuth() : void
+    {
+        self::container(self::AUTH)->set(
+            \Vindite\Auth\Auth::class,
+            [
+                self::container()->get(self::SESSION)
             ]
         );
     }

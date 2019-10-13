@@ -203,10 +203,6 @@ class Route
      */
     public function group(callable $callback) : self
     {
-        if ($this->middleware instanceof MiddlewareInterface) {
-            $this->middleware->handle($this->request);
-        }
-
         if (!\is_callable($callback)) {
             throw new RouteException(
                 "Argumento de agrupamento de rotas deve ser do tipo callable"
@@ -257,10 +253,7 @@ class Route
                     continue;
                 }
 
-                if (!$this->resolveResourceArgument(
-                    $data[RouteConstant::ROUTE_RESOURCE],
-                    $requestedUri
-                )) {
+                if (!$this->resolveResourceArgument($data[RouteConstant::ROUTE_RESOURCE], $requestedUri)) {
                     if (!next($this->queue)) {
                         throw new RouteException($this->resourceNotFound());
                     }
@@ -309,7 +302,11 @@ class Route
             $this->request->withQueryParams($this->matchParam);
         }
 
+        if ($this->middleware instanceof MiddlewareInterface) {
+            $response = $this->middleware->handle($this->request);
+        }
+
         $reflectionMethod = new \ReflectionMethod($this->controller, $this->action);
-        $reflectionMethod->invoke($this->controller, $this->request);
+        $reflectionMethod->invoke($this->controller, $this->request, $response);
     }
 }

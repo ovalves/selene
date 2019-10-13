@@ -13,6 +13,8 @@ use Vindite\Routes\Route;
 use Vindite\Request\Request;
 use Vindite\Middleware\Middleware;
 use Vindite\Render\View;
+use Vindite\Session\Session;
+use Vindite\Auth\Auth;
 use Vindite\Container\Container;
 
 /**
@@ -104,6 +106,26 @@ final class App
     public function view() : View
     {
         return AppCreator::container()->get(AppCreator::VIEW);
+    }
+
+    /**
+     * Retorna o objeto da sessão
+     *
+     * @return Vindite\Session\Session
+     */
+    public function session() : Session
+    {
+        return AppCreator::container()->get(AppCreator::SESSION);
+    }
+
+    /**
+     * Retorna o objeto de autenticação
+     *
+     * @return Vindite\Auth\Auth
+     */
+    public function auth() : Auth
+    {
+        return AppCreator::container()->get(AppCreator::AUTH);
     }
 
     /**

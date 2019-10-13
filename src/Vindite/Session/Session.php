@@ -1,12 +1,15 @@
 <?php
 /**
- * @copyright   2018 - Vindite
+ * @copyright   2019 - Vindite
  * @author      Vinicius Oliveira <vinicius_o.a@live.com>
  * @category    Micro Framework
- * @since       2018-05-01
+ * @since       2019-10-12
  */
 
 namespace Vindite\Session;
+
+use Psr\Http\Message\ServerRequestInterface;
+use Vindite\App\AppCreator;
 
 /**
  * Gerencia o registro da seção
@@ -25,11 +28,15 @@ class Session
      */
     public function __construct()
     {
-        if (!session_id()) {
-            session_start();
-        }
+        // if (!session_id()) {
+        //     session_start();
+        // }
 
         $this->session = $_SESSION;
+
+        AppCreator::container(SessionConstant::SESSION_TABLE)->set(
+            SessionGateway::class
+        );
     }
 
     /**
@@ -39,12 +46,23 @@ class Session
      */
     public function hasSession() : bool
     {
-        return session_id();
+        return (bool) (!empty(session_id()));
+    }
+
+    public function shouldRegenerateSessionId()
+    {
+        $sessionGateway = AppCreator::container()->get(SessionConstant::SESSION_TABLE);
+        $data = $sessionGateway->getSessionById(session_id());
+    }
+
+    public function regenerateSessionId()
+    {
+
     }
 
     /**
      * Armazena um array de valores na seção
-     * 
+     *
      * @param array $data
      * @return bool
      */
@@ -63,7 +81,7 @@ class Session
 
     /**
      * Retorna uma variável da seção
-     * 
+     *
      * @param string $var
      * @return string
      */

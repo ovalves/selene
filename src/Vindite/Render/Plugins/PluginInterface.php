@@ -13,5 +13,5 @@ namespace Vindite\Render\Plugins;
  */
 interface PluginInterface
 {
-    public function __invoke() : array;
+    public function __invoke($string) : string;
 }

@@ -3,11 +3,13 @@
  * @copyright   2019 - Vindite
  * @author      Vinicius Oliveira <vinicius_o.a@live.com>
  * @category    Micro Framework
- * @since       2019-02-09
+ * @since       2019-10-12
  */
 
 namespace Vindite\Middleware\Handler;
 
+use Vindite\App\AppCreator;
+use Vindite\Response\Response;
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,8 +26,19 @@ final class Auth implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
     {
-        echo "verificando autenticacao";
-        echo '<br><br>';
+        $auth = AppCreator::container()->get(AppCreator::AUTH);
+
+        $auth->setRequest($request);
+
+        if (!$auth->isAuthenticated()) {
+            return (new Response)
+                        ->withStatus(401, 'unauthorized')
+                        ->withRedirectTo($auth->redirectToLoginPage())
+                        ->setUnauthorized();
+        }
+
+        $auth->authenticate();
+
         return $handler->process($request, $handler);
     }
 }
