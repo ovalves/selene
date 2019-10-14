@@ -35,14 +35,14 @@ trait ConfigAwareTrait
      *
      * @return array
      */
-    protected function loadConfig($prefix)
+    protected function loadConfig($prefix) : array
     {
         if (isset($this->config[$prefix])) {
-            return $this->config[$prefix];
+            return $this->config[$prefix]->__invoke();
         }
 
-        $this->config = new $this->mapConfig[$prefix];
+        $this->config[$prefix] = new $this->mapConfig[$prefix];
 
-        return $this->config->__invoke();
+        return $this->config[$prefix]->__invoke();
     }
 }

@@ -110,8 +110,8 @@ final class AppCreator
         self::container(self::REQUEST)->set(
             \Vindite\Request\Request::class,
             [
-                $_POST,
                 $_GET,
+                $_POST,
                 $_REQUEST,
                 $_SERVER
             ]

@@ -17,6 +17,7 @@ class ConfigConstant
     const SESSION = 'session';
 
     const AUTH_HASH                   = 'auth_hash';
+    const AUTH_TABLE_NAME             = "auth_table_name";
     const AUTH_LOGIN_URL              = 'auth_login_url';
     const AUTH_REDIRECT_SUCCESS_LOGIN = 'auth_redirect_success_login';
     const AUTH_REDIRECT_FAILED_LOGIN  = 'auth_redirect_failed_login';
