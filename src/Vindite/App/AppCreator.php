@@ -165,11 +165,12 @@ final class AppCreator
      */
     private function makeSession() : void
     {
+        if (!session_id()) {
+            session_start();
+        }
+
         self::container(self::SESSION)->set(
-            \Vindite\Session\Session::class,
-            [
-                $_SESSION
-            ]
+            \Vindite\Session\Session::class
         );
     }
 

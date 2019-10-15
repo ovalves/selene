@@ -37,8 +37,6 @@ final class Auth implements MiddlewareInterface
                         ->setUnauthorized();
         }
 
-        $auth->authenticate();
-
         return $handler->process($request, $handler);
     }
 }

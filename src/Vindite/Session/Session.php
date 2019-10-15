@@ -8,36 +8,23 @@
 
 namespace Vindite\Session;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Vindite\App\AppCreator;
+use Vindite\Config\ConfigConstant;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Gerencia o registro da seção
  */
 class Session
 {
+    use \Vindite\Config\ConfigAwareTrait;
+
     /**
-     * Guarda os dados da sessão
+     * Guarda oo objeto de conexao com a tabela de sessao
      *
-     * @var array
+     * @var SessionGateway
      */
-    protected $session;
-
-    /**
-     * inicializa uma seção
-     */
-    public function __construct()
-    {
-        // if (!session_id()) {
-        //     session_start();
-        // }
-
-        $this->session = $_SESSION;
-
-        AppCreator::container(SessionConstant::SESSION_TABLE)->set(
-            SessionGateway::class
-        );
-    }
+    protected $gateway;
 
     /**
      * Verifica se existe secao registrada
@@ -46,18 +33,31 @@ class Session
      */
     public function hasSession() : bool
     {
-        return (bool) (!empty(session_id()));
+        return isset($_SESSION[SessionConstant::USER_ID]) ? true : false;
     }
 
-    public function shouldRegenerateSessionId()
+    /**
+     * Verifica se deve regerar o id de sessao
+     *
+     * @return boolean
+     */
+    public function shouldRegenerateSessionId() : bool
     {
-        $sessionGateway = AppCreator::container()->get(SessionConstant::SESSION_TABLE);
-        $data = $sessionGateway->getSessionById(session_id());
+        if ($_SESSION[SessionConstant::REFRESH_TIME] <= strtotime("now")) {
+            return true;
+        }
+
+        return false;
     }
 
-    public function regenerateSessionId()
+    /**
+     * Regera o id de sessao
+     *
+     * @return void
+     */
+    public function regenerateSessionId() : void
     {
-
+        session_regenerate_id();
     }
 
     /**
@@ -73,7 +73,7 @@ class Session
         }
 
         foreach ($data as $key => $value) {
-            $this->session[$key] = $value;
+            $_SESSION[$key] = $value;
         }
 
         return true;
@@ -85,19 +85,37 @@ class Session
      * @param string $var
      * @return string
      */
-    public function getValue($var) : string
+    public function getValue(string $var) : string
     {
-        if (isset($this->session[$var])) {
-            return $this->session[$var];
+        if (isset($_SESSION[$var])) {
+            return $_SESSION[$var];
         }
     }
 
     /**
      * Destrói os dados de uma seção
      */
-    public function freeSession()
+    public function freeSession() : void
     {
-        $this->session = [];
+        unset($_SESSION);
         session_destroy();
+    }
+
+    /**
+     * Retorna o gateway de conexao com a tabela de sessao
+     *
+     * @return SessionGateway
+     */
+    protected function getGateway() : SessionGateway
+    {
+        if (!isset($this->gateway[SessionConstant::SESSION_TABLE])) {
+            AppCreator::container(SessionConstant::SESSION_TABLE)->set(
+                SessionGateway::class
+            );
+
+            $this->gateway = AppCreator::container()->get(SessionConstant::SESSION_TABLE);
+        }
+
+        return $this->gateway;
     }
 }

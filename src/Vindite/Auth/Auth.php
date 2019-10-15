@@ -9,9 +9,12 @@
 namespace Vindite\Auth;
 
 use Vindite\App\AppCreator;
-use Psr\Http\Message\ServerRequestInterface;
 use Vindite\Config\ConfigConstant;
 use Vindite\Session\Session;
+use Vindite\Auth\AuthConstant;
+use Psr\Http\Message\ServerRequestInterface;
+use Vindite\Session\SessionConstant;
+
 /**
  * Trata as solicitaçoes de autenticacao do framework
  */
@@ -42,7 +45,7 @@ class Auth
     public function __construct(Session $session)
     {
         $this->session = $session;
-        AppCreator::container('auth_table')->set(
+        AppCreator::container(AuthConstant::AUTH_TABLE)->set(
             AuthGateway::class
         );
     }
@@ -74,7 +77,7 @@ class Auth
             SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
         );
 
-        $authGateway = AppCreator::container()->get('auth_table');
+        $authGateway = AppCreator::container()->get(AuthConstant::AUTH_TABLE);
         return (bool) $authGateway->registerUser($email, $storeInDatabase);
     }
 
@@ -98,58 +101,6 @@ class Auth
     }
 
     /**
-     * Find user by email
-     *
-     * @param string $email
-     * @return array
-     */
-    public function findByEmail(string $email) : array
-    {
-        $authGateway = AppCreator::container()->get('auth_table');
-        return $authGateway->findByEmail($email);
-    }
-
-    /**
-     * Generate fake password
-     *
-     * @return string
-     */
-    public function generateFakePassword($password) : string
-    {
-        $genericSecretKey = random_bytes(32);
-        return sodium_crypto_generichash($password, $genericSecretKey);
-    }
-
-    /**
-     * Verifica o password
-     *
-     * @param string $password
-     * @param string $storedPassword
-     * @return boolean
-     */
-    public function verifyPassword(string $password, string $storedPassword) : bool
-    {
-        /* Once that's stored, you can just test against the hash like so: */
-        if (\sodium_crypto_pwhash_str_verify($storedPassword, $password)) {
-
-            /**
-             * @todo setar os dados do usuario na sessao
-             * @todo inicar a sessão
-             * @todo inserir um registro na tabela de sessão
-             */
-            /* Logged in! */
-
-            echo '<pre>';
-            var_dump ($this->user);
-            die('e');
-            return true;
-        }
-
-        /* Incorrect password. */
-        return false;
-    }
-
-    /**
      * Verifica se o user está autenticado
      *
      * @return boolean
@@ -162,6 +113,16 @@ class Auth
 
         if ($this->session->shouldRegenerateSessionId()) {
             $this->session->regenerateSessionId();
+
+            $config = $this->loadConfig(ConfigConstant::SESSION);
+            $this->session->setValue(
+                [
+                    SessionConstant::UPDATED_AT      => strtotime("now"),
+                    SessionConstant::CREATED_AT      => strtotime("now"),
+                    SessionConstant::EXPIRATION_TIME => strtotime("+ {$config[ConfigConstant::SESSION_EXPIRATION_TIME]} seconds"),
+                    SessionConstant::REFRESH_TIME    => strtotime("+ {$config[ConfigConstant::SESSION_REFRESH_TIME]} seconds")
+                ]
+            );
         }
 
         return true;
@@ -176,5 +137,55 @@ class Auth
     {
         $config = $this->loadConfig(ConfigConstant::AUTH);
         return $config[ConfigConstant::AUTH_LOGIN_URL];
+    }
+
+    /**
+     * Find user by email
+     *
+     * @param string $email
+     * @return array
+     */
+    protected function findByEmail(string $email) : array
+    {
+        $authGateway = AppCreator::container()->get(AuthConstant::AUTH_TABLE);
+        return $authGateway->findByEmail($email);
+    }
+
+    /**
+     * Generate fake password
+     *
+     * @return string
+     */
+    protected function generateFakePassword($password) : string
+    {
+        $genericSecretKey = random_bytes(32);
+        return sodium_crypto_generichash($password, $genericSecretKey);
+    }
+
+    /**
+     * Verifica o password
+     *
+     * @param string $password
+     * @param string $storedPassword
+     * @return boolean
+     */
+    protected function verifyPassword(string $password, string $storedPassword) : bool
+    {
+        if (!\sodium_crypto_pwhash_str_verify($storedPassword, $password)) {
+            return false;
+        }
+
+        $config = $this->loadConfig(ConfigConstant::SESSION);
+        $this->session->setValue(
+            [
+                SessionConstant::USER_ID         => $this->user[0]["user_id"],
+                SessionConstant::UPDATED_AT      => strtotime("now"),
+                SessionConstant::CREATED_AT      => strtotime("now"),
+                SessionConstant::EXPIRATION_TIME => strtotime("+ {$config[ConfigConstant::SESSION_EXPIRATION_TIME]} seconds"),
+                SessionConstant::REFRESH_TIME => strtotime("+ {$config[ConfigConstant::SESSION_REFRESH_TIME]} seconds")
+            ]
+        );
+
+        return true;
     }
 }
