@@ -93,7 +93,7 @@ class Session
     }
 
     /**
-     * Destrói os dados de uma seção
+     * Destrói os dados da seção
      */
     public function freeSession() : void
     {

@@ -266,7 +266,17 @@ class Route
 
                 if (isset($data[RouteConstant::ROUTE_CALLBACK])) {
                     if (is_callable($data[RouteConstant::ROUTE_CALLBACK])) {
+
+                        if ($this->middleware instanceof MiddlewareInterface) {
+                            $response = $this->middleware->handle($this->request);
+                        }
+
+                        if ($response->isUnauthorized()) {
+                            throw new RouteException($response->getReasonPhrase(), $response->getStatusCode());
+                        }
+
                         \call_user_func($data[RouteConstant::ROUTE_CALLBACK]);
+
                         break 2;
                     }
                 }

@@ -62,44 +62,6 @@ class Auth
         return $this;
     }
 
-   /**
-    * Registra o usuário
-    *
-    * @param string $email
-    * @param string $password
-    * @return bool
-    */
-    public function registerUser(string $email, string $password) : bool
-    {
-        $storeInDatabase = \sodium_crypto_pwhash_str(
-            $password,
-            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
-        );
-
-        $authGateway = AppCreator::container()->get(AuthConstant::AUTH_TABLE);
-        return (bool) $authGateway->registerUser($email, $storeInDatabase);
-    }
-
-    /**
-     * Autentica user
-     *
-     * @param string $email
-     * @param string $password
-     * @return boolean
-     */
-    public function authenticate(string $email, string $password) : bool
-    {
-        $storedPassword = $this->generateFakePassword($password);
-        $this->user = $this->findByEmail($email);
-
-        if ($this->user) {
-            $storedPassword = $this->user[0]["password"];
-        }
-
-        return (bool) ($this->verifyPassword($password, $storedPassword)) && ($this->user !== null);
-    }
-
     /**
      * Verifica se o user está autenticado
      *
@@ -126,6 +88,56 @@ class Auth
         }
 
         return true;
+    }
+
+    /**
+     * Autentica user
+     *
+     * @param string $email
+     * @param string $password
+     * @return boolean
+     */
+    public function authenticate(string $email, string $password) : bool
+    {
+        $storedPassword = $this->generateFakePassword($password);
+        $this->user = $this->findByEmail($email);
+
+        if ($this->user) {
+            $storedPassword = $this->user[0]["password"];
+        }
+
+        return (bool) ($this->verifyPassword($password, $storedPassword)) && ($this->user !== null);
+    }
+
+    /**
+    * Registra o usuário
+    *
+    * @param string $email
+    * @param string $password
+    * @return bool
+    */
+    public function registerUser(string $email, string $password) : bool
+    {
+        $storeInDatabase = \sodium_crypto_pwhash_str(
+            $password,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        );
+
+        $authGateway = AppCreator::container()->get(AuthConstant::AUTH_TABLE);
+        return (bool) $authGateway->registerUser($email, $storeInDatabase);
+    }
+
+    /**
+     * Desloga o user autenticado
+     *
+     * @return void
+     */
+    public function logout() : void
+    {
+        if ($this->session->hasSession()) {
+            $this->session->freeSession();
+        }
     }
 
     /**
