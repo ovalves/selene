@@ -96,6 +96,7 @@ final class AppCreator
         $this->makeSession();
         $this->makeAuth();
         $this->makeView();
+        $this->makeErrorhandler();
         $this->injectAppRootPathOnView();
         $this->injectViewOnRouterDispatcher();
     }
@@ -187,6 +188,18 @@ final class AppCreator
                 self::container()->get(self::SESSION)
             ]
         );
+    }
+
+    /**
+     * Creates the error handler
+     *
+     * @return void
+     */
+    private function makeErrorHandler() : void
+    {
+        $whoops = new \Whoops\Run;
+        $whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler);
+        $whoops->register();
     }
 
     /**
