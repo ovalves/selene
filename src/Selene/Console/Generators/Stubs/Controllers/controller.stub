@@ -1,0 +1,11 @@
+<?php
+
+use Selene\App\AppCreator;
+use Selene\Controllers\BaseController;
+use Selene\Request\Request;
+use Selene\Response\Response;
+
+class __class_name__ extends BaseController
+{
+    //
+}

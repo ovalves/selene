@@ -1,16 +1,16 @@
-# Vindite Microframework
+# Selene Microframework
 
-Vindite is a PHP micro-framework that helps you quickly write simple web applications.
+Selene is a PHP micro-framework that helps you quickly write simple web applications.
 
 ## Installation
 
-It's recommended that you use [Composer](https://getcomposer.org/) to install Vindite.
+It's recommended that you use [Composer](https://getcomposer.org/) to install Selene.
 
 ```bash
-$ composer require vindite/vindite "dev-master@dev"
+$ composer require vindite/selene "dev-master@dev"
 ```
 
-This will install Vindite and all required dependencies. Vindite requires PHP 7.2 or newer.
+This will install Selene and all required dependencies. Selene requires PHP 7.2 or newer.
 
 ## Usage
 
@@ -21,26 +21,41 @@ Create an index.php file with the following contents:
 
 require 'vendor/autoload.php';
 
-$app = Vindite\App::getInstance();
+// Loading your application folders
+$loader = new Selene\Loader\AppLoader;
+$loader->addDirectory('App/Controllers');
+$loader->addDirectory('App/Models');
+$loader->addDirectory('App/Gateway');
+$loader->addDirectory('App/Config');
+$loader->load();
 
+// Getting an instance of Selene framework
+$app = Selene\App::getInstance();
+
+// Using the router to register your application routes
+// In this case we are using the authentication middleware
 $app->route()->middleware([
-    new Vindite\Middleware\Handler\Auth,
-    new Vindite\Middleware\Handler\Session
+    new Selene\Middleware\Handler\Auth
 ])->group(function () use ($app) {
 
-    $app->route()->get('/hello/{name}', function ($argument) use ($app) {
-        return $app->json("Hello, {$argument['name']}");
+    // This route responds as callback function
+    $app->route()->get('/callable', function () use ($app) {
+        $app->json('ola mundo again');
     });
 
+    // Mapping requested http method with request http path
     $app->route()->get('/', 'HomeController@index');
-    $app->route()->post('/store', 'HomeController@store');
-    $app->route()->put('/put/{id}', 'HomeController@put');
-    $app->route()->delete('/delete/{id}', 'HomeController@delete');
+    $app->route()->get('/shos/{id}', 'HomeController@show');
+    $app->route()->get('/show/{id}', 'HomeController@show');
+    $app->route()->get('/store', 'HomeController@store');
+    $app->route()->get('/login', 'HomeController@login');
+    $app->route()->post('/login', 'HomeController@login');
+    $app->route()->get('/logout', 'HomeController@logout');
 })->run();
 ```
 ## Examples
 
-Please see https://github.com/vindite/vindite-skeleton for more examples.
+Please see https://github.com/vindite/selene-skeleton for more examples.
 
 ## Credits
 
@@ -48,4 +63,4 @@ Please see https://github.com/vindite/vindite-skeleton for more examples.
 
 ## License
 
-The Vindite Microframework is licensed under the MIT license. See [License File](LICENSE) for more information.
+The Selene Microframework is licensed under the MIT license. See [License File](LICENSE) for more information.

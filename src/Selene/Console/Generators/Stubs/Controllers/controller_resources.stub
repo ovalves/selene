@@ -1,0 +1,29 @@
+<?php
+
+use Selene\App\AppCreator;
+use Selene\Controllers\BaseController;
+use Selene\Request\Request;
+use Selene\Response\Response;
+
+class __class_name__ extends BaseController
+{
+    public function index(Request $request, Response $response)
+    {
+        //
+    }
+
+    public function store(Request $request, Response $response)
+    {
+        //
+    }
+
+    public function put(Request $request, Response $response)
+    {
+        //
+    }
+
+    public function delete(Request $request, Response $response)
+    {
+        //
+    }
+}

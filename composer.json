@@ -1,14 +1,12 @@
 {
-    "name": "vindite/vindite",
-    "description": "simple microframework",
+    "name": "vindite/selene",
     "type": "project",
+    "description": "simple microframework",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Vinicius Oliveira",
-            "email": "vinicius_o.a@live.com"
-        }
-    ],
+    "authors": [{
+        "name": "Vinicius Oliveira",
+        "email": "vinicius_o.a@live.com"
+    }],
     "keywords": [
         "framework",
         "middleware",
@@ -23,5 +21,20 @@
         "psr/container": "^1.0",
         "psr/http-message": "^1.0.1",
         "psr/http-server-middleware": "^1.0"
-    }
+    },
+    "require-dev": {
+        "symfony/console": "4.3.5",
+        "filp/whoops": "2.5.0"
+    },
+    "suggest": {
+        "symfony/console": "For using the console generators",
+        "filp/whoops": "To make reading errors easier"
+    },
+    "autoload": {
+        "psr-4": {
+            "Selene\\": "src/Selene"
+        },
+        "classmap": ["src/Selene/Console/Commands"]
+    },
+    "minimum-stability": "dev"
 }
