@@ -8,7 +8,8 @@
 
 namespace Selene;
 
-use Selene\App\AppCreator;
+use Psr\Container\ContainerInterface;
+use Selene\Loader\AppLoader;
 use Selene\Routes\Route;
 use Selene\Request\Request;
 use Selene\Middleware\Middleware;
@@ -23,18 +24,59 @@ use Selene\Container\Container;
 final class App
 {
     /**
-     * Guarda a instância da aplicação
-     *
-     * @var App
+     * Define o container de rotas
      */
-    protected static $instance = null;
+    const ROUTE = 'router';
 
     /**
-     * Impede que a classe seja instanciada
+     * Define o container de middleware
      */
-    final protected function __construct()
-    {
+    const MIDDLEWARE = 'middleware';
 
+    /**
+     * Define o container de request
+     */
+    const REQUEST = 'request';
+
+    /**
+     * Define o container de autenticação
+     */
+    const AUTH = 'auth';
+
+    /**
+     * Define o container da sessão
+     */
+    const SESSION = 'session';
+
+    /**
+     * Define  container da view
+     */
+    const VIEW = 'view';
+
+    /**
+     * Gurada o objeto usado como Container no framework
+     *
+     * @var ContainerInterface
+     */
+    protected $container = null;
+
+    protected $booted = false;
+
+    /**
+     * Constructor
+     *
+     * @param ContainerInterface $container
+     * @return void
+     */
+    public function __construct()
+    {
+        if ($this->isBooted()) {
+            return;
+        }
+
+        $this->container = new Container;
+        $this->make();
+        $this->booted();
     }
 
     /**
@@ -54,28 +96,13 @@ final class App
     }
 
     /**
-     * Retorna uma instância da aplicação
-     *
-     * @return self
-     */
-    public static function getInstance() : self
-    {
-        if (self::$instance === null) {
-            self::$instance = new self;
-            (new AppCreator(new Container))->make();
-        }
-
-        return self::$instance;
-    }
-
-    /**
      * Retorna o objeto do roteador
      *
      * @return Selene\Routes\Route
      */
     public function route() : Route
     {
-        return AppCreator::container()->get(AppCreator::ROUTE);
+        return $this->container->get(self::ROUTE);
     }
 
     /**
@@ -85,7 +112,7 @@ final class App
      */
     public function middleware() : MiddlewareInterface
     {
-        return AppCreator::container()->get(AppCreator::MIDDLEWARE);
+        return $this->container->get(self::MIDDLEWARE);
     }
 
     /**
@@ -95,7 +122,7 @@ final class App
      */
     public function request() : Request
     {
-        return AppCreator::container()->get(AppCreator::REQUEST);
+        return $this->container->get(self::REQUEST);
     }
 
     /**
@@ -105,7 +132,7 @@ final class App
      */
     public function view() : View
     {
-        return AppCreator::container()->get(AppCreator::VIEW);
+        return $this->container->get(self::VIEW);
     }
 
     /**
@@ -115,7 +142,7 @@ final class App
      */
     public function session() : Session
     {
-        return AppCreator::container()->get(AppCreator::SESSION);
+        return $this->container->get(self::SESSION);
     }
 
     /**
@@ -125,7 +152,7 @@ final class App
      */
     public function auth() : Auth
     {
-        return AppCreator::container()->get(AppCreator::AUTH);
+        return $this->container->get(self::AUTH);
     }
 
     /**
@@ -137,5 +164,185 @@ final class App
     public function json($data)
     {
         echo \json_encode($data);
+    }
+
+    protected function booted() : void
+    {
+        $this->booted = true;
+    }
+
+    protected function isBooted() : bool
+    {
+        return (bool) $this->booted === true;
+    }
+
+    /**
+     * Instancia os componentes básicos do framework
+     *
+     * @return void
+     */
+    protected function make() : void
+    {
+        if (is_null($this->container)) {
+            throw new Exception("Uma instância do ContainerInterface é requerida");
+        }
+
+        $this->init();
+        $this->makeRequest();
+        $this->makeMiddleware();
+        $this->makeRouter();
+        $this->makeSession();
+        $this->makeAuth();
+        $this->makeView();
+        $this->makeErrorhandler();
+        $this->injectAppRootPathOnView();
+        $this->injectViewOnRouterDispatcher();
+    }
+
+    /**
+     * Init and loads all app main folders
+     *
+     * @return void
+     */
+    protected function init() : void
+    {
+        $loader = new AppLoader;
+
+        $loader->addDirectory('App/Controllers');
+        $loader->addDirectory('App/Models');
+        $loader->addDirectory('App/Gateway');
+        $loader->addDirectory('App/Config');
+        $loader->load();
+
+        /**
+         * Loads configuration file
+         */
+        $configuration = require 'App/Config/app.php';
+        $this->container->setConfiguration($configuration);
+    }
+
+    /**
+     * Criando o container da request e suas dependencias
+     *
+     * @return void
+     */
+    protected function makeRequest() : void
+    {
+        $this->container->setPrefix(self::REQUEST)->set(
+            \Selene\Request\Request::class,
+            [
+                $_GET,
+                $_POST,
+                $_REQUEST,
+                $_SERVER
+            ]
+        );
+    }
+
+    /**
+     * Criando o container de middlaware e suas dependencias
+     */
+    protected function makeMiddleware() : void
+    {
+        $this->container->setPrefix(self::MIDDLEWARE)->set(
+            \Selene\Middleware\Middleware::class
+        );
+    }
+
+    /**
+     * Criando o container da view e suas dependencias
+     *
+     * @return void
+     */
+    protected function makeView() : void
+    {
+        $this->container->setPrefix(self::VIEW)->set(
+            \Selene\Render\View::class,
+            [
+                \Selene\Render\Compiler\PluginCompiler::class,
+                \Selene\Render\Compiler\TemplateCompiler::class
+            ]
+        );
+    }
+
+    /**
+     * Criando o container de rota e suas dependencias
+     */
+    protected function makeRouter() : void
+    {
+        $this->container->setPrefix(self::ROUTE)->set(
+            \Selene\Routes\Route::class,
+            [
+                $this->container->get(self::REQUEST),
+                $this->container->get(self::MIDDLEWARE)
+            ]
+        );
+    }
+
+    /**
+     * Criando o objeto da sessão e suas dependencias
+     *
+     * @return Selene\Session\Session
+     */
+    protected function makeSession() : void
+    {
+        if (!session_id()) {
+            session_start();
+        }
+
+        $this->container->setPrefix(self::SESSION)->set(
+            \Selene\Session\Session::class
+        );
+    }
+
+    /**
+     * Criando o objeto de autenticação e suas dependencias
+     *
+     * @return Selene\Auth\Auth
+     */
+    protected function makeAuth() : void
+    {
+        $this->container->setPrefix(self::AUTH)->set(
+            \Selene\Auth\Auth::class,
+            [
+                $this->container->get(self::SESSION)
+            ]
+        );
+    }
+
+    /**
+     * Creates the error handler
+     *
+     * @return void
+     */
+    protected function makeErrorHandler() : void
+    {
+        $whoops = new \Whoops\Run;
+        $whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler);
+        $whoops->register();
+    }
+
+    /**
+     * Seta o path root da aplicação
+     *
+     * @return void
+     */
+    protected function injectAppRootPathOnView() : void
+    {
+        $request = $this->container->get(self::REQUEST);
+        $view    = $this->container->get(self::VIEW);
+        $view->setRootPath($request->getDocumentRoot());
+    }
+
+    /**
+     * Injeta a view no roteador
+     *
+     * @return void
+     */
+    protected function injectViewOnRouterDispatcher() : void
+    {
+        $this->container->get(self::ROUTE)->injectViewOnRouterDispatcher(
+            $this->container->get(self::VIEW)
+        );
     }
 }

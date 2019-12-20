@@ -8,6 +8,7 @@
 
 namespace Selene\Request;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -28,6 +29,11 @@ abstract class RequestAbstract implements ServerRequestInterface
     use RequestUriAwareTrait;
     use RequestProtocolAwareTrait;
     use RequestHeaderAwareTrait;
+
+    /**
+     * @var ContainerInterface
+    */
+    protected $container;
 
     /**
      * Guarda os dados GET da requisição
@@ -60,16 +66,18 @@ abstract class RequestAbstract implements ServerRequestInterface
     /**
      * Constructor
      *
+     * @param ContainerInterface $container
      * @param array $get
      * @param array $post
      * @param array $server
      * @param array $request
      */
-    public function __construct(array $get, array $post, array $server, array $request)
+    public function __construct(ContainerInterface $container, array $get, array $post, array $server, array $request)
     {
-        $this->get     = $get;
-        $this->post    = $post;
-        $this->server  = $server;
-        $this->request = $request;
+        $this->container = $container;
+        $this->get       = $get;
+        $this->post      = $post;
+        $this->server    = $server;
+        $this->request   = $request;
     }
 }

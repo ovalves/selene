@@ -8,6 +8,7 @@
 
 namespace Selene\Render;
 
+use Psr\Container\ContainerInterface;
 use Selene\Render\Plugins;
 use Selene\Render\Compiler\PluginCompiler;
 use Selene\Render\Compiler\TemplateCompiler;
@@ -22,6 +23,11 @@ abstract class ViewAbstract
      * Guarda o diretório das views
      */
     const APP_VIEW_DIRECTORY = 'App/Views/';
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * Guarda o root path da aplicação
@@ -68,12 +74,15 @@ abstract class ViewAbstract
     /**
      * Constructor
      *
+     * @param ContainerInterface $container
      * @param PluginCompiler $compiler
+     * @param TemplateCompiler $template
      */
-    final public function __construct(PluginCompiler $compiler, TemplateCompiler $template)
+    final public function __construct(ContainerInterface $container, PluginCompiler $compiler, TemplateCompiler $template)
     {
-        $this->compiler = $compiler;
-        $this->template = $template;
+        $this->container = $container;
+        $this->compiler  = $compiler;
+        $this->template  = $template;
     }
 
     /**

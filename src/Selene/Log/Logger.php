@@ -13,7 +13,7 @@ class Logger
     /**
      * Define o nome do arquivo de logs
      */
-    const LOGGER_FILENAME = '/log/app.log';
+    const LOGGER_FILENAME = '/var/log/selene.log';
 
     /**
      * Constructor

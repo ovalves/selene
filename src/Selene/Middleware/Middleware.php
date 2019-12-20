@@ -8,6 +8,7 @@
 
 namespace Selene\Middleware;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -21,16 +22,24 @@ use SplQueue;
 final class Middleware implements MiddlewareInterface
 {
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * @var SplQueue
      */
-    private $pipeline;
+    protected $pipeline;
 
     /**
      * Initializes the queue.
+     *
+     * @param ContainerInterface $container
      */
-    public function __construct()
+    public function __construct(ContainerInterface $container)
     {
-        $this->pipeline = new SplQueue();
+        $this->container = $container;
+        $this->pipeline  = new SplQueue();
     }
 
     /**

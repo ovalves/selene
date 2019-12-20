@@ -8,9 +8,9 @@
 
 namespace Selene\Session;
 
-use Selene\App\AppCreator;
-use Selene\Config\ConfigConstant;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Selene\Config\ConfigConstant;
 
 /**
  * Gerencia o registro da seção
@@ -20,11 +20,26 @@ class Session
     use \Selene\Config\ConfigAwareTrait;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * Guarda oo objeto de conexao com a tabela de sessao
      *
      * @var SessionGateway
      */
     protected $gateway;
+
+    /**
+     * Constructor
+     *
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Verifica se existe secao registrada
@@ -109,11 +124,11 @@ class Session
     protected function getGateway() : SessionGateway
     {
         if (!isset($this->gateway[SessionConstant::SESSION_TABLE])) {
-            AppCreator::container(SessionConstant::SESSION_TABLE)->set(
+            $this->container->setPrefix(SessionConstant::SESSION_TABLE)->set(
                 SessionGateway::class
             );
 
-            $this->gateway = AppCreator::container()->get(SessionConstant::SESSION_TABLE);
+            $this->gateway = $this->container->get(SessionConstant::SESSION_TABLE);
         }
 
         return $this->gateway;

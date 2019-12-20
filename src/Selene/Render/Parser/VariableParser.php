@@ -9,7 +9,7 @@
 namespace Selene\Render\Parser;
 
 /**
- * Responsável por fazer o parser das variaveis do template
+ * Parse template variables
  */
 trait VariableParser
 {
@@ -19,6 +19,8 @@ trait VariableParser
      * @var array
      */
     private $matches = [];
+    private $assign = null;
+    private $plugin = null;
 
     /**
      * Define a regex de busca das tags de variaveis
@@ -33,7 +35,8 @@ trait VariableParser
     private $replaceVariableTag = ["}", "{", "\t\n\r\0\x0b", " ", "$"];
 
     /**
-     * Compila as variaveis e executa o plugin caso a variavel necessite de um
+     * Parse the template variables
+     * Call plugin templates if exists
      *
      * @param string $content
      * @param array $variables
@@ -42,29 +45,31 @@ trait VariableParser
     protected function parserVariables($content, array $variables) : string
     {
         preg_match_all($this->matchVariableTag, $content, $this->matches);
+
         if (empty($this->matches)) {
             return $content;
         }
 
         foreach ($this->matches[0] as $match) {
-            list($assing, $plugin) = explode('|', $match);
-            $assing = str_replace($this->replaceVariableTag, '', $assing);
+            $this->parseMatch($match);
 
-            if ($this->variableIsNested($assing)) {
-                $variables[$assing] = $this->parseNestedVariable($variables);
+            $this->assign = str_replace($this->replaceVariableTag, '', $this->assign);
+
+            if ($this->variableIsNested($this->assign)) {
+                $variables[$this->assign] = $this->parseNestedVariable($variables, $this->assign);
             }
 
-            if (!isset($variables[$assing])) {
+            if (!isset($variables[$this->assign])) {
                 continue;
             }
 
-            if (!empty($plugin)) {
-                $variables[$assing] = $this->callPluginIfExists($variables[$assing], $plugin);
+            if (!empty($this->plugin)) {
+                $variables[$this->assign] = $this->callPluginIfExists($variables[$this->assign], $this->plugin);
             }
 
             $content = str_replace(
                 $match,
-                "<?php echo @{$variables[$assing]};?>",
+                $variables[$this->assign],
                 $content
             );
         }
@@ -73,45 +78,82 @@ trait VariableParser
     }
 
     /**
+     * Parse variable string, separate assignment and plugin`s call
+     *
+     * @param string $match
+     * @return void
+     */
+    private function parseMatch(string $match) : void
+    {
+        $match = explode('|', $match);
+
+        if (empty($match[0])) {
+            throw new Exception("Parser variable error");
+        }
+
+        $this->assign = (isset($match[0])) ? trim($match[0]) : null;
+        $this->plugin = (isset($match[1])) ? trim($match[1]) : null;
+    }
+
+    /**
      * Verifica se a variavel está aninhada
      *
-     * @param string $assing
+     * @param string $assign
+     *
      * @return bool
      */
-    private function variableIsNested(string $assing) : bool
+    private function variableIsNested(string $assign) : bool
     {
-        if (empty($assing)) {
+        if (empty($assign)) {
             return false;
         }
 
-        list($this->contextVariable, $this->nested) = explode('.', $assing);
+        $assign = explode('.', $assign);
+
+        $this->contextVariable = (isset($assign[0])) ? trim($assign[0]) : null;
+        $this->nested          = (isset($assign[1])) ? trim($assign[1]) : null;
+
         return (isset($this->contextVariable) && (isset($this->nested)));
     }
 
     /**
      * Faz o parser de váriaveis aninhadas através das váriaveis presentes na symbol table do loop
      *
+     * @param array  $variables
+     * @param string $assign
+     *
      * @return mixed
      */
-    private function parseNestedVariable(array $variables)
+    private function parseNestedVariable(array $variables, string $assign)
     {
         if (empty($variables)) {
             return false;
         }
 
         $nestedVars = $this->symbolTable[$this->contextVariable];
+
         if (empty($nestedVars)) {
             return false;
         }
 
+        if (isset($nestedVars[$this->nested])) {
+            $variables[$assign] = trim($nestedVars[$this->nested]);
+            return $variables[$assign];
+        }
+
         foreach ($nestedVars as $vars) {
+            if (!\is_array($vars)) {
+                $variables[$assign] = $vars;
+                continue;
+            }
+
             if (array_key_exists($this->nested, $vars)) {
-                $variables[$assing] = '$'.$this->contextVariable.'["'.$this->nested.'"]';
+                $variables[$assign] = $vars[$this->nested];
                 continue;
             }
         }
 
-        return $variables[$assing];
+        return $variables[$assign];
     }
 
     /**

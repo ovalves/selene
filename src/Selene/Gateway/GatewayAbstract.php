@@ -8,6 +8,7 @@
 
 namespace Selene\Gateway;
 
+use Psr\Container\ContainerInterface;
 use Selene\Database\Builder\Expression;
 
 abstract class GatewayAbstract extends Expression
@@ -19,9 +20,9 @@ abstract class GatewayAbstract extends Expression
     /**
      * Constructor
      */
-    final public function __construct()
+    final public function __construct(ContainerInterface $container)
     {
-        $this->gatewayDatabaseConnector();
+        $this->gatewayDatabaseConnector($container);
         parent::__construct($this->getTransaction());
     }
 }

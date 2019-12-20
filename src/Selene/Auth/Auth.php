@@ -8,11 +8,11 @@
 
 namespace Selene\Auth;
 
-use Selene\App\AppCreator;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Selene\Config\ConfigConstant;
 use Selene\Session\Session;
 use Selene\Auth\AuthConstant;
-use Psr\Http\Message\ServerRequestInterface;
 use Selene\Session\SessionConstant;
 
 /**
@@ -21,6 +21,11 @@ use Selene\Session\SessionConstant;
 class Auth
 {
     use \Selene\Config\ConfigAwareTrait;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * Guarda o objeto de sessão
@@ -39,13 +44,16 @@ class Auth
     /**
      * Constructor
      *
+     * @param ContainerInterface $container
      * @param Session $session
      * @return void
      */
-    public function __construct(Session $session)
+    public function __construct(ContainerInterface $container, Session $session)
     {
-        $this->session = $session;
-        AppCreator::container(AuthConstant::AUTH_TABLE)->set(
+        $this->container = $container;
+        $this->session   = $session;
+
+        $this->container->setPrefix(AuthConstant::AUTH_TABLE)->set(
             AuthGateway::class
         );
     }
@@ -124,7 +132,7 @@ class Auth
             SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
         );
 
-        $authGateway = AppCreator::container()->get(AuthConstant::AUTH_TABLE);
+        $authGateway = $this->container->get(AuthConstant::AUTH_TABLE);
         return (bool) $authGateway->registerUser($email, $storeInDatabase);
     }
 
@@ -159,7 +167,7 @@ class Auth
      */
     protected function findByEmail(string $email) : array
     {
-        $authGateway = AppCreator::container()->get(AuthConstant::AUTH_TABLE);
+        $authGateway = $this->container->get(AuthConstant::AUTH_TABLE);
         return $authGateway->findByEmail($email);
     }
 

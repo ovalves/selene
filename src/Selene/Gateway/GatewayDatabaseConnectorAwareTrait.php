@@ -8,7 +8,7 @@
 
 namespace Selene\Gateway;
 
-use Selene\App\AppCreator;
+use Psr\Container\ContainerInterface;
 use Selene\Database\Connection;
 use Selene\Database\Transaction;
 use Selene\Database\DatabaseConstant;
@@ -20,10 +20,16 @@ use Selene\Log\Logger;
 trait GatewayDatabaseConnectorAwareTrait
 {
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * Constructor
      */
-    protected function __construct()
+    protected function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
         $this->makeConnectionContainer();
         $this->makeLoggerContainer();
         $this->makeTransactionContainer();
@@ -36,7 +42,7 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     protected function getTransaction() : Transaction
     {
-        return AppCreator::container()->get(DatabaseConstant::TRANSACTION);
+        return $this->container->get(DatabaseConstant::TRANSACTION);
     }
 
     /**
@@ -46,7 +52,7 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     protected function getLogger() : Logger
     {
-        return AppCreator::container()->get(DatabaseConstant::LOGGER);
+        return $this->container->get(DatabaseConstant::LOGGER);
     }
 
     /**
@@ -56,7 +62,7 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     private function makeConnectionContainer() : void
     {
-        AppCreator::container(DatabaseConstant::CONNECTION)->set(
+        $this->container->setPrefix(DatabaseConstant::CONNECTION)->set(
             Connection::class
         );
     }
@@ -68,7 +74,7 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     private function makeLoggerContainer() : void
     {
-        AppCreator::container(DatabaseConstant::LOGGER)->set(
+        $this->container->setPrefix(DatabaseConstant::LOGGER)->set(
             Logger::class
         );
     }
@@ -80,11 +86,11 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     private function makeTransactionContainer() : void
     {
-        AppCreator::container(DatabaseConstant::TRANSACTION)->set(
+        $this->container->setPrefix(DatabaseConstant::TRANSACTION)->set(
             Transaction::class,
             [
                 DatabaseConstant::DATABASE_NAME,
-                AppCreator::container()->get(DatabaseConstant::CONNECTION)
+                $this->container->get(DatabaseConstant::CONNECTION)
             ]
         );
     }

@@ -8,6 +8,7 @@
 
 namespace Selene\Routes;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Selene\Request\Request;
 use Selene\Routes\Http;
@@ -20,6 +21,11 @@ class Route
 {
     use RouteAwareTrait;
     use RouteDispatcherAwareTrait;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * Guarda os middlewares usados no roteamento
@@ -94,10 +100,11 @@ class Route
     /**
      * Constructor
      *
+     * @param ContainerInterface $container
      * @param Request $request
      * @param MiddlewareInterface $middleware
      */
-    public function __construct(Request $request, MiddlewareInterface $middleware = null)
+    public function __construct(ContainerInterface $container, Request $request, MiddlewareInterface $middleware = null)
     {
         $this->get        = new Http\Get;
         $this->put        = new Http\Put;
@@ -105,6 +112,7 @@ class Route
         $this->patch      = new Http\Patch;
         $this->delete     = new Http\Delete;
         $this->queue      = [];
+        $this->container  = $container;
         $this->request    = $request;
         $this->middleware = $middleware;
     }

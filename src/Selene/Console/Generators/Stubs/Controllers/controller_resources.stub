@@ -1,6 +1,6 @@
 <?php
 
-use Selene\App\AppCreator;
+use Selene\App;
 use Selene\Controllers\BaseController;
 use Selene\Request\Request;
 use Selene\Response\Response;

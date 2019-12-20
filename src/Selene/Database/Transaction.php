@@ -9,6 +9,7 @@
 namespace Selene\Database;
 
 use PDO;
+use Psr\Container\ContainerInterface;
 use Selene\Database\Connection;
 use Selene\Database\DatabaseException;
 
@@ -27,11 +28,13 @@ final class Transaction
     /**
      * Constructor
      *
+     * @param ContainerInterface $container
      * @param string $database
      * @param Connection $connection
      */
-    public function __construct(string $database, Connection $connection)
+    public function __construct(ContainerInterface $container, string $database, Connection $connection)
     {
+        $this->container  = $container;
         $this->database   = $database;
         $this->connection = $connection;
     }

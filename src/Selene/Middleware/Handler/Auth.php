@@ -8,7 +8,7 @@
 
 namespace Selene\Middleware\Handler;
 
-use Selene\App\AppCreator;
+use Selene\App;
 use Selene\Response\Response;
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use Psr\Http\Message\ResponseInterface;
@@ -26,7 +26,10 @@ final class Auth implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
     {
-        $auth = AppCreator::container()->get(AppCreator::AUTH);
+        /**
+         * @todo inject service container on middlawares
+         */
+        $auth = $this->container->get(App::AUTH);
 
         $auth->setRequest($request);
 
