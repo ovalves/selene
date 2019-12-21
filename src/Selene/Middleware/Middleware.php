@@ -73,6 +73,13 @@ final class Middleware implements MiddlewareInterface
      */
     public function add(MiddlewareInterface $middleware) : self
     {
+        $class = new \ReflectionClass($middleware);
+
+        if ($class->hasMethod('serviceContainer')) {
+            $method = new \ReflectionMethod($middleware, 'serviceContainer');
+            $method->invoke($middleware, $this->container);
+        }
+
         $this->pipeline->enqueue($middleware);
         return $this;
     }

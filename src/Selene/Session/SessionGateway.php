@@ -11,20 +11,20 @@ namespace Selene\Session;
 use Selene\Gateway\GatewayAbstract;
 use Selene\Config\ConfigConstant;
 use Selene\Session\SessionException;
+use Selene\Container\ServiceContainer;
 
 /**
  * Manages the session data
  */
 class SessionGateway extends GatewayAbstract
 {
-    use \Selene\Config\ConfigAwareTrait;
-
     /**
      * Get session by id
      */
     public function getSessionById(string $sessionId)
     {
-        $config = $this->loadConfig(ConfigConstant::SESSION);
+        $config = $this->container->get(ServiceContainer::APPLICATION_CONFIG);
+        $config = $config->getConfig(ConfigConstant::SESSION);
 
         if (empty($config[ConfigConstant::SESSION_TABLE_NAME])) {
             throw new SessionException("Failed to check user session data");

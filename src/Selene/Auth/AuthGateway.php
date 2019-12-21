@@ -10,14 +10,13 @@ namespace Selene\Auth;
 
 use Selene\Gateway\GatewayAbstract;
 use Selene\Config\ConfigConstant;
+use Selene\Container\ServiceContainer;
 
 /**
  * Manages the authentication data
  */
 class AuthGateway extends GatewayAbstract
 {
-    use \Selene\Config\ConfigAwareTrait;
-
     /**
      * Find user by email
      *
@@ -26,8 +25,8 @@ class AuthGateway extends GatewayAbstract
      */
     public function findByEmail(string $email) : array
     {
-        $config = $this->loadConfig(ConfigConstant::AUTH);
-
+        $config = $this->container->get(ServiceContainer::APPLICATION_CONFIG);
+        $config = $config->getConfig(ConfigConstant::AUTH);
         if (empty($config[ConfigConstant::AUTH_TABLE_NAME])) {
             throw new \Exception("Failed to check user auth data");
         }

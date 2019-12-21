@@ -13,6 +13,7 @@ use Selene\Database\Connection;
 use Selene\Database\Transaction;
 use Selene\Database\DatabaseConstant;
 use Selene\Log\Logger;
+use Selene\Container\ServiceContainer;
 
 /**
  * Responsável por conectar a model e a base de dados
@@ -42,7 +43,7 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     protected function getTransaction() : Transaction
     {
-        return $this->container->get(DatabaseConstant::TRANSACTION);
+        return $this->container->get(ServiceContainer::TRANSACTION);
     }
 
     /**
@@ -52,7 +53,7 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     protected function getLogger() : Logger
     {
-        return $this->container->get(DatabaseConstant::LOGGER);
+        return $this->container->get(ServiceContainer::LOGGER);
     }
 
     /**
@@ -62,7 +63,7 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     private function makeConnectionContainer() : void
     {
-        $this->container->setPrefix(DatabaseConstant::CONNECTION)->set(
+        $this->container->setPrefix(ServiceContainer::CONNECTION)->set(
             Connection::class
         );
     }
@@ -74,7 +75,7 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     private function makeLoggerContainer() : void
     {
-        $this->container->setPrefix(DatabaseConstant::LOGGER)->set(
+        $this->container->setPrefix(ServiceContainer::LOGGER)->set(
             Logger::class
         );
     }
@@ -86,11 +87,11 @@ trait GatewayDatabaseConnectorAwareTrait
      */
     private function makeTransactionContainer() : void
     {
-        $this->container->setPrefix(DatabaseConstant::TRANSACTION)->set(
+        $this->container->setPrefix(ServiceContainer::TRANSACTION)->set(
             Transaction::class,
             [
-                DatabaseConstant::DATABASE_NAME,
-                $this->container->get(DatabaseConstant::CONNECTION)
+                $this->container->get(ServiceContainer::APPLICATION_CONFIG),
+                $this->container->get(ServiceContainer::CONNECTION)
             ]
         );
     }

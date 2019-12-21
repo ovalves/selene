@@ -17,6 +17,8 @@ use Selene\Render\View;
 use Selene\Session\Session;
 use Selene\Auth\Auth;
 use Selene\Container\Container;
+use Selene\Container\ServiceContainer;
+use Selene\Config\AplicationConfig;
 
 /**
  * Bootstrap do framework
@@ -24,42 +26,17 @@ use Selene\Container\Container;
 final class App
 {
     /**
-     * Define o container de rotas
-     */
-    const ROUTE = 'router';
-
-    /**
-     * Define o container de middleware
-     */
-    const MIDDLEWARE = 'middleware';
-
-    /**
-     * Define o container de request
-     */
-    const REQUEST = 'request';
-
-    /**
-     * Define o container de autenticação
-     */
-    const AUTH = 'auth';
-
-    /**
-     * Define o container da sessão
-     */
-    const SESSION = 'session';
-
-    /**
-     * Define  container da view
-     */
-    const VIEW = 'view';
-
-    /**
      * Gurada o objeto usado como Container no framework
      *
      * @var ContainerInterface
      */
     protected $container = null;
 
+    /**
+     * Undocumented variable
+     *
+     * @var boolean
+     */
     protected $booted = false;
 
     /**
@@ -102,7 +79,7 @@ final class App
      */
     public function route() : Route
     {
-        return $this->container->get(self::ROUTE);
+        return $this->container->get(ServiceContainer::ROUTE);
     }
 
     /**
@@ -112,7 +89,7 @@ final class App
      */
     public function middleware() : MiddlewareInterface
     {
-        return $this->container->get(self::MIDDLEWARE);
+        return $this->container->get(ServiceContainer::MIDDLEWARE);
     }
 
     /**
@@ -122,7 +99,7 @@ final class App
      */
     public function request() : Request
     {
-        return $this->container->get(self::REQUEST);
+        return $this->container->get(ServiceContainer::REQUEST);
     }
 
     /**
@@ -132,7 +109,7 @@ final class App
      */
     public function view() : View
     {
-        return $this->container->get(self::VIEW);
+        return $this->container->get(ServiceContainer::VIEW);
     }
 
     /**
@@ -142,7 +119,7 @@ final class App
      */
     public function session() : Session
     {
-        return $this->container->get(self::SESSION);
+        return $this->container->get(ServiceContainer::SESSION);
     }
 
     /**
@@ -152,7 +129,7 @@ final class App
      */
     public function auth() : Auth
     {
-        return $this->container->get(self::AUTH);
+        return $this->container->get(ServiceContainer::AUTH);
     }
 
     /**
@@ -214,11 +191,9 @@ final class App
         $loader->addDirectory('App/Config');
         $loader->load();
 
-        /**
-         * Loads configuration file
-         */
-        $configuration = require 'App/Config/app.php';
-        $this->container->setConfiguration($configuration);
+        $this->container->setPrefix(ServiceContainer::APPLICATION_CONFIG)->set(
+            \Selene\Config\ApplicationConfig::class
+        );
     }
 
     /**
@@ -228,7 +203,7 @@ final class App
      */
     protected function makeRequest() : void
     {
-        $this->container->setPrefix(self::REQUEST)->set(
+        $this->container->setPrefix(ServiceContainer::REQUEST)->set(
             \Selene\Request\Request::class,
             [
                 $_GET,
@@ -244,7 +219,7 @@ final class App
      */
     protected function makeMiddleware() : void
     {
-        $this->container->setPrefix(self::MIDDLEWARE)->set(
+        $this->container->setPrefix(ServiceContainer::MIDDLEWARE)->set(
             \Selene\Middleware\Middleware::class
         );
     }
@@ -256,7 +231,7 @@ final class App
      */
     protected function makeView() : void
     {
-        $this->container->setPrefix(self::VIEW)->set(
+        $this->container->setPrefix(ServiceContainer::VIEW)->set(
             \Selene\Render\View::class,
             [
                 \Selene\Render\Compiler\PluginCompiler::class,
@@ -270,11 +245,11 @@ final class App
      */
     protected function makeRouter() : void
     {
-        $this->container->setPrefix(self::ROUTE)->set(
+        $this->container->setPrefix(ServiceContainer::ROUTE)->set(
             \Selene\Routes\Route::class,
             [
-                $this->container->get(self::REQUEST),
-                $this->container->get(self::MIDDLEWARE)
+                $this->container->get(ServiceContainer::REQUEST),
+                $this->container->get(ServiceContainer::MIDDLEWARE)
             ]
         );
     }
@@ -290,7 +265,7 @@ final class App
             session_start();
         }
 
-        $this->container->setPrefix(self::SESSION)->set(
+        $this->container->setPrefix(ServiceContainer::SESSION)->set(
             \Selene\Session\Session::class
         );
     }
@@ -302,10 +277,10 @@ final class App
      */
     protected function makeAuth() : void
     {
-        $this->container->setPrefix(self::AUTH)->set(
+        $this->container->setPrefix(ServiceContainer::AUTH)->set(
             \Selene\Auth\Auth::class,
             [
-                $this->container->get(self::SESSION)
+                $this->container->get(ServiceContainer::SESSION)
             ]
         );
     }
@@ -329,8 +304,8 @@ final class App
      */
     protected function injectAppRootPathOnView() : void
     {
-        $request = $this->container->get(self::REQUEST);
-        $view    = $this->container->get(self::VIEW);
+        $request = $this->container->get(ServiceContainer::REQUEST);
+        $view    = $this->container->get(ServiceContainer::VIEW);
         $view->setRootPath($request->getDocumentRoot());
     }
 
@@ -341,8 +316,8 @@ final class App
      */
     protected function injectViewOnRouterDispatcher() : void
     {
-        $this->container->get(self::ROUTE)->injectViewOnRouterDispatcher(
-            $this->container->get(self::VIEW)
+        $this->container->get(ServiceContainer::ROUTE)->injectViewOnRouterDispatcher(
+            $this->container->get(ServiceContainer::VIEW)
         );
     }
 }

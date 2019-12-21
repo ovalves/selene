@@ -14,14 +14,13 @@ use Selene\Config\ConfigConstant;
 use Selene\Session\Session;
 use Selene\Auth\AuthConstant;
 use Selene\Session\SessionConstant;
+use Selene\Container\ServiceContainer;
 
 /**
  * Trata as solicitaçoes de autenticacao do framework
  */
 class Auth
 {
-    use \Selene\Config\ConfigAwareTrait;
-
     /**
      * @var ContainerInterface
      */
@@ -52,10 +51,13 @@ class Auth
     {
         $this->container = $container;
         $this->session   = $session;
+        $this->applicationConfig = $this->container->get(ServiceContainer::APPLICATION_CONFIG);
 
         $this->container->setPrefix(AuthConstant::AUTH_TABLE)->set(
             AuthGateway::class
         );
+
+        $this->findByEmail('$email');
     }
 
     /**
@@ -84,7 +86,7 @@ class Auth
         if ($this->session->shouldRegenerateSessionId()) {
             $this->session->regenerateSessionId();
 
-            $config = $this->loadConfig(ConfigConstant::SESSION);
+            $config = $this->applicationConfig->getConfig(ConfigConstant::SESSION);
             $this->session->setValue(
                 [
                     SessionConstant::UPDATED_AT      => strtotime("now"),
@@ -155,7 +157,7 @@ class Auth
      */
     public function redirectToLoginPage() : string
     {
-        $config = $this->loadConfig(ConfigConstant::AUTH);
+        $config = $this->applicationConfig->getConfig(ConfigConstant::AUTH);
         return $config[ConfigConstant::AUTH_LOGIN_URL];
     }
 
@@ -195,14 +197,14 @@ class Auth
             return false;
         }
 
-        $config = $this->loadConfig(ConfigConstant::SESSION);
+        $config = $this->applicationConfig->getConfig(ConfigConstant::SESSION);
         $this->session->setValue(
             [
                 SessionConstant::USER_ID         => $this->user[0]["user_id"],
                 SessionConstant::UPDATED_AT      => strtotime("now"),
                 SessionConstant::CREATED_AT      => strtotime("now"),
                 SessionConstant::EXPIRATION_TIME => strtotime("+ {$config[ConfigConstant::SESSION_EXPIRATION_TIME]} seconds"),
-                SessionConstant::REFRESH_TIME => strtotime("+ {$config[ConfigConstant::SESSION_REFRESH_TIME]} seconds")
+                SessionConstant::REFRESH_TIME    => strtotime("+ {$config[ConfigConstant::SESSION_REFRESH_TIME]} seconds")
             ]
         );
 

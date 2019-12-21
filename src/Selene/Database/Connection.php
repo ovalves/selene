@@ -9,7 +9,9 @@
 namespace Selene\Database;
 
 use PDO;
+use Selene\Config\ApplicationConfig;
 use Selene\Database\DatabaseException;
+use Selene\Config\ConfigConstant;
 
 /**
  * Responsável por criar uma conexão com a base de dados
@@ -21,26 +23,62 @@ final class Connection
      *
      * @return PDO
      */
-    public function open(string $configFile) : PDO
+    public function open(ApplicationConfig $appConfig, string $dbType = DatabaseConstant::DEFAULT_DB) : PDO
     {
-        if (!\file_exists("App/Config/{$configFile}.ini")) {
-            throw new DatabaseException(
-                \sprintf(
-                    "O arquivo de configuração (%s) de base de dados não foi encontrado",
-                    $configFile
-                )
-            );
+        $appConfig = $appConfig->getConfig(ConfigConstant::DATABASE);
+        if (empty($appConfig)) {
+            throw new DatabaseException('Error - Configuration of database connection not found');
         }
 
-        $configFile = \parse_ini_file("App/Config/{$configFile}.ini");
+        $driverType = $appConfig[$dbType];
 
-        // lê as informações contidas no arquivo
-        $user = isset($configFile['user']) ? $configFile['user'] : null;
-        $pass = isset($configFile['pass']) ? $configFile['pass'] : null;
-        $name = isset($configFile['name']) ? $configFile['name'] : null;
-        $host = isset($configFile['host']) ? $configFile['host'] : null;
-        $port = isset($configFile['port']) ? $configFile['port'] : null;
+        if (empty($driverType)) {
+            throw new DatabaseException('Error - Driver of database connection not found');
+        }
 
-        return new PDO("mysql:host={$host};port={$port};dbname={$name}", $user, $pass);
+        $user = isset($appConfig[$driverType][DatabaseConstant::DB_USER])
+            ? $appConfig[$driverType][DatabaseConstant::DB_USER]
+            : null;
+
+        $pass = isset($appConfig[$driverType][DatabaseConstant::DB_PASS])
+                        ? $appConfig[$driverType][DatabaseConstant::DB_PASS]
+                        : null;
+
+        $name = isset($appConfig[$driverType][DatabaseConstant::DB_NAME])
+                        ? $appConfig[$driverType][DatabaseConstant::DB_NAME]
+                        : null;
+
+        $host = isset($appConfig[$driverType][DatabaseConstant::DB_HOST])
+                        ? $appConfig[$driverType][DatabaseConstant::DB_HOST]
+                        : null;
+
+        $port = isset($appConfig[$driverType][DatabaseConstant::DB_PORT])
+                        ? $appConfig[$driverType][DatabaseConstant::DB_PORT]
+                        : null;
+
+        switch ($driverType)
+        {
+            case DatabaseConstant::PGSQL:
+                $port = $port ? $port : DatabaseConstant::PGSQL_PORT;
+                $conn = new PDO("pgsql:dbname={$name}; user={$user}; password={$pass};
+                        host=$host;port={$port}");
+                break;
+
+            case DatabaseConstant::MYSQL:
+                $port = $port ? $port : DatabaseConstant::MYSQL_PORT;
+                $conn = new PDO("mysql:host={$host};port={$port};dbname={$name}", $user, $pass);
+                break;
+
+            case DatabaseConstant::SQLITE:
+                $conn = new PDO("sqlite:{$name}");
+                break;
+
+            case DatabaseConstant::MSSQL:
+                $conn = new PDO("mssql:host={$host},1433;dbname={$name}", $user, $pass);
+                break;
+        }
+
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $conn;
     }
 }

@@ -17,8 +17,6 @@ use Selene\Config\ConfigConstant;
  */
 class Session
 {
-    use \Selene\Config\ConfigAwareTrait;
-
     /**
      * @var ContainerInterface
      */

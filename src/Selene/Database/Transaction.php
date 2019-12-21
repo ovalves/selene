@@ -11,6 +11,7 @@ namespace Selene\Database;
 use PDO;
 use Psr\Container\ContainerInterface;
 use Selene\Database\Connection;
+use Selene\Config\ApplicationConfig;
 use Selene\Database\DatabaseException;
 
 /**
@@ -26,23 +27,30 @@ final class Transaction
     private $connection;
 
     /**
+     * Undocumented variable
+     *
+     * @var [type]
+     */
+    private $appConfig;
+
+    /**
      * Constructor
      *
      * @param ContainerInterface $container
-     * @param string $database
+     * @param ApplicationConfig $appConfig
      * @param Connection $connection
      */
-    public function __construct(ContainerInterface $container, string $database, Connection $connection)
+    public function __construct(ContainerInterface $container, ApplicationConfig $appConfig, Connection $connection)
     {
         $this->container  = $container;
-        $this->database   = $database;
+        $this->appConfig  = $appConfig;
         $this->connection = $connection;
     }
 
     /**
      * Abre uma conexão com a base de dados
      */
-    public function open() : PDO
+    public function open(string $dbType = DatabaseConstant::DEFAULT_DB) : PDO
     {
         if (empty($this->connection)) {
             throw new DatabaseException("Não há conexão ativa");
@@ -52,7 +60,7 @@ final class Transaction
             return $this->connection;
         }
 
-        $this->connection = $this->connection->open($this->database);
+        $this->connection = $this->connection->open($this->appConfig, $dbType);
         return $this->connection;
     }
 

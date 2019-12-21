@@ -14,42 +14,35 @@ namespace  Selene\Database;
 class DatabaseConstant
 {
     /**
-     * Define o nome da base de dados
+     * Database default config
      */
-    const DATABASE_NAME = 'database_connection';
+    const DEFAULT_DB  = 'default';
+    const DB_PORT     = 'db_port';
+    const DB_HOST     = 'db_host';
+    const DB_NAME     = 'db_name';
+    const DB_USER     = 'db_user';
+    const DB_PASS     = 'db_pass';
 
     /**
-     * Define o prefixo do container de connection
+     * Database default ports
      */
-    const CONNECTION = 'connection';
+    const MYSQL_PORT = '3306';
+    const PGSQL_PORT = '5432';
 
     /**
-     * Define o prefixo do container de logger
+     * Available connection types
      */
-    const LOGGER = 'logger';
+    const MYSQL  = 'mysql';
+    const SQLITE = 'sqlite';
+    const MONGO  = 'mongo';
+    const MSSQL  = 'mssql';
+    const PGSQL  = 'pgsql';
 
     /**
-     * Define o prefixo do container de transaction
-     */
-    const TRANSACTION = 'transaction';
-
-    /**
-     * Define o tipo de expressão a ser avaliada
+     * Expression types
      */
     const INSERT = 'insert';
-
-    /**
-     * Define o tipo de expressão a ser avaliada
-     */
     const SELECT = 'select';
-
-    /**
-     * Define o tipo de expressão a ser avaliada
-     */
     const UPDATE = 'update';
-
-    /**
-     * Define o tipo de expressão a ser avaliada
-     */
     const DELETE = 'delete';
 }

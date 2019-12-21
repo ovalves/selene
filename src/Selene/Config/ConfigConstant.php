@@ -34,6 +34,7 @@ class ConfigConstant
     /**
      * Define configurations of database
      */
+    const DATABASE          = 'database';
     const MYSQL             = 'mysql';
     const SQLITE            = 'sqlite';
     const MONGODB           = 'mongodb';

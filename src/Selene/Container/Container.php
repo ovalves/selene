@@ -31,13 +31,6 @@ class Container implements ContainerInterface
     private $dependencies;
 
     /**
-     * Undocumented variable
-     *
-     * @var array
-     */
-    private $configuration = [];
-
-    /**
      * Guarda o prefixo identificar do container corrente
      *
      * @var string
@@ -60,18 +53,6 @@ class Container implements ContainerInterface
         $this->dependencies = [];
         $this->prefix       = null;
         $this->namespace    = null;
-    }
-
-    /**
-     * Define o prefixo identificar do container corrente
-     *
-     * @param string $prefix
-     * @return self
-     */
-    public function setConfiguration($configuration) : self
-    {
-        $this->configuration = $configuration;
-        return $this;
     }
 
     /**
