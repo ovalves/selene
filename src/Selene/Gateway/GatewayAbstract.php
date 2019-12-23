@@ -13,6 +13,11 @@ use Selene\Database\Builder\Expression;
 
 abstract class GatewayAbstract extends Expression
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
     use GatewayDatabaseConnectorAwareTrait {
         GatewayDatabaseConnectorAwareTrait::__construct as private gatewayDatabaseConnector;
     }
@@ -22,7 +27,8 @@ abstract class GatewayAbstract extends Expression
      */
     final public function __construct(ContainerInterface $container)
     {
-        $this->gatewayDatabaseConnector($container);
+        $this->container = $container;
+        $this->gatewayDatabaseConnector();
         parent::__construct($this->getTransaction());
     }
 }

@@ -56,8 +56,7 @@ final class Connection
                         ? $appConfig[$driverType][DatabaseConstant::DB_PORT]
                         : null;
 
-        switch ($driverType)
-        {
+        switch ($driverType) {
             case DatabaseConstant::PGSQL:
                 $port = $port ? $port : DatabaseConstant::PGSQL_PORT;
                 $conn = new PDO("pgsql:dbname={$name}; user={$user}; password={$pass};

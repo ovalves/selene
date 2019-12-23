@@ -21,16 +21,10 @@ use Selene\Container\ServiceContainer;
 trait GatewayDatabaseConnectorAwareTrait
 {
     /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
      * Constructor
      */
-    protected function __construct(ContainerInterface $container)
+    protected function __construct()
     {
-        $this->container = $container;
         $this->makeConnectionContainer();
         $this->makeLoggerContainer();
         $this->makeTransactionContainer();

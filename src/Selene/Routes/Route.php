@@ -289,7 +289,7 @@ class Route
                     }
                 }
 
-                $this->controller = new $data[RouteConstant::ROUTE_CLASS];
+                $this->controller = new $data[RouteConstant::ROUTE_CLASS]($this->container);
                 $this->action     = $data[RouteConstant::ROUTE_ACTION];
 
                 $this->dispatch();

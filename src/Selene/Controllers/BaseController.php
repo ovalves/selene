@@ -9,12 +9,13 @@
 namespace Selene\Controllers;
 
 use Psr\Container\ContainerInterface;
+use Selene\Gateway\GatewayAbstract;
 use Selene\Render\View;
 
 /**
  * Classe base para as controllers
  */
-class BaseController
+class BaseController extends GatewayAbstract
 {
     /**
      * Define a constante de injeção da view na base controller
@@ -39,26 +40,6 @@ class BaseController
     protected $container;
 
     /**
-     * Retorna objeto de render view
-     *
-     * @return View
-     */
-    protected function view() : View
-    {
-        return $this->view;
-    }
-
-    /**
-     * Retorna objeto de Service Container
-     *
-     * @return ContainerInterface
-     */
-    protected function container() : ContainerInterface
-    {
-        return $this->container;
-    }
-
-    /**
      * Instância o objeto da view
      *
      * @param View $view
@@ -78,5 +59,25 @@ class BaseController
     final public function injectContainerOnBaseController(ContainerInterface $container) : void
     {
         $this->container = $container;
+    }
+
+    /**
+     * Retorna objeto de render view
+     *
+     * @return View
+     */
+    protected function view() : View
+    {
+        return $this->view;
+    }
+
+    /**
+     * Retorna objeto de Service Container
+     *
+     * @return ContainerInterface
+     */
+    protected function container() : ContainerInterface
+    {
+        return $this->container;
     }
 }
