@@ -56,8 +56,6 @@ class Auth
         $this->container->setPrefix(AuthConstant::AUTH_TABLE)->set(
             AuthGateway::class
         );
-
-        $this->findByEmail('$email');
     }
 
     /**

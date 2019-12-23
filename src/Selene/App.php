@@ -20,9 +20,6 @@ use Selene\Container\Container;
 use Selene\Container\ServiceContainer;
 use Selene\Config\AplicationConfig;
 
-/**
- * Bootstrap do framework
- */
 final class App
 {
     /**
@@ -33,13 +30,6 @@ final class App
     protected $container = null;
 
     /**
-     * Undocumented variable
-     *
-     * @var boolean
-     */
-    protected $booted = false;
-
-    /**
      * Constructor
      *
      * @param ContainerInterface $container
@@ -47,29 +37,8 @@ final class App
      */
     public function __construct()
     {
-        if ($this->isBooted()) {
-            return;
-        }
-
         $this->container = new Container;
         $this->make();
-        $this->booted();
-    }
-
-    /**
-     * impede que a classe seja clonada
-     */
-    final protected function __clone()
-    {
-
-    }
-
-    /**
-     * impede que a classe seja reconstruida
-     */
-    final protected function __wakeup()
-    {
-
     }
 
     /**
@@ -105,7 +74,7 @@ final class App
     /**
      * Retorna o objeto da view
      *
-     * @return Selene\Request\Request
+     * @return Selene\Render\View
      */
     public function view() : View
     {
@@ -141,16 +110,6 @@ final class App
     public function json($data)
     {
         echo \json_encode($data);
-    }
-
-    protected function booted() : void
-    {
-        $this->booted = true;
-    }
-
-    protected function isBooted() : bool
-    {
-        return (bool) $this->booted === true;
     }
 
     /**
@@ -261,10 +220,6 @@ final class App
      */
     protected function makeSession() : void
     {
-        if (!session_id()) {
-            session_start();
-        }
-
         $this->container->setPrefix(ServiceContainer::SESSION)->set(
             \Selene\Session\Session::class
         );

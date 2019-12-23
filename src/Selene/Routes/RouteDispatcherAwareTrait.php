@@ -51,6 +51,18 @@ trait RouteDispatcherAwareTrait
             );
         }
 
+        $this->injectViewOnBaseController($parent);
+        $this->injectContainerOnBaseController($parent);
+    }
+
+    /**
+     * Inject the view on base controller
+     *
+     * @param \ReflectionClass $parent
+     * @return void
+     */
+    private function injectViewOnBaseController(\ReflectionClass $parent) : void
+    {
         if (!$parent->hasMethod(BaseController::INJECT_VIEW)) {
             throw new RouteException(
                 \sprintf(
@@ -63,5 +75,27 @@ trait RouteDispatcherAwareTrait
 
         $reflectionMethod = new \ReflectionMethod($this->controller, BaseController::INJECT_VIEW);
         $reflectionMethod->invoke($this->controller, $this->dispatcherView);
+    }
+
+    /**
+     * Inject the service container on base controller
+     *
+     * @param \ReflectionClass $parent
+     * @return void
+     */
+    private function injectContainerOnBaseController(\ReflectionClass $parent) : void
+    {
+        if (!$parent->hasMethod(BaseController::INJECT_SERVICE_CONTAINER)) {
+            throw new RouteException(
+                \sprintf(
+                    "Método (%s) responsável por injetar a classe de Service Container não foi encontrado na controller base (%s)",
+                    BaseController::INJECT_SERVICE_CONTAINER,
+                    BaseController::class
+                )
+            );
+        }
+
+        $reflectionMethod = new \ReflectionMethod($this->controller, BaseController::INJECT_SERVICE_CONTAINER);
+        $reflectionMethod->invoke($this->controller, $this->container);
     }
 }

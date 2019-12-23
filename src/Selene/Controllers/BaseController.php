@@ -8,6 +8,7 @@
 
 namespace Selene\Controllers;
 
+use Psr\Container\ContainerInterface;
 use Selene\Render\View;
 
 /**
@@ -21,11 +22,21 @@ class BaseController
     const INJECT_VIEW = 'injectViewOnBaseController';
 
     /**
+     * Define a constante de injeção do service container na base controller
+     */
+    const INJECT_SERVICE_CONTAINER = 'injectContainerOnBaseController';
+
+    /**
      * Guarda o objeto da view
      *
      * @var View
      */
     protected $view;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * Retorna objeto de render view
@@ -38,6 +49,16 @@ class BaseController
     }
 
     /**
+     * Retorna objeto de Service Container
+     *
+     * @return ContainerInterface
+     */
+    protected function container() : ContainerInterface
+    {
+        return $this->container;
+    }
+
+    /**
      * Instância o objeto da view
      *
      * @param View $view
@@ -46,5 +67,16 @@ class BaseController
     final public function injectViewOnBaseController(View $view) : void
     {
         $this->view = $view;
+    }
+
+    /**
+     * Instância o objeto de Service Container
+     *
+     * @param ContainerInterface $container
+     * @return void
+     */
+    final public function injectContainerOnBaseController(ContainerInterface $container) : void
+    {
+        $this->container = $container;
     }
 }

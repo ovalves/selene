@@ -36,6 +36,10 @@ class Session
      */
     public function __construct(ContainerInterface $container)
     {
+        if (!session_id()) {
+            session_start();
+        }
+
         $this->container = $container;
     }
 

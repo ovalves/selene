@@ -8,6 +8,8 @@
 
 namespace Selene\Config;
 
+use Exception;
+
 /**
  * Gerencia os arquivos de configuração do framework
  */
@@ -25,7 +27,11 @@ class ApplicationConfig
      */
     public function __construct()
     {
-        $this->configuration = require 'App/Config/app.php';
+        $this->configuration = include 'App/Config/app.php';
+
+        if (empty($this->configuration)) {
+            throw new Exception("Failed to open the framework configuration file");
+        }
     }
 
     /**
@@ -35,10 +41,19 @@ class ApplicationConfig
      */
     public function getConfig(string $type = null) : array
     {
-        if (!empty($type)) {
-            return $this->configuration[$type];
+        if (empty($type)) {
+            return $this->configuration;
         }
 
-        return $this->configuration;
+        if (!isset($this->configuration[$type])) {
+            throw new Exception(
+                sprintf(
+                    "The configuration of '%s' does not exist. Please check your configuration file",
+                    $type
+                )
+            );
+        }
+
+        return $this->configuration[$type];
     }
 }
