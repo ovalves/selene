@@ -40,12 +40,11 @@ $app->route()->middleware([
 
     // This route responds as callback function
     $app->route()->get('/callable', function () use ($app) {
-        $app->json('ola mundo again');
+        $app->json('Hello World!!!');
     });
 
     // Mapping requested http method with request http path
     $app->route()->get('/', 'HomeController@index');
-    $app->route()->get('/shos/{id}', 'HomeController@show');
     $app->route()->get('/show/{id}', 'HomeController@show');
     $app->route()->get('/store', 'HomeController@store');
     $app->route()->get('/login', 'HomeController@login');
@@ -59,7 +58,7 @@ Please see https://github.com/vindite/selene-skeleton for more examples.
 
 ## Credits
 
-- [Vinicius Alves](https://github.com/vindite)
+- [Vinicius Alves](https://github.com/ovalves)
 
 ## License
 
