@@ -1,6 +1,19 @@
-# Selene Microframework
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/ovalves/selene/blob/master/LICENSE)
+[![Read the Docs](https://readthedocs.org/projects/selene-framework/badge/?version=latest)](https://selene-framework.readthedocs.io/en/latest/?badge=latest)
+[![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
+
+## About Selene Microframework
 
 Selene is a PHP micro-framework that helps you quickly write simple web applications.
+
+Selene attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+
+- [Routing engine](https://github.com/ovalves/selene/edit/master/README.md).
+- [Dependency injection container](https://github.com/ovalves/selene/edit/master/README.md).
+- [Session Manager](https://github.com/ovalves/selene/edit/master/README.md).
+- [Database ORM](https://github.com/ovalves/selene/edit/master/README.md).
+- [Template Engine](https://github.com/ovalves/selene/edit/master/README.md).
+- [Middleware engine](https://github.com/ovalves/selene/edit/master/README.md).
 
 ## Installation
 
