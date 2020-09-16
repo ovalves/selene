@@ -8,12 +8,12 @@ Selene is a PHP micro-framework that helps you quickly write simple web applicat
 
 Selene attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
 
-- [Routing engine](https://github.com/ovalves/selene/edit/master/README.md).
-- [Dependency injection container](https://github.com/ovalves/selene/edit/master/README.md).
-- [Session Manager](https://github.com/ovalves/selene/edit/master/README.md).
-- [Database ORM](https://github.com/ovalves/selene/edit/master/README.md).
-- [Template Engine](https://github.com/ovalves/selene/edit/master/README.md).
-- [Middleware engine](https://github.com/ovalves/selene/edit/master/README.md).
+- Routing engine
+- Dependency injection container
+- Session Manager
+- Database ORM
+- Template Engine
+- Middleware engine
 
 ## Installation
 
