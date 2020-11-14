@@ -69,10 +69,6 @@ $app->route()->middleware([
 
 Please see https://github.com/vindite/selene-skeleton for more examples.
 
-## Credits
-
-- [Vinicius Alves](https://github.com/ovalves)
-
 ## License
 
 The Selene Microframework is licensed under the MIT license. See [License File](LICENSE) for more information.
