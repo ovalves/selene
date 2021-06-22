@@ -20,17 +20,17 @@ final class Factory
      */
     protected static $instance = null;
 
-    public function __construct()
+    final public function __construct()
     {
         //
     }
 
-    final protected function __clone()
+    final public function __clone()
     {
         //
     }
 
-    final protected function __wakeup()
+    final public function __wakeup()
     {
         //
     }
