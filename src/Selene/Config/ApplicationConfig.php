@@ -30,7 +30,7 @@ class ApplicationConfig
         $this->configuration = include 'App/Config/app.php';
 
         if (empty($this->configuration)) {
-            throw new Exception("Failed to open the framework configuration file");
+            throw new Exception("Failed to open the framework configuration app file");
         }
     }
 
