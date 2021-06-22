@@ -113,6 +113,16 @@ final class App
     }
 
     /**
+     * Retorna objeto de Service Container
+     *
+     * @return ContainerInterface
+     */
+    public function container() : ContainerInterface
+    {
+        return $this->container;
+    }
+
+    /**
      * Instancia os componentes básicos do framework
      *
      * @return void
