@@ -19,12 +19,11 @@
         "fig/http-message-util": "^1.1.2",
         "psr/container": "^1.0",
         "psr/http-message": "^1.0.1",
-        "psr/http-server-middleware": "^1.0"
-    },
-    "require-dev": {
+        "psr/http-server-middleware": "^1.0",
         "symfony/console": "4.3.5",
         "filp/whoops": "2.5.0"
     },
+    "require-dev": {},
     "suggest": {
         "symfony/console": "For using the console generators",
         "filp/whoops": "To make reading errors easier"
