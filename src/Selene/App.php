@@ -9,102 +9,101 @@
 namespace Selene;
 
 use Psr\Container\ContainerInterface;
-use Selene\Loader\AppLoader;
-use Selene\Routes\Route;
-use Selene\Request\Request;
-use Selene\Middleware\Middleware;
-use Selene\Render\View;
-use Selene\Session\Session;
 use Selene\Auth\Auth;
 use Selene\Container\Container;
 use Selene\Container\ServiceContainer;
-use Selene\Config\AplicationConfig;
+use Selene\Loader\AppLoader;
+use Selene\Middleware\Middleware;
+use Selene\Render\View;
+use Selene\Request\Request;
+use Selene\Routes\Route;
+use Selene\Session\Session;
 
 final class App
 {
     /**
-     * Gurada o objeto usado como Container no framework
+     * Gurada o objeto usado como Container no framework.
      *
      * @var ContainerInterface
      */
-    protected $container = null;
+    private $container = null;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param ContainerInterface $container
+     * @param  ContainerInterface $container
      * @return void
      */
     public function __construct()
     {
-        $this->container = new Container;
+        $this->container = new Container();
         $this->make();
     }
 
     /**
-     * Retorna o objeto do roteador
+     * Retorna o objeto do roteador.
      *
      * @return Selene\Routes\Route
      */
-    public function route() : Route
+    public function route(): Route
     {
         return $this->container->get(ServiceContainer::ROUTE);
     }
 
     /**
-     * Retorna o objeto do middleware
+     * Retorna o objeto do middleware.
      *
      * @return Selene\Middleware\Middleware
      */
-    public function middleware() : MiddlewareInterface
+    public function middleware(): MiddlewareInterface
     {
         return $this->container->get(ServiceContainer::MIDDLEWARE);
     }
 
     /**
-     * Retorna o objeto da request
+     * Retorna o objeto da request.
      *
      * @return Selene\Request\Request
      */
-    public function request() : Request
+    public function request(): Request
     {
         return $this->container->get(ServiceContainer::REQUEST);
     }
 
     /**
-     * Retorna o objeto da view
+     * Retorna o objeto da view.
      *
      * @return Selene\Render\View
      */
-    public function view() : View
+    public function view(): View
     {
         return $this->container->get(ServiceContainer::VIEW);
     }
 
     /**
-     * Retorna o objeto da sessão
+     * Retorna o objeto da sessão.
      *
      * @return Selene\Session\Session
      */
-    public function session() : Session
+    public function session(): Session
     {
         return $this->container->get(ServiceContainer::SESSION);
     }
 
     /**
-     * Retorna o objeto de autenticação
+     * Retorna o objeto de autenticação.
      *
      * @return Selene\Auth\Auth
      */
-    public function auth() : Auth
+    public function auth(): Auth
     {
         return $this->container->get(ServiceContainer::AUTH);
     }
 
     /**
-     * Retorna a resposta como json
+     * Retorna a resposta como json.
      *
-     * @param mixed $data
+     * @param  mixed $data
      * @return json
      */
     public function json($data)
@@ -113,24 +112,20 @@ final class App
     }
 
     /**
-     * Retorna objeto de Service Container
-     *
-     * @return ContainerInterface
+     * Retorna objeto de Service Container.
      */
-    public function container() : ContainerInterface
+    public function container(): ContainerInterface
     {
         return $this->container;
     }
 
     /**
-     * Instancia os componentes básicos do framework
-     *
-     * @return void
+     * Instancia os componentes básicos do framework.
      */
-    protected function make() : void
+    private function make(): void
     {
         if (is_null($this->container)) {
-            throw new Exception("Uma instância do ContainerInterface é requerida");
+            throw new Exception('Uma instância do ContainerInterface é requerida');
         }
 
         $this->init();
@@ -146,18 +141,16 @@ final class App
     }
 
     /**
-     * Init and loads all app main folders
-     *
-     * @return void
+     * Init and loads all app main folders.
      */
-    protected function init() : void
+    private function init(): void
     {
-        $loader = new AppLoader;
+        $loader = new AppLoader();
 
-        $loader->addDirectory('App/Controllers');
-        $loader->addDirectory('App/Models');
-        $loader->addDirectory('App/Gateway');
-        $loader->addDirectory('App/Config');
+        $loader->addDirectory('../App/Controllers');
+        $loader->addDirectory('../App/Models');
+        $loader->addDirectory('../App/Gateway');
+        $loader->addDirectory('../App/Config');
         $loader->load();
 
         $this->container->setPrefix(ServiceContainer::APPLICATION_CONFIG)->set(
@@ -166,11 +159,9 @@ final class App
     }
 
     /**
-     * Criando o container da request e suas dependencias
-     *
-     * @return void
+     * Criando o container da request e suas dependencias.
      */
-    protected function makeRequest() : void
+    private function makeRequest(): void
     {
         $this->container->setPrefix(ServiceContainer::REQUEST)->set(
             \Selene\Request\Request::class,
@@ -178,15 +169,15 @@ final class App
                 $_GET,
                 $_POST,
                 $_REQUEST,
-                $_SERVER
+                $_SERVER,
             ]
         );
     }
 
     /**
-     * Criando o container de middlaware e suas dependencias
+     * Criando o container de middlaware e suas dependencias.
      */
-    protected function makeMiddleware() : void
+    private function makeMiddleware(): void
     {
         $this->container->setPrefix(ServiceContainer::MIDDLEWARE)->set(
             \Selene\Middleware\Middleware::class
@@ -194,41 +185,39 @@ final class App
     }
 
     /**
-     * Criando o container da view e suas dependencias
-     *
-     * @return void
+     * Criando o container da view e suas dependencias.
      */
-    protected function makeView() : void
+    private function makeView(): void
     {
         $this->container->setPrefix(ServiceContainer::VIEW)->set(
             \Selene\Render\View::class,
             [
                 \Selene\Render\Compiler\PluginCompiler::class,
-                \Selene\Render\Compiler\TemplateCompiler::class
+                \Selene\Render\Compiler\TemplateCompiler::class,
             ]
         );
     }
 
     /**
-     * Criando o container de rota e suas dependencias
+     * Criando o container de rota e suas dependencias.
      */
-    protected function makeRouter() : void
+    private function makeRouter(): void
     {
         $this->container->setPrefix(ServiceContainer::ROUTE)->set(
             \Selene\Routes\Route::class,
             [
                 $this->container->get(ServiceContainer::REQUEST),
-                $this->container->get(ServiceContainer::MIDDLEWARE)
+                $this->container->get(ServiceContainer::MIDDLEWARE),
             ]
         );
     }
 
     /**
-     * Criando o objeto da sessão e suas dependencias
+     * Criando o objeto da sessão e suas dependencias.
      *
      * @return Selene\Session\Session
      */
-    protected function makeSession() : void
+    private function makeSession(): void
     {
         $this->container->setPrefix(ServiceContainer::SESSION)->set(
             \Selene\Session\Session::class
@@ -236,50 +225,44 @@ final class App
     }
 
     /**
-     * Criando o objeto de autenticação e suas dependencias
+     * Criando o objeto de autenticação e suas dependencias.
      *
      * @return Selene\Auth\Auth
      */
-    protected function makeAuth() : void
+    private function makeAuth(): void
     {
         $this->container->setPrefix(ServiceContainer::AUTH)->set(
             \Selene\Auth\Auth::class,
             [
-                $this->container->get(ServiceContainer::SESSION)
+                $this->container->get(ServiceContainer::SESSION),
             ]
         );
     }
 
     /**
-     * Creates the error handler
-     *
-     * @return void
+     * Creates the error handler.
      */
-    protected function makeErrorHandler() : void
+    private function makeErrorHandler(): void
     {
-        $whoops = new \Whoops\Run;
-        $whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler);
+        $whoops = new \Whoops\Run();
+        $whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler());
         $whoops->register();
     }
 
     /**
-     * Seta o path root da aplicação
-     *
-     * @return void
+     * Seta o path root da aplicação.
      */
-    protected function injectAppRootPathOnView() : void
+    private function injectAppRootPathOnView(): void
     {
         $request = $this->container->get(ServiceContainer::REQUEST);
-        $view    = $this->container->get(ServiceContainer::VIEW);
+        $view = $this->container->get(ServiceContainer::VIEW);
         $view->setRootPath($request->getDocumentRoot());
     }
 
     /**
-     * Injeta a view no roteador
-     *
-     * @return void
+     * Injeta a view no roteador.
      */
-    protected function injectViewOnRouterDispatcher() : void
+    private function injectViewOnRouterDispatcher(): void
     {
         $this->container->get(ServiceContainer::ROUTE)->injectViewOnRouterDispatcher(
             $this->container->get(ServiceContainer::VIEW)
