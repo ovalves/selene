@@ -13,27 +13,24 @@ use Exception;
 class Logger
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->configuration = include 'App/Config/logging.php';
+        $this->configuration = include '../App/Config/logging.php';
 
         if (empty($this->configuration)) {
-            throw new Exception("Failed to open the framework configuration logging file");
+            throw new Exception('Failed to open the framework configuration logging file');
         }
     }
 
     /**
-     * Escreve uma linha no arquivo de log
-     *
-     * @param string $message
-     * @return void
+     * Escreve uma linha no arquivo de log.
      */
-    public function write(string $message = '') : void
+    public function write(string $message = ''): void
     {
         \date_default_timezone_set('America/Sao_Paulo');
-        $time = date("Y-m-d H:i:s");
+        $time = date('Y-m-d H:i:s');
         $text = "$time :: $message\n";
         $handler = \fopen($this->configuration['path'], 'a');
         \fwrite($handler, $text);
