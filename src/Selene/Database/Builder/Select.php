@@ -8,35 +8,29 @@
 
 namespace Selene\Database\Builder;
 
+use PDOStatement;
 use Selene\Database\DatabaseConstant;
 use Selene\Database\Grammar\GrammarAbstract;
-use Selene\Database\Grammar\GrammarException;
 use Selene\Database\Grammar\GrammarAwareTrait;
-use Selene\Database\Builder\Where;
-use Selene\Database\Builder\Join;
-use Selene\Database\Builder\Group;
-use PDOStatement;
+use Selene\Database\Grammar\GrammarException;
 
 /**
- * Responsavel por executar os statement de select
+ * Responsavel por executar os statement de select.
  */
 final class Select extends GrammarAbstract
 {
     use GrammarAwareTrait;
 
     /**
-     * Executa a query
+     * Executa a query.
      *
      * @param array $whereClause
-     * @return PDOStatement
      */
-    public function execute() : PDOStatement
+    public function execute(): PDOStatement
     {
         $this->checkFields();
         $this->checkTable();
         $where = $this->getWhere();
-        $join  = $this->getJoin();
-        $group = $this->getGroup();
 
         $stringSql = \str_replace(
             [
@@ -44,26 +38,32 @@ final class Select extends GrammarAbstract
                 '__TABLENAME__',
                 '__JOIN__',
                 '__WHERE__',
-                '__GROUP__'
+                '__ORDER__',
+                '__LIMIT__',
+                '__OFFSET__',
+                '__GROUP__',
             ],
             [
                 $this->fields,
                 $this->table,
-                $join->getParsedString(),
+                $this->getJoin()->getParsedString(),
                 $where->getParsedString(),
-                $group->getParsedString()
+                $this->getOrder(),
+                $this->getLimit(),
+                $this->getOffset(),
+                $this->getGroup()->getParsedString(),
             ],
             $this->grammar[DatabaseConstant::SELECT]
         );
 
         if (empty($stringSql)) {
-            throw new GrammarException("Erro ao parser os dados da query");
+            throw new GrammarException('Erro ao parser os dados da query');
         }
 
         $stmt = $this->transaction->open()->prepare($stringSql);
 
         if (!$stmt->execute($where->getWherePayload())) {
-            throw new GrammarException("Erro ao executar o statement");
+            throw new GrammarException('Erro ao executar o statement');
         }
 
         return $stmt;
