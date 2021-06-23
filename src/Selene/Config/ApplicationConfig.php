@@ -11,47 +11,40 @@ namespace Selene\Config;
 use Exception;
 
 /**
- * Gerencia os arquivos de configuração do framework
+ * Gerencia os arquivos de configuração do framework.
  */
 class ApplicationConfig
 {
     /**
-     * Guarda os arquivos ja carregados
+     * Guarda os arquivos ja carregados.
      *
      * @var array
      */
     protected $configuration = [];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->configuration = include 'App/Config/app.php';
+        $this->configuration = include '../App/Config/app.php';
 
         if (empty($this->configuration)) {
-            throw new Exception("Failed to open the framework configuration app file");
+            throw new Exception('Failed to open the framework configuration app file');
         }
     }
 
     /**
-     * Return the config of aplication
-     *
-     * @return array
+     * Return the config of aplication.
      */
-    public function getConfig(string $type = null) : array
+    public function getConfig(string $type = null): array
     {
         if (empty($type)) {
             return $this->configuration;
         }
 
         if (!isset($this->configuration[$type])) {
-            throw new Exception(
-                sprintf(
-                    "The configuration of '%s' does not exist. Please check your configuration file",
-                    $type
-                )
-            );
+            throw new Exception(sprintf("The configuration of '%s' does not exist. Please check your configuration file", $type));
         }
 
         return $this->configuration[$type];
