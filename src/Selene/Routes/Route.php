@@ -241,7 +241,7 @@ class Route
                     continue;
                 }
 
-                if (!$this->resolveResourceArgument($data[RouteConstant::ROUTE_RESOURCE], $requestedUri)) {
+                if (!$this->resolveResource($data[RouteConstant::ROUTE_RESOURCE], $requestedUri)) {
                     if (!next($this->queue)) {
                         throw new RouteException($this->resourceNotFound());
                     }
