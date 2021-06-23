@@ -8,31 +8,28 @@
 
 namespace Selene\Render;
 
-use Selene\Render\ViewException;
-
 /**
  * Renderiza as views da aplicação
- * Faz o parser das tags especiais do template
+ * Faz o parser das tags especiais do template.
  */
 class View extends ViewAbstract
 {
     /**
-     * Renderiza uma view
-     *
-     * @param string $file
-     * @return void
+     * Renderiza uma view.
      */
-    public function render($file)
+    public function render(string $file): self
     {
         try {
             if (empty($file)) {
-                throw new ViewException("Error Processing Request", 1);
+                throw new ViewException('Error - View not found');
             }
 
-            /**
+            /*
              * @todo verificar se o template está no diretório de cache antes de compilar
              */
             $this->make($file);
+
+            return $this;
         } catch (ViewException $e) {
             error_log($e->getMessage());
         }
