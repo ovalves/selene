@@ -8,24 +8,23 @@
 
 namespace Selene\Loader;
 
-use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
-use Exception;
+use RecursiveIteratorIterator;
 
 /**
- * Responsável por instânciar as classes da aplicação
+ * Responsável por instânciar as classes da aplicação.
  */
 class AppLoader
 {
     /**
-     * Guarda os diretórios que serão carregados da aplicação
+     * Guarda os diretórios que serão carregados da aplicação.
      *
      * @var array
      */
     protected $directories;
 
     /**
-     * Adiciona um diretório a a fila de diretórios
+     * Adiciona um diretório a a fila de diretórios.
      */
     public function addDirectory($directory)
     {
@@ -33,7 +32,7 @@ class AppLoader
     }
 
     /**
-     * Inicia o finder para encontrar os diretórios da aplicação
+     * Inicia o finder para encontrar os diretórios da aplicação.
      */
     public function load()
     {
@@ -41,7 +40,7 @@ class AppLoader
     }
 
     /**
-     * Procura uma classe da aplicação e carrega
+     * Procura uma classe da aplicação e carrega.
      */
     protected function finder($class)
     {
@@ -55,14 +54,13 @@ class AppLoader
     }
 
     /**
-     * Itera pelo diretório para encontrar as classes
+     * Itera pelo diretório para encontrar as classes.
      *
      * @param string $directory
      * @param string $argKey
      * @param string $class
-     * @return bool
      */
-    protected function finderClassInDirectory($directory, $argKey, $class) : bool
+    protected function finderClassInDirectory($directory, $argKey, $class): bool
     {
         if (empty($directory)) {
             return false;
@@ -70,6 +68,7 @@ class AppLoader
 
         if (\file_exists("{$directory}/{$class}.php")) {
             require_once "{$directory}/{$class}.php";
+
             return true;
         }
 
@@ -77,14 +76,13 @@ class AppLoader
     }
 
     /**
-     * Itera recursivamente pelos diretórios para encontrar as classes
+     * Itera recursivamente pelos diretórios para encontrar as classes.
      *
      * @param string $directory
      * @param string $argKey
      * @param string $class
-     * @return bool
      */
-    protected function finderRecursiveInDirectory($directory, $argKey, $class) : bool
+    protected function finderRecursiveInDirectory($directory, $argKey, $class): bool
     {
         if (empty($directory)) {
             return false;
@@ -94,10 +92,6 @@ class AppLoader
             new RecursiveDirectoryIterator($directory),
             RecursiveIteratorIterator::SELF_FIRST
         );
-
-        if (!\file_exists($recursiveDirectory)) {
-            return false;
-        }
 
         foreach ($recursiveDirectory as $entry) {
             if (!\is_dir($entry)) {
@@ -109,6 +103,7 @@ class AppLoader
             }
 
             require_once "{$entry}/{$class}.php";
+
             return true;
         }
 
