@@ -11,11 +11,9 @@ namespace Selene\Routes;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Selene\Request\Request;
-use Selene\Routes\Http;
-use Selene\Routes\RouteException;
 
 /**
- * Responsável por executar as ações de roteamento da aplicação
+ * Responsável por executar as ações de roteamento da aplicação.
  */
 class Route
 {
@@ -28,167 +26,157 @@ class Route
     protected $container;
 
     /**
-     * Guarda os middlewares usados no roteamento
+     * Guarda os middlewares usados no roteamento.
      *
      * @var MiddlewareInterface
      */
     private $middleware;
 
     /**
-     * Guarda o nome da classe da controller que será executada
+     * Guarda o nome da classe da controller que será executada.
      *
      * @var string
      */
     private $controller;
 
     /**
-     * Guarda a action que deve ser executa na controller
+     * Guarda a action que deve ser executa na controller.
      *
      * @var string
      */
     private $action;
 
     /**
-     * Guarda o objeto da request
+     * Guarda o objeto da request.
      *
      * @var Request
      */
     private $request;
 
     /**
-     * Guarda a fila de recursos registrados no roteador
+     * Guarda a fila de recursos registrados no roteador.
      *
      * @var array
      */
     private $queue;
 
     /**
-     * Define o verbo http get
+     * Define o verbo http get.
      *
      * @var Get
      */
     private $get;
 
     /**
-     * Define o verbo http post
+     * Define o verbo http post.
      *
      * @var Post
      */
     private $post;
 
     /**
-     * Define o verbo http put
+     * Define o verbo http put.
      *
      * @var Put
      */
     private $put;
 
     /**
-     * Define o verbo http patch
+     * Define o verbo http patch.
      *
      * @var Patch
      */
     private $patch;
 
     /**
-     * Define o verbo http delete
+     * Define o verbo http delete.
      *
      * @var Delete
      */
     private $delete;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param ContainerInterface $container
-     * @param Request $request
      * @param MiddlewareInterface $middleware
      */
     public function __construct(ContainerInterface $container, Request $request, MiddlewareInterface $middleware = null)
     {
-        $this->get        = new Http\Get;
-        $this->put        = new Http\Put;
-        $this->post       = new Http\Post;
-        $this->patch      = new Http\Patch;
-        $this->delete     = new Http\Delete;
-        $this->queue      = [];
-        $this->container  = $container;
-        $this->request    = $request;
+        $this->get = new Http\Get();
+        $this->put = new Http\Put();
+        $this->post = new Http\Post();
+        $this->patch = new Http\Patch();
+        $this->delete = new Http\Delete();
+        $this->queue = [];
+        $this->container = $container;
+        $this->request = $request;
         $this->middleware = $middleware;
     }
 
     /**
-     * Adiciona uma rota a fila do dispatcher
+     * Adiciona uma rota a fila do dispatcher.
      *
-     * @param string $resource
      * @param mixed $callback
-     * @return self
      */
-    public function get(string $resource, $callback) : self
+    public function get(string $resource, $callback): self
     {
         $this->queue = ($this->get)($this->queue, $resource, $callback);
+
         return $this;
     }
 
     /**
-     * Adiciona uma rota a fila do dispatcher
+     * Adiciona uma rota a fila do dispatcher.
      *
-     * @param string $resource
      * @param mixed $callback
-     * @return self
      */
-    public function post(string $resource, $callback) : self
+    public function post(string $resource, $callback): self
     {
         $this->queue = ($this->post)($this->queue, $resource, $callback);
+
         return $this;
     }
 
     /**
-     * Adiciona uma rota a fila do dispatcher
+     * Adiciona uma rota a fila do dispatcher.
      *
-     * @param string $resource
      * @param mixed $callback
-     * @return self
      */
-    public function put(string $resource, $callback) : self
+    public function put(string $resource, $callback): self
     {
         $this->queue = ($this->put)($this->queue, $resource, $callback);
+
         return $this;
     }
 
     /**
-     * Adiciona uma rota a fila do dispatcher
+     * Adiciona uma rota a fila do dispatcher.
      *
-     * @param string $resource
      * @param mixed $callback
-     * @return self
      */
-    public function patch(string $resource, $callback) : self
+    public function patch(string $resource, $callback): self
     {
         $this->queue = ($this->patch)($this->queue, $resource, $callback);
+
         return $this;
     }
 
     /**
-     * Adiciona uma rota a fila do dispatcher
+     * Adiciona uma rota a fila do dispatcher.
      *
-     * @param string $resource
      * @param mixed $callback
-     * @return self
      */
-    public function delete(string $resource, $callback) : self
+    public function delete(string $resource, $callback): self
     {
         $this->queue = ($this->delete)($this->queue, $resource, $callback);
+
         return $this;
     }
 
     /**
-     * Adiciona os middlewares de agrupamento de rotas
-     *
-     * @param array $middlewares
-     * @return self
+     * Adiciona os middlewares de agrupamento de rotas.
      */
-    public function middleware(array $middlewares) : self
+    public function middleware(array $middlewares): self
     {
         if (empty($middlewares)) {
             return $this;
@@ -204,31 +192,27 @@ class Route
     }
 
     /**
-     * Agrupa as rotas executa os middleware e executa a função anonima de agrupamento
-     *
-     * @param Callable $callback
-     * @return self
+     * Agrupa as rotas executa os middleware e executa a função anonima de agrupamento.
      */
-    public function group(callable $callback) : self
+    public function group(callable $callback): self
     {
         if (!\is_callable($callback)) {
-            throw new RouteException(
-                "Argumento de agrupamento de rotas deve ser do tipo callable"
-            );
+            throw new RouteException('Argumento de agrupamento de rotas deve ser do tipo callable');
         }
 
         \call_user_func($callback);
+
         return $this;
     }
 
     /**
-     * Parseia os dados da request e busca a uri
+     * Parseia os dados da request e busca a uri.
      *
      * @return void
      */
     public function run()
     {
-        $uri    = $this->request->getUri();
+        $uri = $this->request->getUri();
         $method = $this->request->getMethod();
 
         if (empty($uri)) {
@@ -243,13 +227,9 @@ class Route
     }
 
     /**
-     * Busca uma uri para o recurso executa a fila de recursos registros no roteador
-     *
-     * @param string $requestedUri
-     * @param string $requestedHttp
-     * @return void
+     * Busca uma uri para o recurso executa a fila de recursos registros no roteador.
      */
-    private function parse(string $requestedUri, string $requestedHttp) : void
+    private function parse(string $requestedUri, string $requestedHttp): void
     {
         if (empty($this->queue)) {
             throw new RouteException('A fila de rotas está vazia');
@@ -274,7 +254,6 @@ class Route
 
                 if (isset($data[RouteConstant::ROUTE_CALLBACK])) {
                     if (is_callable($data[RouteConstant::ROUTE_CALLBACK])) {
-
                         if ($this->middleware instanceof MiddlewareInterface) {
                             $response = $this->middleware->handle($this->request);
                         }
@@ -290,7 +269,7 @@ class Route
                 }
 
                 $this->controller = new $data[RouteConstant::ROUTE_CLASS]($this->container);
-                $this->action     = $data[RouteConstant::ROUTE_ACTION];
+                $this->action = $data[RouteConstant::ROUTE_ACTION];
 
                 $this->dispatch();
                 break 2;
@@ -299,18 +278,14 @@ class Route
     }
 
     /**
-     * Faz o dispatch dos dados da request para a controller
-     *
-     * @return void
+     * Faz o dispatch dos dados da request para a controller.
      */
-    private function dispatch() : void
+    private function dispatch(): void
     {
         $this->injectOnBaseController();
 
         if (!method_exists($this->controller, $this->action)) {
-            throw new RouteException(
-                $this->controllerActionNotFound($this->controller, $this->action)
-            );
+            throw new RouteException($this->controllerActionNotFound($this->controller, $this->action));
         }
 
         if (!empty($this->matchParam)) {
