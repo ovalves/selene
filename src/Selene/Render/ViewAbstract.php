@@ -9,20 +9,19 @@
 namespace Selene\Render;
 
 use Psr\Container\ContainerInterface;
-use Selene\Render\Plugins;
 use Selene\Render\Compiler\PluginCompiler;
 use Selene\Render\Compiler\TemplateCompiler;
 
 /**
  * Renderiza as views da aplicação
- * Faz o parser das tags especiais do template
+ * Faz o parser das tags especiais do template.
  */
 abstract class ViewAbstract
 {
     /**
-     * Guarda o diretório das views
+     * Guarda o diretório das views.
      */
-    const APP_VIEW_DIRECTORY = 'App/Views/';
+    public const APP_VIEW_DIRECTORY = '../App/Views/';
 
     /**
      * @var ContainerInterface
@@ -30,102 +29,91 @@ abstract class ViewAbstract
     protected $container;
 
     /**
-     * Guarda o root path da aplicação
+     * Guarda o root path da aplicação.
      *
      * @var string
      */
     protected $rootPath;
 
     /**
-     * Guarda o arquivo a ser parseado
+     * Guarda o arquivo a ser parseado.
      *
      * @var string
      */
     protected $file;
 
     /**
-     * Guarda o conteúdo do template a ser parseado
+     * Guarda o conteúdo do template a ser parseado.
      *
      * @var resource
      */
     protected $content;
 
     /**
-     * Guarda o objeto compilador de plugin da template engine
+     * Guarda o objeto compilador de plugin da template engine.
      *
      * @var PluginCompiler
      */
     protected $compiler;
 
     /**
-     * Guarda o objeto compilador da template engine
+     * Guarda o objeto compilador da template engine.
      *
      * @var TemplateCompiler
      */
     protected $template;
 
     /**
-     * Guarda as variáveis que foram criadas no template
+     * Guarda as variáveis que foram criadas no template.
      *
      * @var array
      */
     protected $assigned = [];
 
     /**
-     * Constructor
-     *
-     * @param ContainerInterface $container
-     * @param PluginCompiler $compiler
-     * @param TemplateCompiler $template
+     * Constructor.
      */
     final public function __construct(ContainerInterface $container, PluginCompiler $compiler, TemplateCompiler $template)
     {
         $this->container = $container;
-        $this->compiler  = $compiler;
-        $this->template  = $template;
+        $this->compiler = $compiler;
+        $this->template = $template;
     }
 
     /**
-     * Cria e seta um valor para uma variavel
+     * Cria e seta um valor para uma variavel.
      *
      * @param mixed $variable
      * @param mixed $value
-     * @return void
      */
-    final public function assign($variable, $value) : void
+    final public function assign($variable, $value): void
     {
         $this->assigned[$variable] = $value;
     }
 
     /**
-     * Seta o path root da aplicação
-     *
-     * @param string $rootPath
-     * @return void
+     * Seta o path root da aplicação.
      */
-    final public function setRootPath(string $rootPath) : void
+    final public function setRootPath(string $rootPath): void
     {
         $this->rootPath = $rootPath;
     }
 
     /**
-     * Retorna o path raiz das views
-     *
-     * @return string
+     * Retorna o path raiz das views.
      */
-    final public function getTemplatePath() : string
+    final public function getTemplatePath(): string
     {
         if (empty($this->file)) {
-            throw new ViewException("Erro ao carregar os dados da view");
+            throw new ViewException('Erro ao carregar os dados da view');
         }
 
         return $this->rootPath . DIRECTORY_SEPARATOR . self::APP_VIEW_DIRECTORY . $this->file;
     }
 
     /**
-     * Processa principal para criação de um template
+     * Processa principal para criação de um template.
      *
-     * @param string $file
      * @return void
      */
     final protected function make(string $file)
@@ -137,39 +125,33 @@ abstract class ViewAbstract
     }
 
     /**
-     * Lê o conteúdo do template a ser parseado
-     *
-     * @return string
+     * Lê o conteúdo do template a ser parseado.
      */
-    final protected function load() : string
+    final protected function load(): string
     {
         if (!file_exists($this->getTemplatePath())) {
-            throw new ViewException("Erro ao carregar os dados da view");
+            throw new ViewException('Erro ao carregar os dados da view');
         }
 
         return file_get_contents($this->getTemplatePath());
     }
 
     /**
-     * Faz o parser do template
-     *
-     * @return void
+     * Faz o parser do template.
      */
-    final protected function parserTemplateEngine() : void
+    final protected function parserTemplateEngine(): void
     {
         if (empty($this->content)) {
-            throw new ViewException("Erro ao carregar os dados da view");
+            throw new ViewException('Erro ao carregar os dados da view');
         }
 
         $this->content = $this->template->compilerTemplate($this->compiler, $this->content, $this->assigned);
     }
 
     /**
-     * Executa a compilação do template
-     *
-     * @return string
+     * Executa a compilação do template.
      */
-    final protected function compile() : string
+    final protected function compile(): string
     {
         foreach ($this->assigned as $var => $val) {
             ${$var} = $val;
@@ -177,6 +159,7 @@ abstract class ViewAbstract
 
         ob_start();
         eval(' ?>' . $this->content . '<?php ');
+
         return ob_get_clean();
     }
 }
