@@ -117,22 +117,26 @@ trait RouteAwareTrait
     /**
      * Resolve o recurso requisitado e seus query params.
      */
-    protected function resolveResourceWithQueryParams(string $routeResource, string $calledResource): string
+    protected function resolveResourceWithQueryParams(string $routeResource, string $calledResource): bool
     {
         \preg_match('/([^\?]+)(\?.*)?/', $calledResource, $args);
 
-        if (!empty($args[0])) {
-            $calledResource = \explode('?', $calledResource);
+        if (empty($args[0])) {
+            return false;
         }
+
+        $calledResource = \explode('?', $calledResource);
 
         if (!empty($calledResource[1])) {
             $params = \explode('&', $calledResource[1]);
         }
 
-        $this->matchParam = [];
-        foreach ($params as $param) {
-            $params = \explode('=', $param);
-            $this->matchParam[$params[0]] = $params[1];
+        if (!empty($params)) {
+            $this->matchParam = [];
+            foreach ($params as $param) {
+                $params = \explode('=', $param);
+                $this->matchParam[$params[0]] = $params[1];
+            }
         }
 
         return $routeResource === $calledResource[0];
