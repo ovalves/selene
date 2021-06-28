@@ -8,6 +8,8 @@
 
 namespace Selene\Response;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 /**
  * Classe que lida com Server Requests.
  */
@@ -92,5 +94,17 @@ class Response extends ResponseAbstract
     {
         header("Location: {$this->redirectToPage}");
         exit;
+    }
+
+    /**
+     * Return a new JSON response from the application.
+     *
+     * @param mixed $data
+     * @param int   $status
+     * @param int   $options
+     */
+    public function json($data = [], $status = 200, array $headers = [], $options = 0): JsonResponse
+    {
+        return (new JsonResponse($data, $status, $headers, $options))->send();
     }
 }
