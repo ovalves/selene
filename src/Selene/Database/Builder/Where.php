@@ -20,7 +20,7 @@ final class Where
      *
      * @var array
      */
-    private $whereString = '';
+    private string $whereString = '';
 
     /**
      * Guarda os dados que seerão usados no bind.
@@ -28,13 +28,6 @@ final class Where
      * @var array
      */
     private $dataPayload = [];
-
-    /**
-     * Define a gramatica do uso da clausula where.
-     *
-     * @var array
-     */
-    private $grammar = ['in', 'not in', '=', '<>', '!=', '?'];
 
     /**
      * Construtor.
