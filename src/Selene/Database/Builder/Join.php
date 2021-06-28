@@ -9,23 +9,23 @@
 namespace Selene\Database\Builder;
 
 /**
- * Responsavel por criar as clausulas where
+ * Responsavel por criar as clausulas where.
  */
 final class Join
 {
     /**
-     * Guarda os dados da clausula
+     * Guarda os dados da clausula.
      *
      * @var array
      */
-    protected $joinString = '';
+    private string $joinString = '';
 
     /**
-     * Construtor
+     * Construtor.
      *
      * @param string $join
      */
-    public function __construct(string $join = null)
+    public function __construct(array $join = [])
     {
         if (empty($join)) {
             return $this->joinString;
@@ -34,21 +34,19 @@ final class Join
     }
 
     /**
-     * Cria a clausula where
-     *
-     * @return void
+     * Cria a clausula where.
      */
-    private function make(string $join) : void
+    private function make(array $join): void
     {
-        $this->joinString = $join;
+        foreach ($join as $clause) {
+            $this->joinString .= ' ' . $clause;
+        }
     }
 
     /**
-     * Retorna a string contendo a clausula where
-     *
-     * @return string
+     * Retorna a string contendo a clausula where.
      */
-    public function getParsedString() : string
+    public function getParsedString(): string
     {
         return $this->joinString;
     }
