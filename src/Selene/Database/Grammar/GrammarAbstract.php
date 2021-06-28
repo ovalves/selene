@@ -35,20 +35,6 @@ abstract class GrammarAbstract
     protected $fields;
 
     /**
-     * Guarda os valores a serem usados na clausula.
-     *
-     * @var mixed
-     */
-    protected $values;
-
-    /**
-     * Guarda os valores a serem usados como bind na clausula.
-     *
-     * @var mixed
-     */
-    protected $bindParam;
-
-    /**
      * Guarda a tabela a ser usada na clausula.
      *
      * @var mixed
@@ -86,9 +72,9 @@ abstract class GrammarAbstract
     /**
      * Guarda os dados que serão usados na clausula join.
      *
-     * @var string
+     * @var array
      */
-    protected $join = '';
+    protected $join = [];
 
     /**
      * Guarda os dados que serão usados na clausula group.
@@ -156,6 +142,53 @@ abstract class GrammarAbstract
         $this->table = \addslashes($table);
 
         return $this;
+    }
+
+    /**
+     * Cria uma claususa Left Join.
+     */
+    final public function leftJoin(string $table, string $column, string $operator, string $onClause): self
+    {
+        $this->join(
+            $table,
+            $column,
+            $operator,
+            $onClause,
+            'LEFT'
+        );
+
+        return $this;
+    }
+
+    /**
+     * Cria uma claususa Inner Join.
+     */
+    final public function join(string $table, string $column, string $operator, string $onClause, $type = 'INNER'): self
+    {
+        $table = $this->escape($table);
+        $column = $this->escape($column);
+        $operator = $this->escape($operator);
+        $onClause = $this->escape($onClause);
+
+        $this->join[] = "{$type} JOIN {$table} ON {$column} {$operator} {$onClause}";
+
+        return $this;
+    }
+
+    /**
+     * Retorna os campos de pesquisa da query.
+     */
+    final public function getFields(): string
+    {
+        if (is_array($this->fields)) {
+            return implode(', ', $this->fields);
+        }
+
+        if (is_string($this->fields)) {
+            return $this->fields;
+        }
+
+        throw new DatabaseException('Error Processing Request', 1);
     }
 
     /**
@@ -227,7 +260,7 @@ abstract class GrammarAbstract
         }
 
         if (\is_array($this->fields)) {
-            $this->prepare($this->fields);
+            $this->fields = $this->prepare($this->fields);
 
             return true;
         }
@@ -251,18 +284,19 @@ abstract class GrammarAbstract
      * Itera pelos elemantos do statement
      * Executa o escape da query.
      */
-    protected function prepare(array $data): void
+    protected function prepare(array $fields): array
     {
         $prepared = [];
-        foreach ($data as $key => $value) {
-            if (\is_scalar($value)) {
-                $this->bindParam[] = \str_pad($key, \strlen($key) + 1, ':', STR_PAD_LEFT);
-                $this->values[] = $this->escape($value);
-                $prepared[$key] = $this->escape($key);
+        foreach ($fields as $field) {
+            if (\is_scalar($field)) {
+                $prepared[] = $this->escape($field);
+                continue;
             }
+
+            $prepared[] = $field;
         }
 
-        $this->fields = \array_keys($prepared);
+        return $prepared;
     }
 
     /**
