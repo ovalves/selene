@@ -44,7 +44,7 @@ final class Select extends GrammarAbstract
                 '__GROUP__',
             ],
             [
-                $this->fields,
+                $this->getFields(),
                 $this->table,
                 $this->getJoin()->getParsedString(),
                 $where->getParsedString(),
