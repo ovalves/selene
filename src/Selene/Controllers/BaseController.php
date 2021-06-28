@@ -13,22 +13,22 @@ use Selene\Gateway\GatewayAbstract;
 use Selene\Render\View;
 
 /**
- * Classe base para as controllers
+ * Classe base para as controllers.
  */
 class BaseController extends GatewayAbstract
 {
     /**
-     * Define a constante de injeção da view na base controller
+     * Define a constante de injeção da view na base controller.
      */
-    const INJECT_VIEW = 'injectViewOnBaseController';
+    public const INJECT_VIEW = 'injectViewOnBaseController';
 
     /**
-     * Define a constante de injeção do service container na base controller
+     * Define a constante de injeção do service container na base controller.
      */
-    const INJECT_SERVICE_CONTAINER = 'injectContainerOnBaseController';
+    public const INJECT_SERVICE_CONTAINER = 'injectContainerOnBaseController';
 
     /**
-     * Guarda o objeto da view
+     * Guarda o objeto da view.
      *
      * @var View
      */
@@ -40,43 +40,33 @@ class BaseController extends GatewayAbstract
     protected $container;
 
     /**
-     * Instância o objeto da view
-     *
-     * @param View $view
-     * @return void
+     * Instância o objeto da view.
      */
-    final public function injectViewOnBaseController(View $view) : void
+    final public function injectViewOnBaseController(View $view): void
     {
         $this->view = $view;
     }
 
     /**
-     * Instância o objeto de Service Container
-     *
-     * @param ContainerInterface $container
-     * @return void
+     * Instância o objeto de Service Container.
      */
-    final public function injectContainerOnBaseController(ContainerInterface $container) : void
+    final public function injectContainerOnBaseController(ContainerInterface $container): void
     {
         $this->container = $container;
     }
 
     /**
-     * Retorna objeto de render view
-     *
-     * @return View
+     * Retorna objeto de render view.
      */
-    protected function view() : View
+    protected function view(): View
     {
         return $this->view;
     }
 
     /**
-     * Retorna objeto de Service Container
-     *
-     * @return ContainerInterface
+     * Retorna objeto de Service Container.
      */
-    protected function container() : ContainerInterface
+    protected function container(): ContainerInterface
     {
         return $this->container;
     }
