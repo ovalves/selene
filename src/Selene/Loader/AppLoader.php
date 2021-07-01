@@ -36,6 +36,7 @@ class AppLoader
      */
     public function load()
     {
+        require_once 'helpers.php';
         \spl_autoload_register([$this, 'finder']);
     }
 
