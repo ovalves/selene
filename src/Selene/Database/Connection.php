@@ -65,38 +65,38 @@ final class Connection
         return $conn;
     }
 
-    private function getUser(array $appConfig, string $driverType): string | null
+    private function getUser(array $appConfig, string $driverType): string
     {
         return isset($appConfig[$driverType][DatabaseConstant::DB_USER])
                 ? $appConfig[$driverType][DatabaseConstant::DB_USER]
-                : null;
+                : '';
     }
 
-    private function getPassword(array $appConfig, string $driverType): string | null
+    private function getPassword(array $appConfig, string $driverType): string
     {
         return isset($appConfig[$driverType][DatabaseConstant::DB_PASS])
                 ? $appConfig[$driverType][DatabaseConstant::DB_PASS]
-                : null;
+                : '';
     }
 
-    private function getDatabase(array $appConfig, string $driverType): string | null
+    private function getDatabase(array $appConfig, string $driverType): string
     {
         return isset($appConfig[$driverType][DatabaseConstant::DB_NAME])
                 ? $appConfig[$driverType][DatabaseConstant::DB_NAME]
-                : null;
+                : '';
     }
 
-    private function getHostname(array $appConfig, string $driverType): string | null
+    private function getHostname(array $appConfig, string $driverType): string
     {
         return isset($appConfig[$driverType][DatabaseConstant::DB_HOST])
                 ? $appConfig[$driverType][DatabaseConstant::DB_HOST]
-                : null;
+                : '';
     }
 
-    private function getPort(array $appConfig, string $driverType): string | null
+    private function getPort(array $appConfig, string $driverType): string
     {
         return isset($appConfig[$driverType][DatabaseConstant::DB_PORT])
                 ? $appConfig[$driverType][DatabaseConstant::DB_PORT]
-                : null;
+                : '';
     }
 }
