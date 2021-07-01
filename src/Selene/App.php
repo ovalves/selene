@@ -18,6 +18,7 @@ use Selene\Render\View;
 use Selene\Request\Request;
 use Selene\Routes\Route;
 use Selene\Session\Session;
+use Symfony\Component\Dotenv\Dotenv;
 
 final class App
 {
@@ -29,13 +30,21 @@ final class App
     private $container = null;
 
     /**
+     * Define o root path do app
+     *
+     * @var string
+     */
+    public static $rootPath;
+
+    /**
      * Constructor.
      *
-     * @param  ContainerInterface $container
+     * @param string $root
      * @return void
      */
-    public function __construct()
+    public function __construct(string $root = '')
     {
+        self::$rootPath = $root;
         $this->container = new Container();
         $this->make();
     }
@@ -55,7 +64,7 @@ final class App
      *
      * @return Selene\Middleware\Middleware
      */
-    public function middleware(): MiddlewareInterface
+    public function middleware(): Middleware
     {
         return $this->container->get(ServiceContainer::MIDDLEWARE);
     }
@@ -119,6 +128,11 @@ final class App
         return $this->container;
     }
 
+    public static function rootPath()
+    {
+        return self::$rootPath;
+    }
+
     /**
      * Instancia os componentes básicos do framework.
      */
@@ -147,10 +161,10 @@ final class App
     {
         $loader = new AppLoader();
 
-        $loader->addDirectory('../App/Controllers');
-        $loader->addDirectory('../App/Models');
-        $loader->addDirectory('../App/Gateway');
-        $loader->addDirectory('../App/Config');
+        $loader->addDirectory(\Selene\App::rootPath() . 'src/Controllers');
+        $loader->addDirectory(\Selene\App::rootPath() . 'src/Models');
+        $loader->addDirectory(\Selene\App::rootPath() . 'src/Gateway');
+        $loader->addDirectory(\Selene\App::rootPath() . 'src/Config');
         $loader->load();
 
         $this->container->setPrefix(ServiceContainer::APPLICATION_CONFIG)->set(
