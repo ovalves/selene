@@ -17,7 +17,7 @@ class Logger
      */
     public function __construct()
     {
-        $this->configuration = include '../App/Config/logging.php';
+        $this->configuration = include \Selene\App::rootPath() . 'src/Config/logging.php';
 
         if (empty($this->configuration)) {
             throw new Exception('Failed to open the framework configuration logging file');
@@ -32,7 +32,10 @@ class Logger
         \date_default_timezone_set('America/Sao_Paulo');
         $time = date('Y-m-d H:i:s');
         $text = "$time :: $message\n";
-        $handler = \fopen($this->configuration['path'], 'a');
+        $handler = \fopen(
+            $this->configuration['path'] . $this->configuration['filename'],
+            'a'
+        );
         \fwrite($handler, $text);
         \fclose($handler);
     }
