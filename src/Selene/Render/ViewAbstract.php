@@ -21,7 +21,7 @@ abstract class ViewAbstract
     /**
      * Guarda o diretório das views.
      */
-    public const APP_VIEW_DIRECTORY = '../App/Views/';
+    public const APP_VIEW_DIRECTORY = 'Views/';
 
     /**
      * @var ContainerInterface
