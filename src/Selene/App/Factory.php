@@ -9,6 +9,7 @@
 namespace Selene\App;
 
 use Selene\App;
+use Symfony\Component\Dotenv\Dotenv;
 
 /**
  * Framework Bootstrap
@@ -40,10 +41,12 @@ final class Factory
      *
      * @return App
      */
-    public static function create() : App
+    public static function create(string $root = '') : App
     {
         if (self::$instance === null) {
-            self::$instance = new App;
+            $dotenv = new Dotenv();
+            $dotenv->load($root. '../.env');
+            self::$instance = new App($root);
         }
 
         return self::$instance;
