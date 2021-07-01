@@ -304,7 +304,7 @@ abstract class GrammarAbstract
      *
      * @param mixed $value
      */
-    protected function escape($value): mixed
+    protected function escape($value)
     {
         if (!\is_scalar($value)) {
             return 'null';
