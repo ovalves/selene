@@ -27,8 +27,7 @@ class ApplicationConfig
      */
     public function __construct()
     {
-        $this->configuration = include '../App/Config/app.php';
-
+        $this->configuration = include \Selene\App::rootPath() . 'src/Config/app.php';
         if (empty($this->configuration)) {
             throw new Exception('Failed to open the framework configuration app file');
         }
