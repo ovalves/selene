@@ -45,7 +45,7 @@ final class Factory
     {
         if (self::$instance === null) {
             $dotenv = new Dotenv();
-            $dotenv->load($root. '../.env');
+            $dotenv->load($root. DIRECTORY_SEPARATOR .'.env');
             self::$instance = new App($root);
         }
 
