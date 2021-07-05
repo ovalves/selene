@@ -25,7 +25,11 @@
         "filp/whoops": "2.13.0",
         "symfony/dotenv": "^5.3"
     },
-    "require-dev": {},
+    "require-dev": {
+        "phpmd/phpmd": "@stable",
+        "phpunit/phpunit": "^9.0",
+        "squizlabs/php_codesniffer": "3.5.*"
+    },
     "suggest": {
         "symfony/console": "For using the console generators",
         "filp/whoops": "To make reading errors easier"
