@@ -231,7 +231,9 @@ final class App
      */
     private function makeSession(): void
     {
-        if (env('ENABLE_SESSION_CONTAINER')) {
+        $config = $this->container()->get(ServiceContainer::APPLICATION_CONFIG);
+
+        if ($config->getConfig('ENABLE_SESSION_CONTAINER')) {
             $this->container->setPrefix(ServiceContainer::SESSION)->set(
                 \Selene\Session\Session::class
             );
@@ -245,7 +247,9 @@ final class App
      */
     private function makeAuth(): void
     {
-        if (env('ENABLE_AUTH_CONTAINER')) {
+        $config = $this->container()->get(ServiceContainer::APPLICATION_CONFIG);
+
+        if ($config->getConfig('ENABLE_AUTH_CONTAINER')) {
             $this->container->setPrefix(ServiceContainer::AUTH)->set(
                 \Selene\Auth\Auth::class,
                 [
