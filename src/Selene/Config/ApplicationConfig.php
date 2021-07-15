@@ -36,7 +36,7 @@ class ApplicationConfig
     /**
      * Return the config of aplication.
      */
-    public function getConfig(string $type = null): array
+    public function getConfig(string $type = null)
     {
         if (empty($type)) {
             return $this->configuration;
