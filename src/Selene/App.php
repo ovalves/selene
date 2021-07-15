@@ -18,7 +18,6 @@ use Selene\Render\View;
 use Selene\Request\Request;
 use Selene\Routes\Route;
 use Selene\Session\Session;
-use Symfony\Component\Dotenv\Dotenv;
 
 final class App
 {
@@ -30,7 +29,7 @@ final class App
     private $container = null;
 
     /**
-     * Define o root path do app
+     * Define o root path do app.
      *
      * @var string
      */
@@ -39,7 +38,6 @@ final class App
     /**
      * Constructor.
      *
-     * @param string $root
      * @return void
      */
     public function __construct(string $root = '')
@@ -233,9 +231,11 @@ final class App
      */
     private function makeSession(): void
     {
-        $this->container->setPrefix(ServiceContainer::SESSION)->set(
-            \Selene\Session\Session::class
-        );
+        if (env('ENABLE_SESSION_CONTAINER')) {
+            $this->container->setPrefix(ServiceContainer::SESSION)->set(
+                \Selene\Session\Session::class
+            );
+        }
     }
 
     /**
@@ -245,12 +245,14 @@ final class App
      */
     private function makeAuth(): void
     {
-        $this->container->setPrefix(ServiceContainer::AUTH)->set(
-            \Selene\Auth\Auth::class,
-            [
-                $this->container->get(ServiceContainer::SESSION),
-            ]
-        );
+        if (env('ENABLE_AUTH_CONTAINER')) {
+            $this->container->setPrefix(ServiceContainer::AUTH)->set(
+                \Selene\Auth\Auth::class,
+                [
+                    $this->container->get(ServiceContainer::SESSION),
+                ]
+            );
+        }
     }
 
     /**
