@@ -22,7 +22,7 @@ final class EmptyPipelineHandler implements RequestHandlerInterface
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process($request, RequestHandlerInterface $handler) : ResponseInterface
     {
         return new Response;
     }
@@ -33,7 +33,7 @@ final class EmptyPipelineHandler implements RequestHandlerInterface
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      */
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle($request) : ResponseInterface
     {
         return $this->process($request, $this);
     }
