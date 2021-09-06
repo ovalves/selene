@@ -8,7 +8,7 @@
 
 namespace Selene\Response;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Selene\Response\JsonResponse;
 
 /**
  * Classe que lida com Server Requests.
