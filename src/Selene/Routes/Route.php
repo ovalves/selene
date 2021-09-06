@@ -100,7 +100,7 @@ class Route
      *
      * @param MiddlewareInterface $middleware
      */
-    public function __construct(ContainerInterface $container, Request $request, MiddlewareInterface $middleware = null)
+    public function __construct(ContainerInterface $container, MiddlewareInterface $middleware = null)
     {
         $this->get = new Http\Get();
         $this->put = new Http\Put();
@@ -109,8 +109,13 @@ class Route
         $this->delete = new Http\Delete();
         $this->queue = [];
         $this->container = $container;
-        $this->request = $request;
         $this->middleware = $middleware;
+    }
+
+    public function setRequest($request): self
+    {
+        $this->request = $request;
+        return $this;
     }
 
     /**
@@ -212,8 +217,8 @@ class Route
      */
     public function run()
     {
-        $uri = $this->request->getUri();
-        $method = $this->request->getMethod();
+        $uri = $this->request->server['request_uri'];
+        $method = $this->request->server['request_method'];
 
         if (empty($uri)) {
             throw new RouteException('A URI requisitada não existe');
@@ -223,13 +228,13 @@ class Route
             throw new RouteException('O método requisitado não existe');
         }
 
-        $this->parse($uri, $method);
+        return $this->parse($uri, $method);
     }
 
     /**
      * Busca uma uri para o recurso executa a fila de recursos registros no roteador.
      */
-    private function parse(string $requestedUri, string $requestedHttp): void
+    private function parse(string $requestedUri, string $requestedHttp): mixed
     {
         if (empty($this->queue)) {
             throw new RouteException('A fila de rotas está vazia');
@@ -271,7 +276,7 @@ class Route
                 $this->controller = new $data[RouteConstant::ROUTE_CLASS]($this->container);
                 $this->action = $data[RouteConstant::ROUTE_ACTION];
 
-                $this->dispatch();
+                return $this->dispatch();
                 break 2;
             }
         }
@@ -280,7 +285,7 @@ class Route
     /**
      * Faz o dispatch dos dados da request para a controller.
      */
-    private function dispatch(): void
+    private function dispatch(): mixed
     {
         $this->injectOnBaseController();
 
@@ -300,6 +305,6 @@ class Route
         }
 
         $reflectionMethod = new \ReflectionMethod($this->controller, $this->action);
-        $reflectionMethod->invoke($this->controller, $this->request, $response);
+        return $reflectionMethod->invoke($this->controller, $this->request, $response);
     }
 }
