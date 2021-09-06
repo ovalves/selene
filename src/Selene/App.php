@@ -141,14 +141,12 @@ final class App
         }
 
         $this->init();
-        $this->makeRequest();
         $this->makeMiddleware();
         $this->makeRouter();
         $this->makeSession();
         $this->makeAuth();
         $this->makeView();
         $this->makeErrorhandler();
-        $this->injectAppRootPathOnView();
         $this->injectViewOnRouterDispatcher();
     }
 
@@ -167,22 +165,6 @@ final class App
 
         $this->container->setPrefix(ServiceContainer::APPLICATION_CONFIG)->set(
             \Selene\Config\ApplicationConfig::class
-        );
-    }
-
-    /**
-     * Criando o container da request e suas dependencias.
-     */
-    private function makeRequest(): void
-    {
-        $this->container->setPrefix(ServiceContainer::REQUEST)->set(
-            \Selene\Request\Request::class,
-            [
-                $_GET,
-                $_POST,
-                $_REQUEST,
-                $_SERVER,
-            ]
         );
     }
 
@@ -218,10 +200,17 @@ final class App
         $this->container->setPrefix(ServiceContainer::ROUTE)->set(
             \Selene\Routes\Route::class,
             [
-                $this->container->get(ServiceContainer::REQUEST),
                 $this->container->get(ServiceContainer::MIDDLEWARE),
             ]
         );
+    }
+
+    /**
+     * Criando o container de rota e suas dependencias.
+     */
+    public function emit($request): mixed
+    {
+        return $this->container->get(ServiceContainer::ROUTE)->setRequest($request)->run();
     }
 
     /**
@@ -267,16 +256,6 @@ final class App
         $whoops = new \Whoops\Run();
         $whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler());
         $whoops->register();
-    }
-
-    /**
-     * Seta o path root da aplicação.
-     */
-    private function injectAppRootPathOnView(): void
-    {
-        $request = $this->container->get(ServiceContainer::REQUEST);
-        $view = $this->container->get(ServiceContainer::VIEW);
-        $view->setRootPath($request->getDocumentRoot());
     }
 
     /**
