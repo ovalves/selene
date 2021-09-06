@@ -47,7 +47,7 @@ final class Delegator implements RequestHandlerInterface
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process($request, RequestHandlerInterface $handler) : ResponseInterface
     {
         return (new self($this->queue, $handler))->handle($request);
     }
@@ -58,7 +58,7 @@ final class Delegator implements RequestHandlerInterface
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      */
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle($request) : ResponseInterface
     {
         if ($this->queue->isEmpty()) {
             return $this->fallbackHandler->handle($request);
