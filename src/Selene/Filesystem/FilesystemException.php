@@ -8,11 +8,6 @@
 
 namespace Selene\Filesystem;
 
-use Exception;
-
-/**
- * Exception das views
- */
-class FilesystemException extends Exception
+class FilesystemException extends \Exception
 {
 }

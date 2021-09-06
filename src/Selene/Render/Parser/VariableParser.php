@@ -88,7 +88,7 @@ trait VariableParser
         $match = explode('|', $match);
 
         if (empty($match[0])) {
-            throw new Exception("Parser variable error");
+            throw new \Exception("Parser variable error");
         }
 
         $this->assign = (isset($match[0])) ? trim($match[0]) : null;

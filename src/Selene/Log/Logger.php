@@ -8,8 +8,6 @@
 
 namespace Selene\Log;
 
-use Exception;
-
 class Logger
 {
     /**
@@ -20,7 +18,7 @@ class Logger
         $this->configuration = include \Selene\App::rootPath() . 'src/Config/logging.php';
 
         if (empty($this->configuration)) {
-            throw new Exception('Failed to open the framework configuration logging file');
+            throw new \Exception('Failed to open the framework configuration logging file');
         }
     }
 

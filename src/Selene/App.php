@@ -137,7 +137,7 @@ final class App
     private function make(): void
     {
         if (is_null($this->container)) {
-            throw new Exception('Uma instância do ContainerInterface é requerida');
+            throw new \Exception('Uma instância do ContainerInterface é requerida');
         }
 
         $this->init();

@@ -8,8 +8,6 @@
 
 namespace Selene\Config;
 
-use Exception;
-
 /**
  * Gerencia os arquivos de configuração do framework.
  */
@@ -29,7 +27,7 @@ class ApplicationConfig
     {
         $this->configuration = include \Selene\App::rootPath() . 'src/Config/app.php';
         if (empty($this->configuration)) {
-            throw new Exception('Failed to open the framework configuration app file');
+            throw new \Exception('Failed to open the framework configuration app file');
         }
     }
 
@@ -43,7 +41,7 @@ class ApplicationConfig
         }
 
         if (!isset($this->configuration[$type])) {
-            throw new Exception(sprintf("The configuration of '%s' does not exist. Please check your configuration file", $type));
+            throw new \Exception(sprintf("The configuration of '%s' does not exist. Please check your configuration file", $type));
         }
 
         return $this->configuration[$type];

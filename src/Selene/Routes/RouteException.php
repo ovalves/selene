@@ -8,11 +8,6 @@
 
 namespace Selene\Routes;
 
-use Exception;
-
-/**
- * Exception das rotas
- */
-class RouteException extends Exception
+class RouteException extends \Exception
 {
 }

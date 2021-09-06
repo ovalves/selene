@@ -8,11 +8,6 @@
 
 namespace Selene\Database\Grammar;
 
-use Exception;
-
-/**
- * Exception das rotas
- */
-class GrammarException extends Exception
+class GrammarException extends \Exception
 {
 }

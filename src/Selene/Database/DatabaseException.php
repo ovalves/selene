@@ -8,11 +8,6 @@
 
 namespace Selene\Database;
 
-use Exception;
-
-/**
- * Database Exception
- */
-class DatabaseException extends Exception
+class DatabaseException extends \Exception
 {
 }
