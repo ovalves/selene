@@ -48,7 +48,7 @@ final class Middleware implements MiddlewareInterface
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      */
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle($request) : ResponseInterface
     {
         return $this->process($request, new EmptyPipelineHandler(__CLASS__));
     }
@@ -60,7 +60,7 @@ final class Middleware implements MiddlewareInterface
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process($request, RequestHandlerInterface $handler) : ResponseInterface
     {
         return (new Delegator($this->pipeline, $handler))->handle($request);
     }
