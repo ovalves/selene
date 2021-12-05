@@ -6,7 +6,7 @@
  * @since       2019-03-17
  */
 
-namespace Selene\Routes;
+namespace Selene\Request;
 
 use Exception;
 

@@ -29,6 +29,7 @@ abstract class RequestAbstract implements ServerRequestInterface
     use RequestUriAwareTrait;
     use RequestProtocolAwareTrait;
     use RequestHeaderAwareTrait;
+    use RequestSanitizerAwareTrait;
 
     /**
      * @var ContainerInterface
