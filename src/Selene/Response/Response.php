@@ -8,6 +8,7 @@
 
 namespace Selene\Response;
 
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -106,5 +107,45 @@ class Response extends ResponseAbstract
     public function json($data = [], $status = 200, array $headers = [], $options = 0): JsonResponse
     {
         return (new JsonResponse($data, $status, $headers, $options))->send();
+    }
+
+    public function success(mixed $data = [], mixed $page = [], int $httpCode = parent::HTTP_OK, string $message = null, array $headers = [], int $options = 0): JsonResponse
+    {
+        return $this->json(
+            [
+                'httpCode' => $httpCode,
+                'httpMessage' => $message,
+                'data' => $data,
+                'page' => $page,
+                'transaction' => [
+                    'localTransactionId' => (string) uniqid('', true),
+                    'localTransactionDate' => date(\DateTime::ATOM, strtotime('now')),
+                ],
+                'status' => true,
+            ],
+            $httpCode,
+            $headers,
+            $options
+        );
+    }
+
+    public function error(Exception $exception, array $headers = [], int $options = 0): JsonResponse
+    {
+        return $this->json(
+            [
+                'httpCode' => $exception->getCode(),
+                'httpMessage' => $exception->getMessage(),
+                'data' => [],
+                'page' => [],
+                'transaction' => [
+                    'localTransactionId' => (string) uniqid('', true),
+                    'localTransactionDate' => date(\DateTime::ATOM, strtotime('now')),
+                ],
+                'status' => false,
+            ],
+            $exception->getCode(),
+            $headers,
+            $options
+        );
     }
 }
