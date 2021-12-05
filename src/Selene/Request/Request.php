@@ -69,4 +69,24 @@ class Request extends RequestAbstract
     {
         return $this->request;
     }
+
+    /**
+    * Retorna o dados do corpo da request
+    *
+    * @return array
+    */
+    public function getContentBody() : array
+    {
+        return json_decode(file_get_contents('php://input'), true, 512, \JSON_BIGINT_AS_STRING);
+    }
+
+    /**
+    * Retorna o dados do da request
+    *
+    * @return array
+    */
+    public function all() : array
+    {
+        return array_merge($this->getPostParams(), $this->getGetParams(), $this->getContentBody());
+    }
 }
