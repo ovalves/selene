@@ -13,24 +13,22 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Fig\Http\Message\StatusCodeInterface as StatusCode;
-use Selene\Response\Response;
 use Selene\Container\ServiceContainer;
+use Selene\Response\Response;
 
 /**
- * Middleware de autenticação
+ * Middleware de autenticação.
  */
 final class Auth implements MiddlewareInterface
 {
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    private $container;
 
     /**
-     * Enable middleware to get an instance of service Container
+     * Enable middleware to get an instance of service Container.
      *
-     * @param ContainerInterface $container
      * @return void
      */
     public function serviceContainer(ContainerInterface $container)
@@ -39,16 +37,16 @@ final class Auth implements MiddlewareInterface
     }
 
     /**
-     * Processa o middleware e chama o próximo da fila
+     * Processa o middleware e chama o próximo da fila.
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $auth = $this->container->get(ServiceContainer::AUTH);
 
         $auth->setRequest($request);
 
         if (!$auth->isAuthenticated()) {
-            return (new Response)
+            return (new Response())
                         ->withStatus(401, 'unauthorized')
                         ->withRedirectTo($auth->redirectToLoginPage())
                         ->setUnauthorized();

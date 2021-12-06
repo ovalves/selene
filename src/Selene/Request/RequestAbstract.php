@@ -9,14 +9,10 @@
 namespace Selene\Request;
 
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Message\UriInterface;
-use Psr\Http\Message\StreamInterface;
 
 /**
- * Classe que lida com Server Requests
+ * Classe que lida com Server Requests.
  */
 abstract class RequestAbstract implements ServerRequestInterface
 {
@@ -33,52 +29,46 @@ abstract class RequestAbstract implements ServerRequestInterface
 
     /**
      * @var ContainerInterface
-    */
+     */
     protected $container;
 
     /**
-     * Guarda os dados GET da requisição
+     * Guarda os dados GET da requisição.
      *
      * @var array
      */
     protected $get;
 
     /**
-     * Guarda os dados POST da requisição
+     * Guarda os dados POST da requisição.
      *
      * @var array
      */
     protected $post;
 
     /**
-     * Guarda os dados do SERVER da requisição
+     * Guarda os dados do SERVER da requisição.
      *
      * @var array
      */
     protected $server;
 
     /**
-     * Guarda os dados REQUEST da requisição
+     * Guarda os dados REQUEST da requisição.
      *
      * @var array
      */
     protected $request;
 
     /**
-     * Constructor
-     *
-     * @param ContainerInterface $container
-     * @param array $get
-     * @param array $post
-     * @param array $server
-     * @param array $request
+     * Constructor.
      */
     public function __construct(ContainerInterface $container, array $get, array $post, array $server, array $request)
     {
         $this->container = $container;
-        $this->get       = $get;
-        $this->post      = $post;
-        $this->server    = $server;
-        $this->request   = $request;
+        $this->get = $get;
+        $this->post = $post;
+        $this->server = $server;
+        $this->request = $request;
     }
 }

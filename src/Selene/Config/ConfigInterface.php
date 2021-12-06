@@ -9,9 +9,9 @@
 namespace Selene\Config;
 
 /**
- * Interface para gerenciamento dos arquivos de configuração do framework
+ * Interface para gerenciamento dos arquivos de configuração do framework.
  */
 interface ConfigInterface
 {
-    public function __invoke() : array;
+    public function __invoke(): array;
 }

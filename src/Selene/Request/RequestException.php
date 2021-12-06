@@ -11,7 +11,7 @@ namespace Selene\Request;
 use Exception;
 
 /**
- * Exception da request
+ * Exception da request.
  */
 class RequestException extends Exception
 {

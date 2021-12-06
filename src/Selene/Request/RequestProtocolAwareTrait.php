@@ -15,7 +15,7 @@ trait RequestProtocolAwareTrait
      *
      * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
      *
-     * @return string HTTP protocol version.
+     * @return string HTTP protocol version
      */
     public function getProtocolVersion()
     {
@@ -32,7 +32,7 @@ trait RequestProtocolAwareTrait
      * immutability of the message, and MUST return an instance that has the
      * new protocol version.
      *
-     * @param string $version HTTP protocol version
+     * @param  string $version HTTP protocol version
      * @return static
      */
     public function withProtocolVersion($version)

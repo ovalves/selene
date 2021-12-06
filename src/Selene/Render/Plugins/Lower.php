@@ -8,19 +8,17 @@
 
 namespace Selene\Render\Plugins;
 
-use Selene\Render\PluginConstant;
-
 /**
- * Plugin lowercase
+ * Plugin lowercase.
  */
 class Lower implements PluginInterface
 {
     /**
-     * Retorna a assinatura do plugin
+     * Retorna a assinatura do plugin.
      *
      * @return array
      */
-    public function __invoke($input) : string
+    public function __invoke($input): string
     {
         if (!is_string($input)) {
             return $input;

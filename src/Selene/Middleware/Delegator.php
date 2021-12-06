@@ -29,42 +29,33 @@ final class Delegator implements RequestHandlerInterface
     private $queue;
 
     /**
-     * Constructor
-     *
-     * @param SplQueue $queue
-     * @param RequestHandlerInterface $fallbackHandler
+     * Constructor.
      */
     public function __construct(SplQueue $queue, RequestHandlerInterface $fallbackHandler)
     {
-        $this->queue           = clone $queue;
+        $this->queue = clone $queue;
         $this->fallbackHandler = $fallbackHandler;
     }
 
     /**
-     * Cria uma nova instancia do delegator e executa o middleware
-     *
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
+     * Cria uma nova instancia do delegator e executa o middleware.
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         return (new self($this->queue, $handler))->handle($request);
     }
 
     /**
-     * Executa os middlewares do pipeline
-     *
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
+     * Executa os middlewares do pipeline.
      */
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->queue->isEmpty()) {
             return $this->fallbackHandler->handle($request);
         }
 
         $middleware = $this->queue->dequeue();
+
         return $middleware->process($request, $this);
     }
 }

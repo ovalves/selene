@@ -11,7 +11,7 @@ namespace Selene\Render;
 use Exception;
 
 /**
- * Exception das views
+ * Exception das views.
  */
 class ViewException extends Exception
 {

@@ -9,18 +9,18 @@
 namespace Selene\Container;
 
 /**
- * Define the service`s container constants
+ * Define the service`s container constants.
  */
 class ServiceContainer
 {
-    const APPLICATION_CONFIG = 'applicationConfig';
-    const ROUTE              = 'router';
-    const MIDDLEWARE         = 'middleware';
-    const REQUEST            = 'request';
-    const AUTH               = 'auth';
-    const SESSION            = 'session';
-    const VIEW               = 'view';
-    const CONNECTION         = 'connection';
-    const LOGGER             = 'logger';
-    const TRANSACTION        = 'transaction';
+    public const APPLICATION_CONFIG = 'applicationConfig';
+    public const ROUTE = 'router';
+    public const MIDDLEWARE = 'middleware';
+    public const REQUEST = 'request';
+    public const AUTH = 'auth';
+    public const SESSION = 'session';
+    public const VIEW = 'view';
+    public const CONNECTION = 'connection';
+    public const LOGGER = 'logger';
+    public const TRANSACTION = 'transaction';
 }

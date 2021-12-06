@@ -8,27 +8,24 @@
 
 namespace Selene\Auth;
 
-use Selene\Gateway\GatewayAbstract;
 use Selene\Config\ConfigConstant;
 use Selene\Container\ServiceContainer;
+use Selene\Gateway\GatewayAbstract;
 
 /**
- * Manages the authentication data
+ * Manages the authentication data.
  */
 class AuthGateway extends GatewayAbstract
 {
     /**
-     * Find user by email
-     *
-     * @param string $email
-     * @return array
+     * Find user by email.
      */
-    public function findByEmail(string $email) : array
+    public function findByEmail(string $email): array
     {
         $config = $this->container->get(ServiceContainer::APPLICATION_CONFIG);
         $config = $config->getConfig(ConfigConstant::AUTH);
         if (empty($config[ConfigConstant::AUTH_TABLE_NAME])) {
-            throw new \Exception("Failed to check user auth data");
+            throw new \Exception('Failed to check user auth data');
         }
 
         return $this
@@ -40,13 +37,9 @@ class AuthGateway extends GatewayAbstract
     }
 
     /**
-     * Register user
-     *
-     * @param string $email
-     * @param string $password
-     * @return bool
+     * Register user.
      */
-    public function registerUser(string $email, string $password) : bool
+    public function registerUser(string $email, string $password): bool
     {
         return (bool) $this->insert([
             'email' => $email,

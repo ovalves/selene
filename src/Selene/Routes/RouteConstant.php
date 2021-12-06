@@ -9,52 +9,52 @@
 namespace  Selene\Routes;
 
 /**
- * Define as constantes usadas no router
+ * Define as constantes usadas no router.
  */
 class RouteConstant
 {
     /**
-     * Define o tipo de resource corrente como get
+     * Define o tipo de resource corrente como get.
      */
-    const GET = 'get';
+    public const GET = 'get';
 
     /**
-     * Define o tipo de resource corrente como
+     * Define o tipo de resource corrente como.
      */
-    const POST = 'post';
+    public const POST = 'post';
 
     /**
-     * Define o tipo de resource corrente como
+     * Define o tipo de resource corrente como.
      */
-    const PUT = 'put';
+    public const PUT = 'put';
 
     /**
-     * Define o tipo de resource corrente como
+     * Define o tipo de resource corrente como.
      */
-    const PATCH = 'patch';
+    public const PATCH = 'patch';
 
     /**
-     * Define o tipo de resource corrente como
+     * Define o tipo de resource corrente como.
      */
-    const DELETE = 'delete';
+    public const DELETE = 'delete';
 
     /**
-     * Define a chave resource da fila do router
+     * Define a chave resource da fila do router.
      */
-    const ROUTE_RESOURCE = 'resource';
+    public const ROUTE_RESOURCE = 'resource';
 
     /**
-     * Define a chave class da fila do router
+     * Define a chave class da fila do router.
      */
-    const ROUTE_CLASS = 'class';
+    public const ROUTE_CLASS = 'class';
 
     /**
-     * Define a chave action da fila do router
+     * Define a chave action da fila do router.
      */
-    const ROUTE_ACTION = 'action';
+    public const ROUTE_ACTION = 'action';
 
     /**
-     * Define a chave da Closure da fila do router
+     * Define a chave da Closure da fila do router.
      */
-    const ROUTE_CALLBACK = 'callback';
+    public const ROUTE_CALLBACK = 'callback';
 }

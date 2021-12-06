@@ -9,12 +9,12 @@
 namespace Selene\Render\Parser;
 
 /**
- * Parse template variables
+ * Parse template variables.
  */
 trait VariableParser
 {
     /**
-     * Guarda os dados do template que serão compilados
+     * Guarda os dados do template que serão compilados.
      *
      * @var array
      */
@@ -23,26 +23,24 @@ trait VariableParser
     private $plugin = null;
 
     /**
-     * Define a regex de busca das tags de variaveis
+     * Define a regex de busca das tags de variaveis.
      *
      * @var string
      */
     private $matchVariableTag = '/\{{2}\s*\$(.+?)\s*\}{2}/';
 
     /**
-     * Define as tags que devem ser subistituidas ao fazer o parser das variaveis
+     * Define as tags que devem ser subistituidas ao fazer o parser das variaveis.
      */
-    private $replaceVariableTag = ["}", "{", "\t\n\r\0\x0b", " ", "$"];
+    private $replaceVariableTag = ['}', '{', "\t\n\r\0\x0b", ' ', '$'];
 
     /**
      * Parse the template variables
-     * Call plugin templates if exists
+     * Call plugin templates if exists.
      *
      * @param string $content
-     * @param array $variables
-     * @return string
      */
-    protected function parserVariables($content, array $variables) : string
+    protected function parserVariables($content, array $variables): string
     {
         preg_match_all($this->matchVariableTag, $content, $this->matches);
 
@@ -78,17 +76,14 @@ trait VariableParser
     }
 
     /**
-     * Parse variable string, separate assignment and plugin`s call
-     *
-     * @param string $match
-     * @return void
+     * Parse variable string, separate assignment and plugin`s call.
      */
-    private function parseMatch(string $match) : void
+    private function parseMatch(string $match): void
     {
         $match = explode('|', $match);
 
         if (empty($match[0])) {
-            throw new Exception("Parser variable error");
+            throw new Exception('Parser variable error');
         }
 
         $this->assign = (isset($match[0])) ? trim($match[0]) : null;
@@ -96,13 +91,9 @@ trait VariableParser
     }
 
     /**
-     * Verifica se a variavel está aninhada
-     *
-     * @param string $assign
-     *
-     * @return bool
+     * Verifica se a variavel está aninhada.
      */
-    private function variableIsNested(string $assign) : bool
+    private function variableIsNested(string $assign): bool
     {
         if (empty($assign)) {
             return false;
@@ -111,16 +102,13 @@ trait VariableParser
         $assign = explode('.', $assign);
 
         $this->contextVariable = (isset($assign[0])) ? trim($assign[0]) : null;
-        $this->nested          = (isset($assign[1])) ? trim($assign[1]) : null;
+        $this->nested = (isset($assign[1])) ? trim($assign[1]) : null;
 
-        return (isset($this->contextVariable) && (isset($this->nested)));
+        return isset($this->contextVariable) && (isset($this->nested));
     }
 
     /**
-     * Faz o parser de váriaveis aninhadas através das váriaveis presentes na symbol table do loop
-     *
-     * @param array  $variables
-     * @param string $assign
+     * Faz o parser de váriaveis aninhadas através das váriaveis presentes na symbol table do loop.
      *
      * @return mixed
      */
@@ -138,6 +126,7 @@ trait VariableParser
 
         if (isset($nestedVars[$this->nested])) {
             $variables[$assign] = trim($nestedVars[$this->nested]);
+
             return $variables[$assign];
         }
 
@@ -157,15 +146,15 @@ trait VariableParser
     }
 
     /**
-     * Faz a chamada para o plugin caso o mesmo exista
+     * Faz a chamada para o plugin caso o mesmo exista.
      *
-     * @param mixed $variable
-     * @param string $plugin
+     * @param  mixed $variable
      * @return mixed
      */
     private function callPluginIfExists($variable, string $plugin)
     {
         $plugin = str_replace($this->replaceVariableTag, '', $plugin);
+
         return $this->compiler->callPlugin($variable, $plugin);
     }
 }

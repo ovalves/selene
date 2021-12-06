@@ -17,61 +17,49 @@ use Selene\Middleware\Handler\EmptyPipelineHandler;
 use SplQueue;
 
 /**
- * Responsável por adicionar os handlers a fila de pipeline de middlewares
+ * Responsável por adicionar os handlers a fila de pipeline de middlewares.
  */
 final class Middleware implements MiddlewareInterface
 {
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    private $container;
 
     /**
      * @var SplQueue
      */
-    protected $pipeline;
+    private $pipeline;
 
     /**
      * Initializes the queue.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->pipeline  = new SplQueue();
+        $this->pipeline = new SplQueue();
     }
 
     /**
-     * Executa os middlewares do pipeline
-     *
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
+     * Executa os middlewares do pipeline.
      */
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return $this->process($request, new EmptyPipelineHandler(__CLASS__));
     }
 
     /**
-     * Cria uma nova instância do delegator e executa o middleware
-     *
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
+     * Cria uma nova instância do delegator e executa o middleware.
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         return (new Delegator($this->pipeline, $handler))->handle($request);
     }
 
     /**
-     * Adiciona um handler ao pipeline de middleware
-     *
-     * @param MiddlewareInterface $middleware
-     * @return self
+     * Adiciona um handler ao pipeline de middleware.
      */
-    public function add(MiddlewareInterface $middleware) : self
+    public function add(MiddlewareInterface $middleware): self
     {
         $class = new \ReflectionClass($middleware);
 
@@ -81,6 +69,7 @@ final class Middleware implements MiddlewareInterface
         }
 
         $this->pipeline->enqueue($middleware);
+
         return $this;
     }
 }

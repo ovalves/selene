@@ -19,7 +19,7 @@ trait RequestAttributeAwareTrait
      * deserializing non-form-encoded message bodies; etc. Attributes
      * will be application and request specific, and CAN be mutable.
      *
-     * @return array Attributes derived from the request.
+     * @return array attributes derived from the request
      */
     public function getAttributes()
     {
@@ -36,8 +36,8 @@ trait RequestAttributeAwareTrait
      * specifying a default value to return if the attribute is not found.
      *
      * @see getAttributes()
-     * @param string $name The attribute name.
-     * @param mixed $default Default value to return if the attribute does not exist.
+     * @param  string $name    the attribute name
+     * @param  mixed  $default default value to return if the attribute does not exist
      * @return mixed
      */
     public function getAttribute($name, $default = null)
@@ -55,8 +55,8 @@ trait RequestAttributeAwareTrait
      * updated attribute.
      *
      * @see getAttributes()
-     * @param string $name The attribute name.
-     * @param mixed $value The value of the attribute.
+     * @param  string $name  the attribute name
+     * @param  mixed  $value the value of the attribute
      * @return static
      */
     public function withAttribute($name, $value)
@@ -74,7 +74,7 @@ trait RequestAttributeAwareTrait
      * the attribute.
      *
      * @see getAttributes()
-     * @param string $name The attribute name.
+     * @param  string $name the attribute name
      * @return static
      */
     public function withoutAttribute($name)

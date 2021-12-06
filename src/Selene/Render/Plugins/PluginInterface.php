@@ -9,9 +9,9 @@
 namespace Selene\Render\Plugins;
 
 /**
- * Interface para os plugins da template engine
+ * Interface para os plugins da template engine.
  */
 interface PluginInterface
 {
-    public function __invoke($string) : string;
+    public function __invoke($string): string;
 }

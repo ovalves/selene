@@ -9,39 +9,37 @@
 namespace Selene\Config;
 
 /**
- * Gerencia os arquivos de configuração do framework
+ * Gerencia os arquivos de configuração do framework.
  */
 trait ConfigAwareTrait
 {
     /**
-     * Mapeamento dos arquivos de config
+     * Mapeamento dos arquivos de config.
      *
      * @var array
      */
     protected $mapConfig = [
-        ConfigConstant::AUTH    => \Auth::class,
-        ConfigConstant::SESSION => \Session::class
+        ConfigConstant::AUTH => \Auth::class,
+        ConfigConstant::SESSION => \Session::class,
     ];
 
     /**
-     * Guarda os arquivos ja carregados
+     * Guarda os arquivos ja carregados.
      *
      * @var array
      */
     protected $config = [];
 
     /**
-     * Carrega a configuração por tipo
-     *
-     * @return array
+     * Carrega a configuração por tipo.
      */
-    protected function loadConfig($prefix) : array
+    protected function loadConfig($prefix): array
     {
         if (isset($this->config[$prefix])) {
             return $this->config[$prefix]->__invoke();
         }
 
-        $this->config[$prefix] = new $this->mapConfig[$prefix];
+        $this->config[$prefix] = new $this->mapConfig[$prefix]();
 
         return $this->config[$prefix]->__invoke();
     }

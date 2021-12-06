@@ -11,7 +11,7 @@ namespace Selene\Database;
 use Exception;
 
 /**
- * Database Exception
+ * Database Exception.
  */
 class DatabaseException extends Exception
 {

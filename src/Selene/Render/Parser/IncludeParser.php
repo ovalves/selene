@@ -8,35 +8,34 @@
 
 namespace Selene\Render\Parser;
 
-use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
- * Responsável por fazer o parser dos includes do template
+ * Responsável por fazer o parser dos includes do template.
  */
 trait IncludeParser
 {
     /**
-     * Guarda os dados do template que serão compilados
+     * Guarda os dados do template que serão compilados.
      *
      * @var array
      */
     private $matches = [];
 
     /**
-     * Define a regex que será usada para busca dos dados de include no template
+     * Define a regex que será usada para busca dos dados de include no template.
      *
      * @var string
      */
     private $matchIncludeTag = '/\{{2}\s*(include|require)\s*(.+?)\s*}{2}/';
 
     /**
-     * Faz o parser dos includes da template engine
+     * Faz o parser dos includes da template engine.
      *
      * @param string $content
-     * @return string
      */
-    protected function parserIncludes(string $file) : string
+    protected function parserIncludes(string $file): string
     {
         $include = explode('/', $file);
         $includeFile = $this->findInDirectory($include);
@@ -51,9 +50,9 @@ trait IncludeParser
     }
 
     /**
-     * Procura o template no diretório das views da aplicação
+     * Procura o template no diretório das views da aplicação.
      *
-     * @param array $includes
+     * @param  array       $includes
      * @return string|bool
      */
     private function findInDirectory(array $parts)
@@ -91,12 +90,9 @@ trait IncludeParser
     }
 
     /**
-     * Retorna o nome do arquivo requisitado
-     *
-     * @param array $parts
-     * @return string
+     * Retorna o nome do arquivo requisitado.
      */
-    private function requestedFile(array $parts) : string
+    private function requestedFile(array $parts): string
     {
         if (empty($parts)) {
             return false;
@@ -106,18 +102,15 @@ trait IncludeParser
     }
 
     /**
-     * Retorna o diretório onde o tempalte requisitado se encontra
-     *
-     * @param array $parts
-     * @return string
+     * Retorna o diretório onde o tempalte requisitado se encontra.
      */
-    private function requestedDirectory(array $parts) : string
+    private function requestedDirectory(array $parts): string
     {
         if (empty($parts)) {
             return false;
         }
 
-        if ((count($parts) == 1)) {
+        if ((1 == count($parts))) {
             return reset($parts);
         }
 

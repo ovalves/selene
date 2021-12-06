@@ -9,40 +9,40 @@
 namespace  Selene\Database;
 
 /**
- * Define as constantes usadas no router
+ * Define as constantes usadas no router.
  */
 class DatabaseConstant
 {
     /**
-     * Database default config
+     * Database default config.
      */
-    const DEFAULT_DB  = 'default';
-    const DB_PORT     = 'db_port';
-    const DB_HOST     = 'db_host';
-    const DB_NAME     = 'db_name';
-    const DB_USER     = 'db_user';
-    const DB_PASS     = 'db_pass';
+    public const DEFAULT_DB = 'default';
+    public const DB_PORT = 'db_port';
+    public const DB_HOST = 'db_host';
+    public const DB_NAME = 'db_name';
+    public const DB_USER = 'db_user';
+    public const DB_PASS = 'db_pass';
 
     /**
-     * Database default ports
+     * Database default ports.
      */
-    const MYSQL_PORT = '3306';
-    const PGSQL_PORT = '5432';
+    public const MYSQL_PORT = '3306';
+    public const PGSQL_PORT = '5432';
 
     /**
-     * Available connection types
+     * Available connection types.
      */
-    const MYSQL  = 'mysql';
-    const SQLITE = 'sqlite';
-    const MONGO  = 'mongo';
-    const MSSQL  = 'mssql';
-    const PGSQL  = 'pgsql';
+    public const MYSQL = 'mysql';
+    public const SQLITE = 'sqlite';
+    public const MONGO = 'mongo';
+    public const MSSQL = 'mssql';
+    public const PGSQL = 'pgsql';
 
     /**
-     * Expression types
+     * Expression types.
      */
-    const INSERT = 'insert';
-    const SELECT = 'select';
-    const UPDATE = 'update';
-    const DELETE = 'delete';
+    public const INSERT = 'insert';
+    public const SELECT = 'select';
+    public const UPDATE = 'update';
+    public const DELETE = 'delete';
 }

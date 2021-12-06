@@ -8,13 +8,13 @@
 
 namespace Selene\Drivers\MongoDB;
 
-use MongoDB\Driver\Query;
-use MongoDB\Driver\Manager;
 use MongoDB\Driver\BulkWrite;
+use MongoDB\Driver\Manager;
+use MongoDB\Driver\Query;
 
 final class MongoDriver
 {
-    const QUERY_LIMIT = 15;
+    public const QUERY_LIMIT = 15;
 
     private ?Manager $connection = null;
     private array $filters = [];
@@ -24,12 +24,14 @@ final class MongoDriver
     public function filters(array $filters): self
     {
         $this->filters = $filters;
+
         return $this;
     }
 
     public function options(array $options): self
     {
         $this->options = $options;
+
         return $this;
     }
 
@@ -43,6 +45,7 @@ final class MongoDriver
 
         $query = new Query($this->filters, $this->options);
         $this->cursor = $this->getConnection()->executeQuery($dbCollection, $query);
+
         return $this;
     }
 
@@ -50,10 +53,11 @@ final class MongoDriver
     {
         $dbCollection = \env('MONGO_DATABASE') . '.' . $collection;
 
-        $bulk = new BulkWrite;
+        $bulk = new BulkWrite();
         $bulk->insert($data);
 
         $this->cursor = $this->getConnection()->executeBulkWrite($dbCollection, $bulk);
+
         return $this;
     }
 

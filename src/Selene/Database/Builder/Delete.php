@@ -8,27 +8,25 @@
 
 namespace Selene\Database\Builder;
 
+use PDOStatement;
 use Selene\Database\DatabaseConstant;
 use Selene\Database\Grammar\GrammarAbstract;
-use Selene\Database\Grammar\GrammarException;
 use Selene\Database\Grammar\GrammarAwareTrait;
-use Selene\Database\Builder\Where;
-use PDOStatement;
+use Selene\Database\Grammar\GrammarException;
 
 /**
- * Responsavel por executar os statement de select
+ * Responsavel por executar os statement de select.
  */
 final class Delete extends GrammarAbstract
 {
     use GrammarAwareTrait;
 
     /**
-     * Executa a query
+     * Executa a query.
      *
      * @param array $whereClause
-     * @return PDOStatement
      */
-    public function execute() : PDOStatement
+    public function execute(): PDOStatement
     {
         $this->checkTable();
         $where = $this->getWhere();
@@ -36,7 +34,7 @@ final class Delete extends GrammarAbstract
         $stringSql = \str_replace(
             [
                 '__TABLENAME__',
-                '__WHERE__'
+                '__WHERE__',
             ],
             [
                 $this->table,
@@ -46,13 +44,13 @@ final class Delete extends GrammarAbstract
         );
 
         if (empty($stringSql)) {
-            throw new GrammarException("Erro ao parser os dados da query");
+            throw new GrammarException('Erro ao parser os dados da query');
         }
 
         $stmt = $this->transaction->open()->prepare($stringSql);
 
         if (!$stmt->execute($where->getWherePayload())) {
-            throw new GrammarException("Erro ao executar o statement");
+            throw new GrammarException('Erro ao executar o statement');
         }
 
         return $stmt;

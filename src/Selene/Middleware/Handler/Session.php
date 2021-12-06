@@ -8,22 +8,20 @@
 
 namespace Selene\Middleware\Handler;
 
-use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * Middleware de sessão
+ * Middleware de sessão.
  */
 final class Session implements MiddlewareInterface
 {
-
     /**
-     * Processa o middleware e chama o próximo da fila
+     * Processa o middleware e chama o próximo da fila.
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($this->hasSession()) {
             return $handler->process($request, $handler);

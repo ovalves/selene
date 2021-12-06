@@ -11,7 +11,7 @@ namespace Selene\Routes;
 use Exception;
 
 /**
- * Exception das rotas
+ * Exception das rotas.
  */
 class RouteException extends Exception
 {

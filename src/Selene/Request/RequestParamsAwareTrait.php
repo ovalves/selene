@@ -11,7 +11,7 @@ namespace Selene\Request;
 trait RequestParamsAwareTrait
 {
     /**
-     * Guarda os dados da query param
+     * Guarda os dados da query param.
      *
      * @var array
      */
@@ -58,7 +58,7 @@ trait RequestParamsAwareTrait
      * immutability of the message, and MUST return an instance that has the
      * updated cookie values.
      *
-     * @param array $cookies Array of key/value pairs representing cookies.
+     * @param  array  $cookies array of key/value pairs representing cookies
      * @return static
      */
     public function withCookieParams(array $cookies)
@@ -100,14 +100,14 @@ trait RequestParamsAwareTrait
      * immutability of the message, and MUST return an instance that has the
      * updated query string arguments.
      *
-     * @param array $query Array of query string arguments, typically from
-     *     $_GET.
+     * @param  array  $query array of query string arguments, typically from
+     *                       $_GET
      * @return static
      */
     public function withQueryParams(array $query)
     {
         if (empty($query)) {
-            throw new RequestException("Argumento passado para a query string é obrigatório");
+            throw new RequestException('Argumento passado para a query string é obrigatório');
         }
 
         $this->queryParam = $query;

@@ -5,6 +5,7 @@
  * @category    Micro Framework
  * @since       2019-02-16
  */
+
 namespace Selene\Request;
 
 trait RequestMethodAwareTrait
@@ -12,7 +13,7 @@ trait RequestMethodAwareTrait
     /**
      * Retrieves the HTTP method of the request.
      *
-     * @return string Returns the request method.
+     * @return string returns the request method
      */
     public function getMethod()
     {
@@ -30,9 +31,9 @@ trait RequestMethodAwareTrait
      * immutability of the message, and MUST return an instance that has the
      * changed request method.
      *
-     * @param string $method Case-sensitive method.
+     * @param  string                    $method case-sensitive method
      * @return static
-     * @throws \InvalidArgumentException for invalid HTTP methods.
+     * @throws \InvalidArgumentException for invalid HTTP methods
      */
     public function withMethod($method)
     {

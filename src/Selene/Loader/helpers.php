@@ -10,7 +10,7 @@ use Selene\Log\Logger;
 
 if (!function_exists('env')) {
     /**
-     * Busca valores em variáveis de ambientes
+     * Busca valores em variáveis de ambientes.
      */
     function env(string $name): string
     {
@@ -18,7 +18,7 @@ if (!function_exists('env')) {
     }
 }
 
-/**
+/*
  * Define um item do array para um determinado valor usando a notação "DOT".
  */
 if (!function_exists('arr_set')) {
@@ -31,13 +31,13 @@ if (!function_exists('arr_set')) {
         $keys = explode('.', $key);
 
         foreach ($keys as $i => $key) {
-            if (count($keys) === 1) {
+            if (1 === count($keys)) {
                 break;
             }
 
             unset($keys[$i]);
 
-            if (! isset($array[$key]) || ! is_array($array[$key])) {
+            if (!isset($array[$key]) || !is_array($array[$key])) {
                 $array[$key] = [];
             }
 
@@ -50,7 +50,7 @@ if (!function_exists('arr_set')) {
     }
 }
 
-/**
+/*
  * Adiciona um elemento a um array usando a notação "dot".
  */
 if (!function_exists('arr_add')) {
@@ -64,7 +64,7 @@ if (!function_exists('arr_add')) {
     }
 }
 
-/**
+/*
  * Retorna um item de um array usando a notação "DOT".
  */
 if (!function_exists('arr_get')) {
@@ -98,10 +98,10 @@ if (!function_exists('arr_get')) {
     }
 }
 
-/**
+/*
  * Determina se uma chave existe em um array.
  */
-if (! function_exists('exists')) {
+if (!function_exists('exists')) {
     function exists(array $array, mixed $key): bool
     {
         if ($array instanceof ArrayAccess) {
@@ -112,7 +112,7 @@ if (! function_exists('exists')) {
     }
 }
 
-if (! function_exists('value')) {
+if (!function_exists('value')) {
     function value(mixed $value, mixed ...$args)
     {
         return $value instanceof Closure ? $value(...$args) : $value;
@@ -141,11 +141,11 @@ if (!function_exists('log_audit')) {
     }
 }
 
-/**
+/*
  * Converte a codificação de caracteres de um array ou string
 */
 if (!function_exists('str_sanitize_encoding_from_input')) {
-    function str_sanitize_encoding_from_input(array|string $data): array|string
+    function str_sanitize_encoding_from_input(array | string $data): array | string
     {
         if (is_string($data)) {
             return mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
@@ -162,7 +162,7 @@ if (!function_exists('str_sanitize_encoding_from_input')) {
     }
 }
 
-/**
+/*
  * Remove os acentos de um texto retornando o em letras minúsculas
  * Exemplo de uso:
  *      echo str_transliterator('Fóø Bår') // foo bar
@@ -575,7 +575,7 @@ if (!function_exists('json_encode_options')) {
     }
 }
 
-/**
+/*
  * Retorna o tipo de uma variável.
  */
 if (!function_exists('var_get_type')) {
@@ -595,7 +595,7 @@ if (!function_exists('var_get_type')) {
     }
 }
 
-/**
+/*
  * Faz o cast de uma variavel para o tipo encontrado no teste de tipo de variável.
  */
 if (!function_exists('var_cast_to_type')) {

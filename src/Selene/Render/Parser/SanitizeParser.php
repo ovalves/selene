@@ -10,7 +10,7 @@ namespace Selene\Render\Parser;
 
 trait SanitizeParser
 {
-    protected function sanitize(string $content) : string
+    protected function sanitize(string $content): string
     {
         return preg_replace('~\{%\s*(.+?)\s*\%}~is', '<?php $1 ?>', $content);
     }

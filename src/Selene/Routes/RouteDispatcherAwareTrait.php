@@ -8,47 +8,36 @@
 
 namespace Selene\Routes;
 
-use Selene\Routes\RouteException;
-use Selene\Render\View;
 use Selene\Controllers\BaseController;
+use Selene\Render\View;
 
 trait RouteDispatcherAwareTrait
 {
     /**
-     * Guarda a instância da view
+     * Guarda a instância da view.
      *
      * @var View
      */
     protected $dispatcherView;
 
     /**
-     * Injeta a view no roteador
-     *
-     * @return void
+     * Injeta a view no roteador.
      */
-    public function injectViewOnRouterDispatcher(View $view) : void
+    public function injectViewOnRouterDispatcher(View $view): void
     {
         $this->dispatcherView = $view;
     }
 
     /**
-     * Injeta as classes necessárias na base controller
-     *
-     * @return void
+     * Injeta as classes necessárias na base controller.
      */
-    protected function injectOnBaseController() : void
+    protected function injectOnBaseController(): void
     {
         $controller = new \ReflectionClass($this->controller);
-        $parent     = $controller->getParentClass();
+        $parent = $controller->getParentClass();
 
         if (!$controller->isSubclassOf(BaseController::class)) {
-            throw new RouteException(
-                \sprintf(
-                    "A controller (%s) precisa herdar da controller base (%s)",
-                    get_class($this->controller),
-                    BaseController::class
-                )
-            );
+            throw new RouteException(\sprintf('A controller (%s) precisa herdar da controller base (%s)', get_class($this->controller), BaseController::class));
         }
 
         $this->injectViewOnBaseController($parent);
@@ -56,21 +45,12 @@ trait RouteDispatcherAwareTrait
     }
 
     /**
-     * Inject the view on base controller
-     *
-     * @param \ReflectionClass $parent
-     * @return void
+     * Inject the view on base controller.
      */
-    private function injectViewOnBaseController(\ReflectionClass $parent) : void
+    private function injectViewOnBaseController(\ReflectionClass $parent): void
     {
         if (!$parent->hasMethod(BaseController::INJECT_VIEW)) {
-            throw new RouteException(
-                \sprintf(
-                    "Método (%s) responsável por injetar a classe de view não foi encontrado na controller base (%s)",
-                    BaseController::INJECT_VIEW,
-                    BaseController::class
-                )
-            );
+            throw new RouteException(\sprintf('Método (%s) responsável por injetar a classe de view não foi encontrado na controller base (%s)', BaseController::INJECT_VIEW, BaseController::class));
         }
 
         $reflectionMethod = new \ReflectionMethod($this->controller, BaseController::INJECT_VIEW);
@@ -78,21 +58,12 @@ trait RouteDispatcherAwareTrait
     }
 
     /**
-     * Inject the service container on base controller
-     *
-     * @param \ReflectionClass $parent
-     * @return void
+     * Inject the service container on base controller.
      */
-    private function injectContainerOnBaseController(\ReflectionClass $parent) : void
+    private function injectContainerOnBaseController(\ReflectionClass $parent): void
     {
         if (!$parent->hasMethod(BaseController::INJECT_SERVICE_CONTAINER)) {
-            throw new RouteException(
-                \sprintf(
-                    "Método (%s) responsável por injetar a classe de Service Container não foi encontrado na controller base (%s)",
-                    BaseController::INJECT_SERVICE_CONTAINER,
-                    BaseController::class
-                )
-            );
+            throw new RouteException(\sprintf('Método (%s) responsável por injetar a classe de Service Container não foi encontrado na controller base (%s)', BaseController::INJECT_SERVICE_CONTAINER, BaseController::class));
         }
 
         $reflectionMethod = new \ReflectionMethod($this->controller, BaseController::INJECT_SERVICE_CONTAINER);

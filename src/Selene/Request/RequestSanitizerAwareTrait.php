@@ -8,9 +8,6 @@
 
 namespace Selene\Request;
 
-use Selene\Request\RequestAbstract;
-use Selene\Request\RequestException;
-
 trait RequestSanitizerAwareTrait
 {
     public function sanitize(array $fields = []): array

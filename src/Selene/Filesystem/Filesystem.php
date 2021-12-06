@@ -11,24 +11,19 @@ namespace Selene\Filesystem;
 class Filesystem
 {
     /**
-     * Determine if a file or directory exists
+     * Determine if a file or directory exists.
      *
-     * @param  string  $path
-     * @return bool
+     * @param string $path
      */
-    public function exists($path) : bool
+    public function exists($path): bool
     {
         return file_exists($path);
     }
 
     /**
-     * Get contents of a file
-     *
-     * @param string $path
-     *
-     * @return string
+     * Get contents of a file.
      */
-    public function get(string $path) : string
+    public function get(string $path): string
     {
         if ($this->isFile($path)) {
             return file_get_contents($path);
@@ -38,26 +33,17 @@ class Filesystem
     }
 
     /**
-     * Open | Write and close a file | create a file if not exists
-     *
-     * @param string $path
-     * @param string $contents
-     *
-     * @return int
+     * Open | Write and close a file | create a file if not exists.
      */
-    public function put(string $path, string $contents) : int
+    public function put(string $path, string $contents): int
     {
         return file_put_contents($path, $contents);
     }
 
     /**
-     * Prepend content to a file
-     *
-     * @param string $path
-     * @param string $content
-     * @return integer
+     * Prepend content to a file.
      */
-    public function prepend(string $path, string $content) : int
+    public function prepend(string $path, string $content): int
     {
         if ($this->exists($path)) {
             return $this->put($path, $content.$this->get($path));
@@ -67,72 +53,49 @@ class Filesystem
     }
 
     /**
-     * Append content to a file
-     *
-     * @param string $path
-     * @param string $content
-     *
-     * @return integer
+     * Append content to a file.
      */
-    public function append(string $path, string $content) : int
+    public function append(string $path, string $content): int
     {
         return file_put_contents($path, $content, FILE_APPEND);
     }
 
     /**
-     * Determine if the given path is a directory
-     *
-     * @param string $directory
-     * @return boolean
+     * Determine if the given path is a directory.
      */
-    public function isDirectory(string $directory) : bool
+    public function isDirectory(string $directory): bool
     {
         return is_dir($directory);
     }
 
     /**
-     * Determine if the given path is readable
-     *
-     * @param string $path
-     * @return boolean
+     * Determine if the given path is readable.
      */
-    public function isReadable(string $path) : bool
+    public function isReadable(string $path): bool
     {
         return is_readable($path);
     }
 
     /**
-     * Determine if the given path is writable
-     *
-     * @param string $path
-     * @return boolean
+     * Determine if the given path is writable.
      */
-    public function isWritable(string $path) : bool
+    public function isWritable(string $path): bool
     {
         return is_writable($path);
     }
 
     /**
-     * Determine if the given path is a file
-     *
-     * @param string $file
-     * @return boolean
+     * Determine if the given path is a file.
      */
-    public function isFile(string $file) : bool
+    public function isFile(string $file): bool
     {
         return is_file($file);
     }
 
     /**
-     * Create a directory
-     *
-     * @param string $path
-     * @param integer $mode
-     * @param boolean $recursive
-     * @param boolean $force
-     * @return boolean
+     * Create a directory.
      */
-    public function makeDirectory(string $path, int $mode = 0755, bool $recursive = false, bool $force = false) : bool
+    public function makeDirectory(string $path, int $mode = 0755, bool $recursive = false, bool $force = false): bool
     {
         if ($force) {
             return @mkdir($path, $mode, $recursive);

@@ -8,35 +8,33 @@
 
 namespace Selene\Routes;
 
-use Selene\Routes\RouteException;
-
 trait RouteAwareResolveCallbackTrait
 {
     /**
-     * Guarda o nome da controller
+     * Guarda o nome da controller.
      *
      * @var string
      */
     protected $controller = null;
 
     /**
-     * Guarda o nome do método
+     * Guarda o nome do método.
      *
      * @var string
      */
     protected $method = null;
 
     /**
-     * Guarda o callable
+     * Guarda o callable.
      *
      * @var callable
      */
     protected $callable = null;
 
     /**
-     * Resolve o nome do callback do método http
+     * Resolve o nome do callback do método http.
      *
-     * @param mixed $callback
+     * @param  mixed $callback
      * @return void
      */
     public function resolveCallback($callback)
@@ -45,6 +43,7 @@ trait RouteAwareResolveCallbackTrait
 
         if (is_callable($callback)) {
             $this->setCallable($callback);
+
             return true;
         }
 
@@ -53,16 +52,16 @@ trait RouteAwareResolveCallbackTrait
         }
 
         if (empty($parsedCallback)) {
-            throw new RouteException("Sintaxe de uso da controller e action incorreta");
+            throw new RouteException('Sintaxe de uso da controller e action incorreta');
         }
 
         $this->setCallback($parsedCallback);
     }
 
     /**
-     * Seta o callback da rota como um callable
+     * Seta o callback da rota como um callable.
      *
-     * @param mxed $callback
+     * @param  mxed $callback
      * @return void
      */
     private function setCallable(callable $callback)
@@ -71,23 +70,19 @@ trait RouteAwareResolveCallbackTrait
     }
 
     /**
-     * Parseia o callback
+     * Parseia o callback.
      *
      * @param mixed $callback
-     * @return array
      */
-    private function parseCallback($callback) : array
+    private function parseCallback($callback): array
     {
         return explode('@', $callback);
     }
 
     /**
-     * Seta o valor do callback como um nome de controller e método
-     *
-     * @param array $parsedCallback
-     * @return bool
+     * Seta o valor do callback como um nome de controller e método.
      */
-    private function setCallback(array $parsedCallback) : bool
+    private function setCallback(array $parsedCallback): bool
     {
         if (!empty($parsedCallback[0])) {
             $this->controller = $parsedCallback[0];
@@ -101,44 +96,36 @@ trait RouteAwareResolveCallbackTrait
     }
 
     /**
-     * Verifica se o  callback é do tipo callable
-     *
-     * @return bool
+     * Verifica se o  callback é do tipo callable.
      */
-    public function isCallable() : bool
+    public function isCallable(): bool
     {
         return is_callable($this->callable);
     }
 
     /**
-     * Retorna o nome da controller
-     *
-     * @return string
+     * Retorna o nome da controller.
      */
-    public function getController() : string
+    public function getController(): string
     {
         return $this->controller;
     }
 
     /**
-     * Retorna o nome da método
-     *
-     * @return string
+     * Retorna o nome da método.
      */
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
 
     /**
-     * Retorna todas as variaveis da trait para seu estado inicial
-     *
-     * @return void
+     * Retorna todas as variaveis da trait para seu estado inicial.
      */
-    private function flushResolverTrait() : void
+    private function flushResolverTrait(): void
     {
-        $this->callable   = null;
-        $this->method     = null;
+        $this->callable = null;
+        $this->method = null;
         $this->controller = null;
     }
 }

@@ -11,7 +11,7 @@ namespace Selene\Session;
 use Exception;
 
 /**
- * Exception das views
+ * Exception das views.
  */
 class SessionException extends Exception
 {

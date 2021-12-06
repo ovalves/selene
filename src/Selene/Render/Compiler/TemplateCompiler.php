@@ -8,11 +8,10 @@
 
 namespace Selene\Render\Compiler;
 
-use Selene\Render\Plugins\PluginConstant;
 use Selene\Render\Parser;
 
 /**
- * Responsável por compilar o template
+ * Responsável por compilar o template.
  */
 final class TemplateCompiler
 {
@@ -25,25 +24,23 @@ final class TemplateCompiler
     use Parser\SanitizeParser;
 
     /**
-     * Guarda o objeto compilador de plugin da template engine
+     * Guarda o objeto compilador de plugin da template engine.
      *
      * @var PluginCompiler
      */
     protected $compiler;
 
     /**
-     * Guarda os dados na tabela de simbolos da template engine
+     * Guarda os dados na tabela de simbolos da template engine.
      *
      * @var array
      */
     protected $symbolTable = [];
 
     /**
-     * Executa os compiladores de construção da template engine
+     * Executa os compiladores de construção da template engine.
      *
-     * @param string $file
-     * @param string $content
-     * @param array $variables
+     * @param  string $content
      * @return void
      */
     public function compilerTemplate(PluginCompiler $compiler, string $file, $content, array &$variables)
@@ -57,17 +54,16 @@ final class TemplateCompiler
         $content = $this->parserLoop($content, $variables);
         $content = $this->parserVariables($content, $variables);
         $content = $this->sanitize($content);
+
         return $content;
     }
 
     /**
-     * Atribui uma variavel ao array da tabela de simbolos
+     * Atribui uma variavel ao array da tabela de simbolos.
      *
-     * @param string $prefix
      * @param mixed $data
-     * @return void
      */
-    protected function frameworkAssign(string $prefix, $data) : void
+    protected function frameworkAssign(string $prefix, $data): void
     {
         if (!empty($prefix) && !empty($data)) {
             $this->symbolTable[$prefix] = $data;
@@ -75,12 +71,9 @@ final class TemplateCompiler
     }
 
     /**
-     * Remove o profixo de variavel para formar a tabela de simbolos corretamente
-     *
-     * @param string $prefix
-     * @return string
+     * Remove o profixo de variavel para formar a tabela de simbolos corretamente.
      */
-    protected function resolveAssignPrefix(string $prefix) : string
+    protected function resolveAssignPrefix(string $prefix): string
     {
         if (empty($prefix)) {
             return false;

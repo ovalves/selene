@@ -12,7 +12,7 @@ use Exception;
 use Psr\Container\ContainerExceptionInterface;
 
 /**
- * Exception dos containers
+ * Exception dos containers.
  */
 class ContainerException extends Exception implements ContainerExceptionInterface
 {

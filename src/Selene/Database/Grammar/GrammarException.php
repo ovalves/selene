@@ -11,7 +11,7 @@ namespace Selene\Database\Grammar;
 use Exception;
 
 /**
- * Exception das rotas
+ * Exception das rotas.
  */
 class GrammarException extends Exception
 {

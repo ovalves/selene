@@ -10,6 +10,7 @@ namespace Selene;
 
 use Psr\Container\ContainerInterface;
 use Selene\Auth\Auth;
+use Selene\Config\ConfigConstant;
 use Selene\Container\Container;
 use Selene\Container\ServiceContainer;
 use Selene\Loader\AppLoader;
@@ -233,7 +234,7 @@ final class App
     {
         $config = $this->container()->get(ServiceContainer::APPLICATION_CONFIG);
 
-        if ($config->getConfig('ENABLE_SESSION_CONTAINER')) {
+        if ($config->getConfig(ConfigConstant::ENABLE_SESSION_CONTAINER)) {
             $this->container->setPrefix(ServiceContainer::SESSION)->set(
                 \Selene\Session\Session::class
             );
@@ -249,7 +250,7 @@ final class App
     {
         $config = $this->container()->get(ServiceContainer::APPLICATION_CONFIG);
 
-        if ($config->getConfig('ENABLE_AUTH_CONTAINER')) {
+        if ($config->getConfig(ConfigConstant::ENABLE_AUTH_CONTAINER)) {
             $this->container->setPrefix(ServiceContainer::AUTH)->set(
                 \Selene\Auth\Auth::class,
                 [

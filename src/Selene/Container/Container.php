@@ -9,71 +9,69 @@
 namespace Selene\Container;
 
 use Psr\Container\ContainerInterface;
-use Selene\Container\ContainerException;
 
 /**
- * Define os containers usados na aplicação
+ * Define os containers usados na aplicação.
  */
 class Container implements ContainerInterface
 {
     /**
-     * Guarda containers criados
+     * Guarda containers criados.
      *
      * @var array
      */
     private $containers;
 
     /**
-     * Guarda as dependencias do objeto sendo criado
+     * Guarda as dependencias do objeto sendo criado.
      *
      * @var array
      */
     private $dependencies;
 
     /**
-     * Guarda o prefixo identificar do container corrente
+     * Guarda o prefixo identificar do container corrente.
      *
      * @var string
      */
     private $prefix;
 
     /**
-     * Guarda o namespace da aplicação
+     * Guarda o namespace da aplicação.
      *
      * @var string
      */
     private $namespace;
 
     /**
-     * Contructor
+     * Contructor.
      */
     public function __construct()
     {
-        $this->containers   = [];
+        $this->containers = [];
         $this->dependencies = [];
-        $this->prefix       = null;
-        $this->namespace    = null;
+        $this->prefix = null;
+        $this->namespace = null;
     }
 
     /**
-     * Define o prefixo identificar do container corrente
+     * Define o prefixo identificar do container corrente.
      *
      * @param string $prefix
-     * @return self
      */
-    public function setPrefix(string $prefix = null) : self
+    public function setPrefix(string $prefix = null): self
     {
         $this->prefix = $prefix;
+
         return $this;
     }
 
     /**
-     * Cria um novo container e suas dependencias
+     * Cria um novo container e suas dependencias.
      *
-     * @param Object $container
-     * @param array $dependencies
+     * @param object $container
      *
-     * @return Object Container
+     * @return object Container
      */
     public function set($container, array $dependencies = [])
     {
@@ -89,7 +87,7 @@ class Container implements ContainerInterface
                 }
 
                 if (!\is_array($value) && \class_exists($value)) {
-                    $this->dependencies[$key] = new $value;
+                    $this->dependencies[$key] = new $value();
                     continue;
                 }
 
@@ -97,6 +95,7 @@ class Container implements ContainerInterface
             }
 
             $this->containers[$this->prefix] = new $container($this, ...$this->dependencies);
+
             return $this->containers[$this->prefix];
         } catch (\Throwable $e) {
             throw new ContainerException($e->getMessage(), $e->getCode());
@@ -104,10 +103,10 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Retorna um determinado container do pool de containers criados
+     * Retorna um determinado container do pool de containers criados.
      *
      * @param $container
-     * @return Object Container
+     * @return object Container
      */
     public function get($container)
     {
@@ -119,22 +118,19 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Retorna todos os containers criados
-     *
-     * @return array
+     * Retorna todos os containers criados.
      */
-    public function getContainers() : array
+    public function getContainers(): array
     {
         return $this->containers;
     }
 
     /**
-     * Verifica se um container já foi criado
+     * Verifica se um container já foi criado.
      *
-     * @param Object $container
-     * @return bool
+     * @param object $container
      */
-    public function has($container) : bool
+    public function has($container): bool
     {
         return !empty($this->containers[$container]);
     }

@@ -24,8 +24,8 @@ trait RequestBodyAwareTrait
      * potential types MUST be arrays or objects only. A null value indicates
      * the absence of body content.
      *
-     * @return null|array|object The deserialized body parameters, if any.
-     *     These will typically be an array or object.
+     * @return array|object|null The deserialized body parameters, if any.
+     *                           These will typically be an array or object.
      */
     public function getParsedBody()
     {
@@ -53,11 +53,11 @@ trait RequestBodyAwareTrait
      * immutability of the message, and MUST return an instance that has the
      * updated body parameters.
      *
-     * @param null|array|object $data The deserialized body data. This will
-     *     typically be in an array or object.
+     * @param  array|object|null         $data The deserialized body data. This will
+     *                                         typically be in an array or object.
      * @return static
      * @throws \InvalidArgumentException if an unsupported argument type is
-     *     provided.
+     *                                        provided
      */
     public function withParsedBody($data)
     {
@@ -66,7 +66,7 @@ trait RequestBodyAwareTrait
     /**
      * Gets the body of the message.
      *
-     * @return StreamInterface Returns the body as a stream.
+     * @return StreamInterface returns the body as a stream
      */
     public function getBody()
     {
@@ -81,9 +81,9 @@ trait RequestBodyAwareTrait
      * immutability of the message, and MUST return a new instance that has the
      * new body stream.
      *
-     * @param StreamInterface $body Body.
+     * @param  StreamInterface           $body body
      * @return static
-     * @throws \InvalidArgumentException When the body is not valid.
+     * @throws \InvalidArgumentException when the body is not valid
      */
     public function withBody(StreamInterface $body)
     {

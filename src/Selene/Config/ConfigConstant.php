@@ -9,37 +9,48 @@
 namespace Selene\Config;
 
 /**
- * Define as constantes usadas nas configuracoes do framework
+ * Define as constantes usadas nas configuracoes do framework.
  */
 class ConfigConstant
 {
     /**
-     * Define configurations of authentication
+     * Define configurations of authentication.
      */
-    const AUTH                        = 'auth';
-    const AUTH_HASH                   = 'auth_hash';
-    const AUTH_TABLE_NAME             = "auth_table_name";
-    const AUTH_LOGIN_URL              = 'auth_login_url';
-    const AUTH_REDIRECT_SUCCESS_LOGIN = 'auth_redirect_success_login';
-    const AUTH_REDIRECT_FAILED_LOGIN  = 'auth_redirect_failed_login';
+    public const AUTH = 'auth';
+    public const AUTH_HASH = 'auth_hash';
+    public const AUTH_TABLE_NAME = 'auth_table_name';
+    public const AUTH_LOGIN_URL = 'auth_login_url';
+    public const AUTH_REDIRECT_SUCCESS_LOGIN = 'auth_redirect_success_login';
+    public const AUTH_REDIRECT_FAILED_LOGIN = 'auth_redirect_failed_login';
 
     /**
-     * Define configurations of session
+     * Define configurations of session.
      */
-    const SESSION                 = 'session';
-    const SESSION_TABLE_NAME      = "session_table_name";
-    const SESSION_EXPIRATION_TIME = "expiration_time";
-    const SESSION_REFRESH_TIME    = "refresh_time";
+    public const SESSION = 'session';
+    public const SESSION_TABLE_NAME = 'session_table_name';
+    public const SESSION_EXPIRATION_TIME = 'expiration_time';
+    public const SESSION_REFRESH_TIME = 'refresh_time';
 
     /**
-     * Define configurations of database
+     * Define configurations of database.
      */
-    const DATABASE          = 'database';
-    const MYSQL             = 'mysql';
-    const SQLITE            = 'sqlite';
-    const MONGODB           = 'mongodb';
-    const DATABASE_SERVER   = 'mysql';
-    const DATABASE_NAME     = "db_name";
-    const DATABASE_USER     = "root";
-    const DATABASE_PASSWORD = "1234";
+    public const DATABASE = 'database';
+    public const MYSQL = 'mysql';
+    public const SQLITE = 'sqlite';
+    public const MONGODB = 'mongodb';
+    public const DATABASE_SERVER = 'mysql';
+    public const DATABASE_NAME = 'db_name';
+    public const DATABASE_USER = 'root';
+    public const DATABASE_PASSWORD = '1234';
+
+    /**
+     * Define as configurações das Views.
+     */
+    public const ENABLE_CACHE_VIEWS = 'enable_cache_views';
+
+    /**
+     * Define as configurações dos containers de aplicação.
+     */
+    public const ENABLE_SESSION_CONTAINER = 'enable_session_container';
+    public const ENABLE_AUTH_CONTAINER = 'enable_auth_container';
 }

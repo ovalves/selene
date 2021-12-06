@@ -9,32 +9,32 @@
 namespace Selene\Render\Parser;
 
 /**
- * Responsável por fazer o parser das variaveis do template
+ * Responsável por fazer o parser das variaveis do template.
  */
 trait LoopParser
 {
     /**
-     * Guarda os dados do template que serão compilados
+     * Guarda os dados do template que serão compilados.
      *
      * @var array
      */
     private $matches = [];
 
     /**
-     * Define a regex de busca da tag de loop
+     * Define a regex de busca da tag de loop.
      *
      * @var string
      */
     private $matchLoop = '/\{{2}\s*(foreach|endforeach|for|endfor)\s*(.+?)\s*\}{2}/';
 
     /**
-     * Define as condições da estrutura de controle if
+     * Define as condições da estrutura de controle if.
      *
      * @var array
      */
     private $loopEndTypes = [
         ParserConstant::LOOP_ENDFOREACH_TAG,
-        ParserConstant::LOOP_ENDFOR_TAG
+        ParserConstant::LOOP_ENDFOR_TAG,
     ];
 
     /**
@@ -46,28 +46,26 @@ trait LoopParser
      */
     private $loopControlTypes = [
         ParserConstant::LOOP_FOREACH_TAG => [
-            ParserConstant::LOOP_FIRST_ARGUMENT  => '/\$([a-zA-Z0-9_\-\(\)\.]+)/',
+            ParserConstant::LOOP_FIRST_ARGUMENT => '/\$([a-zA-Z0-9_\-\(\)\.]+)/',
             ParserConstant::LOOP_SECOND_ARGUMENT => '/\b(as|in)\b/',
-            ParserConstant::LOOP_THIRD_ARGUMENT  => '/(.\w+)$/',
-            ParserConstant::LOOP_EXTRA_ARGUMENT  => '/(\s{1}?\$.*\=>\s*)/'
+            ParserConstant::LOOP_THIRD_ARGUMENT => '/(.\w+)$/',
+            ParserConstant::LOOP_EXTRA_ARGUMENT => '/(\s{1}?\$.*\=>\s*)/',
         ],
         ParserConstant::LOOP_FOR_TAG => [
-            ParserConstant::LOOP_FIRST_ARGUMENT  => '',
+            ParserConstant::LOOP_FIRST_ARGUMENT => '',
             ParserConstant::LOOP_SECOND_ARGUMENT => '',
-            ParserConstant::LOOP_THIRD_ARGUMENT  => ''
+            ParserConstant::LOOP_THIRD_ARGUMENT => '',
         ],
         ParserConstant::LOOP_ENDFOREACH_TAG => 'endforeach',
-        ParserConstant::LOOP_ENDFOR_TAG => 'endfor'
+        ParserConstant::LOOP_ENDFOR_TAG => 'endfor',
     ];
 
     /**
-     * Compila as variaveis e executa o plugin caso a variavel necessite de um
+     * Compila as variaveis e executa o plugin caso a variavel necessite de um.
      *
      * @param string $content
-     * @param array $variables
-     * @return string
      */
-    protected function parserLoop($content, array $variables) : string
+    protected function parserLoop($content, array $variables): string
     {
         preg_match_all($this->matchLoop, $content, $this->matches);
         if (empty($this->matches)) {
@@ -89,10 +87,10 @@ trait LoopParser
                 continue;
             }
 
-            $firstArg  = $this->getLoopArgument($type[ParserConstant::LOOP_FIRST_ARGUMENT], $condition);
+            $firstArg = $this->getLoopArgument($type[ParserConstant::LOOP_FIRST_ARGUMENT], $condition);
             $secondArg = $this->getLoopArgument($type[ParserConstant::LOOP_SECOND_ARGUMENT], $condition);
-            $thirdArg  = $this->getLoopArgument($type[ParserConstant::LOOP_THIRD_ARGUMENT], $condition);
-            $extraArg  = $this->getLoopArgument($type[ParserConstant::LOOP_EXTRA_ARGUMENT], $condition);
+            $thirdArg = $this->getLoopArgument($type[ParserConstant::LOOP_THIRD_ARGUMENT], $condition);
+            $extraArg = $this->getLoopArgument($type[ParserConstant::LOOP_EXTRA_ARGUMENT], $condition);
 
             if (empty($firstArg || empty($secondArg || empty($thirdArg)))) {
                 continue;
@@ -105,7 +103,7 @@ trait LoopParser
             }
 
             $symbolTableReference = $this->resolveAssignPrefix($thirdArg);
-            $symbolTableArgument  = $this->resolveAssignPrefix($firstArg);
+            $symbolTableArgument = $this->resolveAssignPrefix($firstArg);
             $this->frameworkAssign($symbolTableReference, $variables[$symbolTableArgument]);
 
             $content = str_replace(
@@ -119,13 +117,9 @@ trait LoopParser
     }
 
     /**
-     * Retorna o argumento usado no loop
-     *
-     * @param string $type
-     * @param string $condition
-     * @return string
+     * Retorna o argumento usado no loop.
      */
-    private function getLoopArgument(string $type, string $condition) : string
+    private function getLoopArgument(string $type, string $condition): string
     {
         preg_match($type, $condition, $argument);
         if (empty($argument)) {

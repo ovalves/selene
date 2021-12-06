@@ -11,7 +11,7 @@ namespace Selene\Filesystem;
 use Exception;
 
 /**
- * Exception das views
+ * Exception das views.
  */
 class FilesystemException extends Exception
 {

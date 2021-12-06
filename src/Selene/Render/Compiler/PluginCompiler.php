@@ -6,39 +6,38 @@
  * @since       2019-02-27
  */
 
-
 namespace Selene\Render\Compiler;
 
 use Selene\Render\Plugins;
 
 /**
- * Responsável por compilar os plugins
+ * Responsável por compilar os plugins.
  */
 final class PluginCompiler
 {
     /**
-     * Guarda o array de plugins definidos pelo framework
+     * Guarda o array de plugins definidos pelo framework.
      *
      * @var array
      */
-    protected $pluginsFramework = [];
+    private $pluginsFramework = [];
 
     /**
-     * Guarda o array de plugins definidos pela aplicação cliente
+     * Guarda o array de plugins definidos pela aplicação cliente.
      *
      * @var array
      */
-    protected $pluginsCustom = [];
+    private $pluginsCustom = [];
 
     /**
-     * Guarda os plugins que estão presentes no template
+     * Guarda os plugins que estão presentes no template.
      *
      * @var array
      */
-    protected $matches = [];
+    private $matches = [];
 
     /**
-     * Undocumented function
+     * Undocumented function.
      */
     public function __construct()
     {
@@ -46,46 +45,39 @@ final class PluginCompiler
     }
 
     /**
-     * Inicia os plugins da template engine
-     *
-     * @return void
+     * Inicia os plugins da template engine.
      */
-    protected function initPlugins() : void
+    private function initPlugins(): void
     {
         $this->addFrameworkPlugins([
             Plugins\PluginConstant::UPPER => Plugins\Upper::class,
-            Plugins\PluginConstant::LOWER => Plugins\Lower::class
+            Plugins\PluginConstant::LOWER => Plugins\Lower::class,
         ]);
     }
 
     /**
-     * Adiciona um plugin ao array de plugins do framework
-     *
-     * @param array $plugins
-     * @return void
+     * Adiciona um plugin ao array de plugins do framework.
      */
-    protected function addFrameworkPlugins(array $plugins) : void
+    private function addFrameworkPlugins(array $plugins): void
     {
         $this->pluginsFramework = $plugins;
     }
 
-
     /**
-     * Adiciona um plugin ao array de plugins do framework
+     * Adiciona um plugin ao array de plugins do framework.
      *
      * @param array $plugins
-     * @return void
      */
-    public function addCustomPlugins($plugin) : void
+    public function addCustomPlugins($plugin): void
     {
         $this->pluginsCustom[] = $plugin;
     }
 
     /**
-     * Chama o plugin executando-o
+     * Chama o plugin executando-o.
      *
-     * @param mixed $variable
-     * @param mixed $plugin
+     * @param  mixed $variable
+     * @param  mixed $plugin
      * @return mixed
      */
     public function callPlugin($variable, $plugin)
@@ -98,6 +90,6 @@ final class PluginCompiler
             return $variable;
         }
 
-        return (new $this->pluginsFramework[$plugin])($variable);
+        return (new $this->pluginsFramework[$plugin]())($variable);
     }
 }

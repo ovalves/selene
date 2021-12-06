@@ -12,38 +12,33 @@ use Selene\App;
 use Symfony\Component\Dotenv\Dotenv;
 
 /**
- * Framework Bootstrap
+ * Framework Bootstrap.
  */
 final class Factory
 {
     /**
      * @var App
      */
-    protected static $instance = null;
+    private static $instance = null;
 
     final public function __construct()
     {
-        //
     }
 
     final public function __clone()
     {
-        //
     }
 
     final public function __wakeup()
     {
-        //
     }
 
     /**
-     * Return framework instance
-     *
-     * @return App
+     * Return framework instance.
      */
-    public static function create(string $root = '') : App
+    public static function create(string $root = ''): App
     {
-        if (self::$instance === null) {
+        if (null === self::$instance) {
             $dotenv = new Dotenv();
             $dotenv->load($root. DIRECTORY_SEPARATOR .'.env');
             self::$instance = new App($root);

@@ -9,17 +9,17 @@
 namespace Selene\Render\Plugins;
 
 /**
- * Define as constantes usadas nos plugins da template engine
+ * Define as constantes usadas nos plugins da template engine.
  */
 class PluginConstant
 {
     /**
-     * Plugin uppercase
+     * Plugin uppercase.
      */
-    const UPPER = 'upper';
+    public const UPPER = 'upper';
 
     /**
-     * Plugin lowercase
+     * Plugin lowercase.
      */
-    const LOWER = 'lower';
+    public const LOWER = 'lower';
 }

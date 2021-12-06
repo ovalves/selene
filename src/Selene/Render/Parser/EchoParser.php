@@ -9,7 +9,7 @@
 namespace Selene\Render\Parser;
 
 /**
- * Responsável por fazer o parser dos echos das váriaveis dos templates
+ * Responsável por fazer o parser dos echos das váriaveis dos templates.
  */
 trait EchoParser
 {

@@ -10,8 +10,8 @@ namespace Selene\Http;
 
 use Exception;
 use GuzzleHttp\Client as GuzzleClient;
-use Selene\Http\Traits\ClientErrorTrait;
 use Psr\Http\Message\ResponseInterface;
+use Selene\Http\Traits\ClientErrorTrait;
 
 final class Client
 {

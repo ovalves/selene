@@ -9,24 +9,21 @@
 namespace Selene\Render\Parser;
 
 /**
- * Responsável por fazer o parser dos includes do template
+ * Responsável por fazer o parser dos includes do template.
  */
 trait BlocksParser
 {
     /**
-     * Guarda os dados do template que serão compilados
+     * Guarda os dados do template que serão compilados.
      *
      * @var array
      */
     private $blocks = [];
 
     /**
-     * Faz o parser dos includes da template engine
-     *
-     * @param string $content
-     * @return string
+     * Faz o parser dos includes da template engine.
      */
-    protected function parserBlocks(string $content) : string
+    protected function parserBlocks(string $content): string
     {
         preg_match_all('/{% ?block ?(.*?) ?%}(.*?){% ?endblock ?%}/is', $content, $matches, PREG_SET_ORDER);
 
@@ -35,7 +32,7 @@ trait BlocksParser
                 $this->blocks[$value[1]] = '';
             }
 
-            if (strpos($value[2], '@parent') === false) {
+            if (false === strpos($value[2], '@parent')) {
                 $this->blocks[$value[1]] = $value[2];
             } else {
                 $this->blocks[$value[1]] = str_replace('@parent', $this->blocks[$value[1]], $value[2]);
@@ -53,6 +50,7 @@ trait BlocksParser
         }
 
         $content = preg_replace('/{% ?yield ?(.*?) ?%}/i', '', $content);
+
         return $content;
     }
 }
