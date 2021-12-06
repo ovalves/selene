@@ -20,6 +20,9 @@ final class TemplateCompiler
     use Parser\IfControlParser;
     use Parser\LoopParser;
     use Parser\IncludeParser;
+    use Parser\BlocksParser;
+    use Parser\EchoParser;
+    use Parser\SanitizeParser;
 
     /**
      * Guarda o objeto compilador de plugin da template engine
@@ -38,18 +41,22 @@ final class TemplateCompiler
     /**
      * Executa os compiladores de construção da template engine
      *
+     * @param string $file
      * @param string $content
      * @param array $variables
      * @return void
      */
-    public function compilerTemplate(PluginCompiler $compiler, $content, array &$variables)
+    public function compilerTemplate(PluginCompiler $compiler, string $file, $content, array &$variables)
     {
         $this->compiler = $compiler;
-        $content = $this->parserIncludes($content);
-        $content = $this->parserLoop($content, $variables);
+        $content = $this->parserIncludes($file);
+        $content = $this->parserBlocks($content);
+        $content = $this->parserEcho($content);
+        $content = $this->parserEscapedEcho($content);
         $content = $this->parserIfControl($content);
+        $content = $this->parserLoop($content, $variables);
         $content = $this->parserVariables($content, $variables);
-
+        $content = $this->sanitize($content);
         return $content;
     }
 

@@ -28,7 +28,6 @@ trait RequestTargetAwareTrait
      */
     public function getRequestTarget()
     {
-
     }
 
     /**
@@ -50,6 +49,5 @@ trait RequestTargetAwareTrait
      */
     public function withRequestTarget($requestTarget)
     {
-
     }
 }

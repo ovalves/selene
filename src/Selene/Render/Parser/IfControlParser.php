@@ -25,7 +25,7 @@ trait IfControlParser
      *
      * @var string
      */
-    private $matchIfTags = '/\{{2}\s*(if|endif|elseif|else)\s*(.+?)\s*\}{2}/';
+    private $matchIfTags = '/{% ?\s*(if|endif|elseif|else)\s*(.+?)\s*\%}/';
 
     /**
      * Define a regex para busca das variaveis de avaliaçao

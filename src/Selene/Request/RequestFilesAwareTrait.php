@@ -24,7 +24,6 @@ trait RequestFilesAwareTrait
      */
     public function getUploadedFiles()
     {
-
     }
 
     /**
@@ -40,6 +39,5 @@ trait RequestFilesAwareTrait
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
-
     }
 }

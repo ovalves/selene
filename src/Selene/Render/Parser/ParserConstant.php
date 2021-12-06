@@ -44,5 +44,4 @@ class ParserConstant
      */
     const IF_CLOSE_TAG = 'endif';
     const ELSE_CLOSE_TAG = 'else';
-
 }

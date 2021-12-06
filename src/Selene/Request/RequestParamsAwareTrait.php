@@ -28,7 +28,6 @@ trait RequestParamsAwareTrait
      */
     public function getServerParams()
     {
-
     }
 
     /**
@@ -43,7 +42,6 @@ trait RequestParamsAwareTrait
      */
     public function getCookieParams()
     {
-
     }
 
     /**
@@ -65,7 +63,6 @@ trait RequestParamsAwareTrait
      */
     public function withCookieParams(array $cookies)
     {
-
     }
 
     /**

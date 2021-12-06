@@ -23,7 +23,6 @@ trait RequestAttributeAwareTrait
      */
     public function getAttributes()
     {
-
     }
 
     /**
@@ -43,7 +42,6 @@ trait RequestAttributeAwareTrait
      */
     public function getAttribute($name, $default = null)
     {
-
     }
 
     /**
@@ -63,7 +61,6 @@ trait RequestAttributeAwareTrait
      */
     public function withAttribute($name, $value)
     {
-
     }
 
     /**
@@ -82,6 +79,5 @@ trait RequestAttributeAwareTrait
      */
     public function withoutAttribute($name)
     {
-
     }
 }

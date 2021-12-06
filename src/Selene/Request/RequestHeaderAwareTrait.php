@@ -36,7 +36,6 @@ trait RequestHeaderAwareTrait
      */
     public function getHeaders()
     {
-
     }
 
     /**
@@ -49,7 +48,6 @@ trait RequestHeaderAwareTrait
      */
     public function hasHeader($name)
     {
-
     }
 
     /**
@@ -68,7 +66,6 @@ trait RequestHeaderAwareTrait
      */
     public function getHeader($name)
     {
-
     }
 
     /**
@@ -92,7 +89,6 @@ trait RequestHeaderAwareTrait
      */
     public function getHeaderLine($name)
     {
-
     }
 
     /**
@@ -112,7 +108,6 @@ trait RequestHeaderAwareTrait
      */
     public function withHeader($name, $value)
     {
-
     }
 
     /**
@@ -133,7 +128,6 @@ trait RequestHeaderAwareTrait
      */
     public function withAddedHeader($name, $value)
     {
-
     }
 
     /**
@@ -150,6 +144,5 @@ trait RequestHeaderAwareTrait
      */
     public function withoutHeader($name)
     {
-
     }
 }

@@ -29,7 +29,6 @@ trait RequestBodyAwareTrait
      */
     public function getParsedBody()
     {
-
     }
 
     /**
@@ -62,7 +61,6 @@ trait RequestBodyAwareTrait
      */
     public function withParsedBody($data)
     {
-
     }
 
     /**
@@ -72,7 +70,6 @@ trait RequestBodyAwareTrait
      */
     public function getBody()
     {
-
     }
 
     /**
@@ -90,6 +87,5 @@ trait RequestBodyAwareTrait
      */
     public function withBody(StreamInterface $body)
     {
-
     }
 }

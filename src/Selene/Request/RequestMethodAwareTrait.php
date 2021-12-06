@@ -36,6 +36,5 @@ trait RequestMethodAwareTrait
      */
     public function withMethod($method)
     {
-
     }
 }

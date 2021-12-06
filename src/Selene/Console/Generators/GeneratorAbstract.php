@@ -149,7 +149,8 @@ class GeneratorAbstract
     public function createFile()
     {
         if (!$this->filesystem->isWritable(
-            $this->rootPath.DIRECTORY_SEPARATOR.$this->directory)) {
+            $this->rootPath.DIRECTORY_SEPARATOR.$this->directory
+        )) {
             throw new FilesystemException("Directory is not Writable");
         }
 

@@ -37,6 +37,5 @@ trait RequestProtocolAwareTrait
      */
     public function withProtocolVersion($version)
     {
-
     }
 }

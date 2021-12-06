@@ -36,38 +36,25 @@ trait IncludeParser
      * @param string $content
      * @return string
      */
-    protected function parserIncludes(string $content) : string
+    protected function parserIncludes(string $file) : string
     {
-        preg_match_all($this->matchIncludeTag, $content, $this->matches);
-        if (empty($this->matches)) {
-            return $content;
+        $include = explode('/', $file);
+        $includeFile = $this->findInDirectory($include);
+        $code = file_get_contents($includeFile);
+
+        preg_match_all('/{% ?(extends|include) ?\'?(.*?)\'? ?%}/i', $code, $matches, PREG_SET_ORDER);
+        foreach ($matches as $value) {
+            $code = str_replace($value[0], $this->parserIncludes($value[2]), $code);
         }
 
-        foreach ($this->matches[2] as $key => $match) {
-            $include = explode('/', $match);
-            $includeFile = $this->findInDirectory($include);
-
-            if (empty($includeFile)) {
-                continue;
-            }
-
-            $includedFileContent = file_get_contents($includeFile);
-
-            $content = str_replace(
-                $this->matches[0][$key],
-                $includedFileContent,
-                $content
-            );
-        }
-
-        return $content;
+        return preg_replace('/{% ?(extends|include) ?\'?(.*?)\'? ?%}/i', '', $code);
     }
 
     /**
      * Procura o template no diretório das views da aplicação
      *
      * @param array $includes
-     * @return void
+     * @return string|bool
      */
     private function findInDirectory(array $parts)
     {

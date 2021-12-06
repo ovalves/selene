@@ -22,7 +22,8 @@ if (!function_exists('env')) {
  * Define um item do array para um determinado valor usando a notação "DOT".
  */
 if (!function_exists('arr_set')) {
-    function arr_set(array &$array, ?string $key, mixed $value): array {
+    function arr_set(array &$array, ?string $key, mixed $value): array
+    {
         if (is_null($key)) {
             return $array = $value;
         }
@@ -53,7 +54,8 @@ if (!function_exists('arr_set')) {
  * Adiciona um elemento a um array usando a notação "dot".
  */
 if (!function_exists('arr_add')) {
-    function arr_add(array $array, string $key, mixed $value): array {
+    function arr_add(array $array, string $key, mixed $value): array
+    {
         if (is_null(arr_get($array, $key))) {
             arr_set($array, $key, $value);
         }
@@ -66,7 +68,8 @@ if (!function_exists('arr_add')) {
  * Retorna um item de um array usando a notação "DOT".
  */
 if (!function_exists('arr_get')) {
-    function arr_get(array $array, mixed $key, mixed $default = null): mixed {
+    function arr_get(array $array, mixed $key, mixed $default = null): mixed
+    {
         if (!is_array($array)) {
             return value($default);
         }
@@ -99,7 +102,8 @@ if (!function_exists('arr_get')) {
  * Determina se uma chave existe em um array.
  */
 if (! function_exists('exists')) {
-    function exists(array $array, mixed $key): bool {
+    function exists(array $array, mixed $key): bool
+    {
         if ($array instanceof ArrayAccess) {
             return $array->offsetExists($key);
         }
@@ -171,7 +175,8 @@ if (!function_exists('str_transliterator')) {
         }
 
         $transliterator = Transliterator::createFromRules(
-            ':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;', Transliterator::FORWARD
+            ':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;',
+            Transliterator::FORWARD
         );
 
         return $transliterator->transliterate($text);
@@ -181,8 +186,11 @@ if (!function_exists('str_transliterator')) {
 if (!function_exists('str_uncamelize')) {
     function str_uncamelize(array | string $word, string $splitter = ' ', bool $uppercase = true): mixed
     {
-        $word = preg_replace('/(?!^)[[:upper:]][[:lower:]]/', '$0',
-            preg_replace('/(?!^)[[:upper:]]+/', $splitter.'$0', $word));
+        $word = preg_replace(
+            '/(?!^)[[:upper:]][[:lower:]]/',
+            '$0',
+            preg_replace('/(?!^)[[:upper:]]+/', $splitter.'$0', $word)
+        );
 
         return $uppercase ? ucwords($word) : $word;
     }

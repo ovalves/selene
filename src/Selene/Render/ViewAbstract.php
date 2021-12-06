@@ -24,6 +24,11 @@ abstract class ViewAbstract
     public const APP_VIEW_DIRECTORY = 'Views/';
 
     /**
+     * Guarda o diretório das views.
+     */
+    public const CACHE_VIEW_DIRECTORY = 'Views/Cache/';
+
+    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -120,8 +125,15 @@ abstract class ViewAbstract
     {
         $this->file = $file;
         $this->content = $this->load();
-        $this->parserTemplateEngine();
-        echo $this->compile();
+
+        $cachedFile = $this->getCachedFiles();
+
+        if (empty($cachedFile)) {
+            $this->parserTemplateEngine();
+            $cachedFile = $this->saveToCache();
+        }
+
+        $this->requireFile($cachedFile);
     }
 
     /**
@@ -145,21 +157,51 @@ abstract class ViewAbstract
             throw new ViewException('Erro ao carregar os dados da view');
         }
 
-        $this->content = $this->template->compilerTemplate($this->compiler, $this->content, $this->assigned);
+        $this->content = $this->template->compilerTemplate($this->compiler, $this->file, $this->content, $this->assigned);
     }
 
     /**
-     * Executa a compilação do template.
+     * Cria e seta um valor para uma variavel na renderização do template.
      */
-    final protected function compile(): string
+    final protected function assignTemplateVars(array $vars): void
     {
-        foreach ($this->assigned as $var => $val) {
-            ${$var} = $val;
+        if (!empty($vars)) {
+            foreach ($vars as $key => $value) {
+                $this->assign($key, $value);
+            }
+        }
+    }
+
+    final protected function getCachedFiles(): ?string
+    {
+        if (!file_exists(self::CACHE_VIEW_DIRECTORY)) {
+            mkdir(self::CACHE_VIEW_DIRECTORY, 0744);
         }
 
-        ob_start();
-        eval(' ?>' . $this->content . '<?php ');
+        $cachedFile = self::CACHE_VIEW_DIRECTORY . md5($this->file) . '.php';
 
-        return ob_get_clean();
+        if (!file_exists($cachedFile)) {
+            return false;
+        }
+
+        if (filemtime($cachedFile) < filemtime($this->getTemplatePath())) {
+            return false;
+        }
+
+        return $cachedFile;
+    }
+
+    final protected function saveToCache(): string
+    {
+        $cachedFile = self::CACHE_VIEW_DIRECTORY . md5($this->file) . '.php';
+        file_put_contents($cachedFile, $this->content);
+
+        return $cachedFile;
+    }
+
+    final protected function requireFile(string $cachedFile): void
+    {
+        extract($this->assigned, EXTR_SKIP);
+        require $cachedFile;
     }
 }
