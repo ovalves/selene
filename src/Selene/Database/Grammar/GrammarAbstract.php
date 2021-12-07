@@ -12,6 +12,8 @@ use PDOStatement;
 use Selene\Database\Builder\Group;
 use Selene\Database\Builder\Join;
 use Selene\Database\Builder\Where;
+use Selene\Database\Builder\Insert;
+use Selene\Database\Builder\Update;
 use Selene\Database\DatabaseException;
 use Selene\Database\Transaction;
 
@@ -33,6 +35,20 @@ abstract class GrammarAbstract
      * @var mixed
      */
     protected $fields;
+
+    /**
+     * Guarda os valores a serem usados na clausula.
+     *
+     * @var mixed
+     */
+    protected $values;
+
+    /**
+     * Guarda os valores a serem usados como bind na clausula.
+     *
+     * @var mixed
+     */
+    protected $bindParam;
 
     /**
      * Guarda a tabela a ser usada na clausula.
@@ -204,6 +220,10 @@ abstract class GrammarAbstract
      */
     final protected function getOrder(): string
     {
+        if (empty($this->order)) {
+            return '';
+        }
+
         $orderString = 'ORDER BY ';
         $orderCount = count($this->order) - 1;
         for ($i = 0; $i <= $orderCount; $i++) {
@@ -287,6 +307,19 @@ abstract class GrammarAbstract
     protected function prepare(array $fields): array
     {
         $prepared = [];
+        if ($this instanceof Insert || $this instanceof Update) {
+            foreach ($fields as $key => $value) {
+                if (\is_scalar($value)) {
+                    $this->bindParam[] = \str_pad($key, \strlen($key) + 1, ':', STR_PAD_LEFT);
+                    $this->values[] = $this->escape($value);
+                    $prepared[$key] = $this->escape($key);
+                }
+            }
+
+            $this->fields = \array_keys($prepared);
+            return $this->fields;
+        }
+
         foreach ($fields as $field) {
             if (\is_scalar($field)) {
                 $prepared[] = $this->escape($field);
