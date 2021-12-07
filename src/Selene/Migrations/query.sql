@@ -11,6 +11,7 @@ CREATE TABLE `session` (
 CREATE TABLE `user` (
     `user_id` int(11)  unsigned NOT NULL AUTO_INCREMENT,
     `email` varchar(255) NOT NULL,
+    `fullname` varchar(2000) NOT NULL,
     `password` varchar(2000) NOT NULL,
     `time_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `time_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

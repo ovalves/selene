@@ -58,7 +58,7 @@ class Request extends RequestAbstract
      */
     public function getContentBody(): array
     {
-        return json_decode(file_get_contents('php://input'), true, 512, \JSON_BIGINT_AS_STRING);
+        return (array) json_decode(file_get_contents('php://input') ?? '', true, 512, \JSON_BIGINT_AS_STRING);
     }
 
     /**

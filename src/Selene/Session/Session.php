@@ -9,6 +9,8 @@
 namespace Selene\Session;
 
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Selene\Config\ConfigConstant;
 
 /**
  * Gerencia o registro da seção.
@@ -86,15 +88,29 @@ class Session
     /**
      * Retorna uma variável da seção.
      */
-    public function getValue(string $var): string
+    public function getValue(string $var = null) : string|array
     {
         if (isset($_SESSION[$var])) {
             return $_SESSION[$var];
         }
+
+        return $_SESSION;
     }
 
     /**
-     * Destrói os dados da seção.
+     * Retorna uma variável da sessão do usuário
+     */
+    public function getUserData(string $var = null) : string|array
+    {
+        if (isset($_SESSION[SessionConstant::USER_DATA][$var])) {
+            return $_SESSION[SessionConstant::USER_DATA][$var];
+        }
+
+        return $_SESSION;
+    }
+
+    /**
+     * Destrói os dados da seção
      */
     public function freeSession(): void
     {

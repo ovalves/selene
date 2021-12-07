@@ -9,7 +9,7 @@
 namespace  Selene\Session;
 
 /**
- * Define as constantes usadas na sessãorouter.
+ * Define as constantes usadas na sessão.
  */
 class SessionConstant
 {
@@ -18,6 +18,7 @@ class SessionConstant
      */
     public const SESSION_TABLE = 'session';
     public const USER_ID = 'user_id';
+    public const USER_DATA = 'user_data';
     public const UPDATED_AT = 'update_at';
     public const CREATED_AT = 'created_at';
     public const EXPIRATION_TIME = 'expiration_time';
