@@ -106,7 +106,7 @@ class Session
             return $_SESSION[SessionConstant::USER_DATA][$var];
         }
 
-        return $_SESSION;
+        return 'Undefined';
     }
 
     /**

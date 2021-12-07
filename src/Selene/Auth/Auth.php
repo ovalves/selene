@@ -135,11 +135,14 @@ class Auth
     /**
      * Desloga o user autenticado.
      */
-    public function logout(): void
+    public function logout() : bool
     {
         if ($this->session->hasSession()) {
             $this->session->freeSession();
+            return true;
         }
+
+        return false;
     }
 
     /**
