@@ -11,6 +11,8 @@ namespace Selene\Render;
 use Psr\Container\ContainerInterface;
 use Selene\Render\Compiler\PluginCompiler;
 use Selene\Render\Compiler\TemplateCompiler;
+use Selene\Config\ConfigConstant;
+use Selene\Container\ServiceContainer;
 
 /**
  * Renderiza as views da aplicação
@@ -126,6 +128,7 @@ abstract class ViewAbstract
         $this->file = $file;
         $this->content = $this->load();
 
+        $this->makeCacheDir();
         $cachedFile = $this->getCachedFiles();
 
         if (empty($cachedFile)) {
@@ -172,10 +175,21 @@ abstract class ViewAbstract
         }
     }
 
-    final protected function getCachedFiles(): ?string
+    final protected function makeCacheDir(): void
     {
         if (!file_exists(self::CACHE_VIEW_DIRECTORY)) {
             mkdir(self::CACHE_VIEW_DIRECTORY, 0744);
+        }
+    }
+
+    final protected function getCachedFiles(): ?string
+    {
+        $enabled = $this->container
+            ->get(ServiceContainer::APPLICATION_CONFIG)
+            ->getConfig(ConfigConstant::ENABLE_CACHE_VIEWS);
+
+        if (false === $enabled) {
+            return false;
         }
 
         $cachedFile = self::CACHE_VIEW_DIRECTORY . md5($this->file) . '.php';
