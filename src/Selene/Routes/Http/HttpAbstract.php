@@ -24,7 +24,7 @@ abstract class HttpAbstract
      *
      * @param mixed $callback
      */
-    public function resolve($routeType, array $queue, string $resource, $callback = null): array
+    public function resolve($routeType, string $groupIdentifier, array $queue, string $resource, $callback = null) : array
     {
         if (empty($routeType)) {
             throw new RouteException('Método HTTP desconhecido', 404);
@@ -37,7 +37,7 @@ abstract class HttpAbstract
         $this->resolveCallback($callback);
 
         if ($this->isCallable()) {
-            $queue[] = [
+            $queue[$groupIdentifier][] = [
                 $routeType => [
                     RouteConstant::ROUTE_RESOURCE => $resource,
                     RouteConstant::ROUTE_CALLBACK => $callback,
@@ -55,7 +55,7 @@ abstract class HttpAbstract
             throw new RouteException('Ação da controller não encontrada', 404);
         }
 
-        $queue[] = [
+        $queue[$groupIdentifier][] = [
             $routeType => [
                 RouteConstant::ROUTE_RESOURCE => $resource,
                 RouteConstant::ROUTE_CLASS => $this->getController(),

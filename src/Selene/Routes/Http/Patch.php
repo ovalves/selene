@@ -15,13 +15,8 @@ use Selene\Routes\RouteConstant;
  */
 class Patch extends HttpAbstract
 {
-    /**
-     * Adiciona uma rota a fila de rotas.
-     *
-     * @param mixed $callback
-     */
-    public function __invoke(array $queue, string $resource, $callback = null): array
+    public function __invoke(string $groupIdentifier, array $queue, string $resource, mixed $callback = null) : array
     {
-        return $this->resolve(RouteConstant::PATCH, $queue, $resource, $callback);
+        return $this->resolve(RouteConstant::PATCH, $groupIdentifier, $queue, $resource, $callback);
     }
 }

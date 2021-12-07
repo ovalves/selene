@@ -11,6 +11,7 @@ namespace Selene\Routes;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Selene\Request\Request;
+use Selene\Response\Response;
 
 /**
  * Responsável por executar as ações de roteamento da aplicação.
@@ -20,80 +21,68 @@ class Route
     use RouteAwareTrait;
     use RouteDispatcherAwareTrait;
 
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
+    protected MiddlewareInterface $middleware;
 
     /**
-     * Guarda os middlewares usados no roteamento.
-     *
-     * @var MiddlewareInterface
+     * Identificador do grupo de rotas
      */
-    private $middleware;
+    private string $groupIdentifier;
 
     /**
-     * Guarda o nome da classe da controller que será executada.
-     *
-     * @var string
+     * Agrupamento nomeado de middlewares
      */
-    private $controller;
+    private array $groupMiddleware = [];
 
     /**
-     * Guarda a action que deve ser executa na controller.
-     *
-     * @var string
+     * Quantidade Rotas adicionadas
      */
-    private $action;
+    private int $countRoutes = 0;
 
     /**
-     * Guarda o objeto da request.
-     *
-     * @var Request
+     * Route Controller
      */
-    private $request;
+    private mixed $controller;
 
     /**
-     * Guarda a fila de recursos registrados no roteador.
-     *
-     * @var array
+     * Route Action
      */
-    private $queue;
+    private string $action;
+
+    /**
+     * Framework Request Object
+     */
+    private Request $request;
+
+    /**
+     * Fila de rotas
+     */
+    private array $queue = [];
 
     /**
      * Define o verbo http get.
-     *
-     * @var Get
      */
-    private $get;
+    private Http\Get $get;
 
     /**
      * Define o verbo http post.
-     *
-     * @var Post
      */
-    private $post;
+    private Http\Post $post;
 
     /**
      * Define o verbo http put.
-     *
-     * @var Put
      */
-    private $put;
+    private Http\Put $put;
 
     /**
      * Define o verbo http patch.
-     *
-     * @var Patch
      */
-    private $patch;
+    private Http\Patch $patch;
 
     /**
      * Define o verbo http delete.
-     *
-     * @var Delete
      */
-    private $delete;
+    private Http\Delete $delete;
 
     /**
      * Constructor.
@@ -120,7 +109,8 @@ class Route
      */
     public function get(string $resource, $callback): self
     {
-        $this->queue = ($this->get)($this->queue, $resource, $callback);
+        $this->queue = ($this->get)($this->groupIdentifier, $this->queue, $resource, $callback);
+        $this->countRoutes++;
 
         return $this;
     }
@@ -132,7 +122,8 @@ class Route
      */
     public function post(string $resource, $callback): self
     {
-        $this->queue = ($this->post)($this->queue, $resource, $callback);
+        $this->queue = ($this->post)($this->groupIdentifier, $this->queue, $resource, $callback);
+        $this->countRoutes++;
 
         return $this;
     }
@@ -144,7 +135,8 @@ class Route
      */
     public function put(string $resource, $callback): self
     {
-        $this->queue = ($this->put)($this->queue, $resource, $callback);
+        $this->queue = ($this->put)($this->groupIdentifier, $this->queue, $resource, $callback);
+        $this->countRoutes++;
 
         return $this;
     }
@@ -156,7 +148,8 @@ class Route
      */
     public function patch(string $resource, $callback): self
     {
-        $this->queue = ($this->patch)($this->queue, $resource, $callback);
+        $this->queue = ($this->patch)($this->groupIdentifier, $this->queue, $resource, $callback);
+        $this->countRoutes++;
 
         return $this;
     }
@@ -168,7 +161,8 @@ class Route
      */
     public function delete(string $resource, $callback): self
     {
-        $this->queue = ($this->delete)($this->queue, $resource, $callback);
+        $this->queue = ($this->delete)($this->groupIdentifier, $this->queue, $resource, $callback);
+        $this->countRoutes++;
 
         return $this;
     }
@@ -184,6 +178,7 @@ class Route
 
         foreach ($middlewares as $middleware) {
             if (is_object($middleware)) {
+                $this->groupMiddleware[$this->groupIdentifier][] = $middleware::class;
                 $this->middleware->add($middleware);
             }
         }
@@ -194,12 +189,13 @@ class Route
     /**
      * Agrupa as rotas executa os middleware e executa a função anonima de agrupamento.
      */
-    public function group(callable $callback): self
+    public function group(string $groupIdentifier, callable $callback): self
     {
         if (!\is_callable($callback)) {
             throw new RouteException('Argumento de agrupamento de rotas deve ser do tipo callable');
         }
 
+        $this->groupIdentifier = $groupIdentifier;
         \call_user_func($callback);
 
         return $this;
@@ -235,14 +231,19 @@ class Route
             throw new RouteException('A fila de rotas está vazia');
         }
 
-        foreach ($this->queue as $resource) {
-            foreach ($resource as $http => $data) {
+        $routesChecked = 0;
+        foreach ($this->queue as $identifier => $resource) {
+            foreach ($resource as $data) {
+                $routesChecked++;
                 if (empty($data)) {
                     continue;
                 }
 
+                $http = key($data);
+                $data = reset($data);
+
                 if (!$this->resolveResource($data[RouteConstant::ROUTE_RESOURCE], $requestedUri)) {
-                    if (!next($this->queue)) {
+                    if ($routesChecked >= $this->countRoutes) {
                         throw new RouteException($this->resourceNotFound());
                     }
                     continue;
@@ -271,7 +272,7 @@ class Route
                 $this->controller = new $data[RouteConstant::ROUTE_CLASS]($this->container);
                 $this->action = $data[RouteConstant::ROUTE_ACTION];
 
-                $this->dispatch();
+                $this->dispatch($identifier);
                 break 2;
             }
         }
@@ -280,7 +281,7 @@ class Route
     /**
      * Faz o dispatch dos dados da request para a controller.
      */
-    private function dispatch(): void
+    private function dispatch(string $identifier): void
     {
         $this->injectOnBaseController();
 
@@ -295,11 +296,13 @@ class Route
             $this->request->withQueryParams($this->matchParam);
         }
 
-        if ($this->middleware instanceof MiddlewareInterface) {
-            $response = $this->middleware->handle($this->request);
+        if (isset($this->groupMiddleware[$identifier])) {
+            if ($this->middleware instanceof MiddlewareInterface) {
+                $response = $this->middleware->handle($this->request);
+            }
         }
 
         $reflectionMethod = new \ReflectionMethod($this->controller, $this->action);
-        $reflectionMethod->invoke($this->controller, $this->request, $response);
+        $reflectionMethod->invoke($this->controller, $this->request, $response ?? new Response());
     }
 }
