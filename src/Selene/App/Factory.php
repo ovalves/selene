@@ -46,4 +46,9 @@ final class Factory
 
         return self::$instance;
     }
+
+    public static function getInstance() : App
+    {
+        return self::$instance;
+    }
 }
