@@ -25,7 +25,7 @@ class AuthGateway extends GatewayAbstract
         $config = $this->container->get(ServiceContainer::APPLICATION_CONFIG);
         $config = $config->getConfig(ConfigConstant::AUTH);
         if (empty($config[ConfigConstant::AUTH_TABLE_NAME])) {
-            throw new \Exception('Failed to check user auth data');
+            throw new \Exception('Failed to check users auth data');
         }
 
         return $this
@@ -39,13 +39,17 @@ class AuthGateway extends GatewayAbstract
     /**
      * Register user.
      */
-    public function registerUser(string $email, string $password): bool
+    public function registerUser(string $fullname, string $email, string $password) : bool
     {
+        $config = $this->container->get(ServiceContainer::APPLICATION_CONFIG);
+        $config = $config->getConfig(ConfigConstant::AUTH);
+
         return (bool) $this->insert([
+            'fullname' => $fullname,
             'email' => $email,
             'password' => $password,
         ])
-        ->table('user')
+        ->table($config[ConfigConstant::AUTH_TABLE_NAME])
         ->execute();
     }
 }

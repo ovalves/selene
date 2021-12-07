@@ -11,9 +11,10 @@ namespace Selene\Auth;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Selene\Config\ConfigConstant;
-use Selene\Container\ServiceContainer;
 use Selene\Session\Session;
+use Selene\Auth\AuthConstant;
 use Selene\Session\SessionConstant;
+use Selene\Container\ServiceContainer;
 
 /**
  * Trata as solicitaçoes de autenticacao do framework.
@@ -109,7 +110,7 @@ class Auth
     /**
      * Registra o usuário.
      */
-    public function registerUser(string $email, string $password): bool
+    public function registerUser(string $fullname, string $email, string $password) : bool
     {
         $storeInDatabase = \sodium_crypto_pwhash_str(
             $password,
@@ -118,8 +119,17 @@ class Auth
         );
 
         $authGateway = $this->container->get(AuthConstant::AUTH_TABLE);
+        return (bool) $authGateway->registerUser($fullname, $email, $storeInDatabase);
+    }
 
-        return (bool) $authGateway->registerUser($email, $storeInDatabase);
+    /**
+     * Retorna o user autenticado
+     */
+    public function getUser() : mixed
+    {
+        if ($this->session->hasSession()) {
+            return $this->user;
+        }
     }
 
     /**
@@ -175,6 +185,7 @@ class Auth
         $this->session->setValue(
             [
                 SessionConstant::USER_ID => $this->user[0]['user_id'],
+                SessionConstant::USER_DATA       => $this->user[0],
                 SessionConstant::UPDATED_AT => strtotime('now'),
                 SessionConstant::CREATED_AT => strtotime('now'),
                 SessionConstant::EXPIRATION_TIME => strtotime("+ {$config[ConfigConstant::SESSION_EXPIRATION_TIME]} seconds"),
