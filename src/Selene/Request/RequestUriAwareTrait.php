@@ -27,6 +27,14 @@ trait RequestUriAwareTrait
     }
 
     /**
+     * Set the URI instance.
+     */
+    public function setUri(string $uri): void
+    {
+        $this->request['REQUEST_URI'] = $uri;
+    }
+
+    /**
      * Returns an instance with the provided URI.
      *
      * This method MUST update the Host header of the returned request by
