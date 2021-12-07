@@ -7,6 +7,25 @@
  */
 
 use Selene\Log\Logger;
+use Selene\App;
+
+if (!function_exists('app')) {
+    function app(): App
+    {
+        return \Selene\App\Factory::getInstance();
+    }
+}
+
+if (!function_exists('container')) {
+    function container(mixed $abstract, array $dependencies = []): mixed
+    {
+        $app = \Selene\App\Factory::getInstance();
+        return $app->container()->set(
+            $abstract,
+            $dependencies
+        );
+    }
+}
 
 if (!function_exists('env')) {
     /**
