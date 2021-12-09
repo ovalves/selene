@@ -8,11 +8,27 @@
 
 use Selene\Log\Logger;
 use Selene\App;
+use Selene\Container\ServiceContainer;
+use Selene\Redirect\Redirect;
 
 if (!function_exists('app')) {
     function app(): App
     {
         return \Selene\App\Factory::getInstance();
+    }
+}
+
+if (!function_exists('flash')) {
+    function flash(string $key): string
+    {
+        return app()->container()->get(ServiceContainer::SESSION)->get($key) ?? false;
+    }
+}
+
+if (!function_exists('redirect')) {
+    function redirect(): Redirect
+    {
+        return app()->redirect();
     }
 }
 

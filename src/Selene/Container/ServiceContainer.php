@@ -19,6 +19,7 @@ class ServiceContainer
     public const REQUEST = 'request';
     public const AUTH = 'auth';
     public const SESSION = 'session';
+    public const REDIRECT = 'redirect';
     public const VIEW = 'view';
     public const CONNECTION = 'connection';
     public const LOGGER = 'logger';
