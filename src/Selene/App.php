@@ -19,6 +19,7 @@ use Selene\Render\View;
 use Selene\Request\Request;
 use Selene\Routes\Route;
 use Selene\Session\Session;
+use Selene\Redirect\Redirect;
 
 final class App
 {
@@ -99,6 +100,14 @@ final class App
     }
 
     /**
+     * Retorna o objeto de redirect.
+     */
+    public function redirect(): Redirect
+    {
+        return $this->container->get(ServiceContainer::REDIRECT);
+    }
+
+    /**
      * Retorna o objeto de autenticação.
      *
      * @return Selene\Auth\Auth
@@ -146,6 +155,7 @@ final class App
         $this->makeMiddleware();
         $this->makeRouter();
         $this->makeSession();
+        $this->makeRedirect();
         $this->makeAuth();
         $this->makeView();
         $this->makeErrorhandler();
@@ -237,6 +247,23 @@ final class App
         if ($config->getConfig(ConfigConstant::ENABLE_SESSION_CONTAINER)) {
             $this->container->setPrefix(ServiceContainer::SESSION)->set(
                 \Selene\Session\Session::class
+            );
+        }
+    }
+
+    /**
+     * Criando o objeto de redirect e suas dependencias.
+     */
+    private function makeRedirect(): void
+    {
+        $config = $this->container()->get(ServiceContainer::APPLICATION_CONFIG);
+
+        if ($config->getConfig(ConfigConstant::ENABLE_SESSION_CONTAINER)) {
+            $this->container->setPrefix(ServiceContainer::REDIRECT)->set(
+                \Selene\Redirect\Redirect::class,
+                [
+                    $this->container->get(ServiceContainer::SESSION),
+                ]
             );
         }
     }
