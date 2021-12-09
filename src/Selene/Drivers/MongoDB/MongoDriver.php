@@ -35,13 +35,9 @@ final class MongoDriver
         return $this;
     }
 
-    public function query(string $collection)
+    public function query(string $collection): self
     {
         $dbCollection = \env('MONGO_DATABASE') . '.' . $collection;
-
-        if (empty($this->options['limit'])) {
-            $this->options['limit'] = self::QUERY_LIMIT;
-        }
 
         $query = new Query($this->filters, $this->options);
         $this->cursor = $this->getConnection()->executeQuery($dbCollection, $query);
@@ -49,12 +45,29 @@ final class MongoDriver
         return $this;
     }
 
-    public function insert(string $collection, array $data)
+    public function insert(string $collection, array $data): self
     {
         $dbCollection = \env('MONGO_DATABASE') . '.' . $collection;
 
         $bulk = new BulkWrite();
         $bulk->insert($data);
+
+        $this->cursor = $this->getConnection()->executeBulkWrite($dbCollection, $bulk);
+
+        return $this;
+    }
+
+    public function update(string $collection, array $where, array $set): self
+    {
+        $dbCollection = \env('MONGO_DATABASE') . '.' . $collection;
+
+        $bulk = new BulkWrite();
+
+        $bulk->update(
+            $where,
+            ['$set' => $set],
+            ['multi' => false, 'upsert' => false]
+        );
 
         $this->cursor = $this->getConnection()->executeBulkWrite($dbCollection, $bulk);
 
