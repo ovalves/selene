@@ -70,6 +70,44 @@ class Session
     }
 
     /**
+     * Armazena um valor na seção.
+     */
+    public function set(mixed $key, mixed $value) : bool
+    {
+        if (empty($key) || empty($value)) {
+            return false;
+        }
+
+        $_SESSION[$key] = $value;
+
+        return true;
+    }
+
+    /**
+     * Armazena um valor na seção.
+     */
+    public function get(mixed $key) : mixed
+    {
+        if (empty($key)) {
+            return false;
+        }
+
+        return $_SESSION[$key] ?? false;
+    }
+
+    /**
+     * Armazena um valor na seção.
+     */
+    public function unset(mixed $key) : mixed
+    {
+        if (empty($key)) {
+            return false;
+        }
+
+        unset($_SESSION[$key]);
+    }
+
+    /**
      * Armazena um array de valores na seção.
      */
     public function setValue(array $data): bool
