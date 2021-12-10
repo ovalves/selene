@@ -8,10 +8,10 @@
 
 namespace Selene\Redirect;
 
-use Selene\Session\Session;
 use Psr\Container\ContainerInterface;
 use Selene\Container\ServiceContainer;
 use Selene\Redirect\FlashMessage\FlashMessageHandler;
+use Selene\Session\Session;
 
 class Redirect
 {
@@ -33,18 +33,21 @@ class Redirect
     public function message(mixed $key, string $message): self
     {
         self::$flashMessageHandler->setSessionData($key, $message);
+
         return $this;
     }
 
     public function to(string $url): self
     {
         $this->redirectUrl = $url;
+
         return $this;
     }
 
     public function status(int $status = 301): self
     {
         $this->statusCode = $status;
+
         return $this;
     }
 
@@ -59,6 +62,7 @@ class Redirect
     {
         if (!isset($this->redirectUrl)) {
             $this->back();
+
             return;
         }
 

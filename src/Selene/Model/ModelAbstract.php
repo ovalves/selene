@@ -8,8 +8,6 @@
 
 namespace Selene\Model;
 
-use Selene\Model\ModelInterface;
-use Selene\Model\ModelMagicAwareTrait;
 
 /**
  * Molde para as classes do tipo model.

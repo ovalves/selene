@@ -10,10 +10,10 @@ namespace Selene\Database\Grammar;
 
 use PDOStatement;
 use Selene\Database\Builder\Group;
-use Selene\Database\Builder\Join;
-use Selene\Database\Builder\Where;
 use Selene\Database\Builder\Insert;
+use Selene\Database\Builder\Join;
 use Selene\Database\Builder\Update;
+use Selene\Database\Builder\Where;
 use Selene\Database\DatabaseException;
 use Selene\Database\Transaction;
 
@@ -317,6 +317,7 @@ abstract class GrammarAbstract
             }
 
             $this->fields = \array_keys($prepared);
+
             return $this->fields;
         }
 

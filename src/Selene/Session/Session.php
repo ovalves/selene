@@ -9,8 +9,6 @@
 namespace Selene\Session;
 
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Selene\Config\ConfigConstant;
 
 /**
  * Gerencia o registro da sessão.
@@ -72,7 +70,7 @@ class Session
     /**
      * Armazena um valor na sessão.
      */
-    public function set(mixed $key, mixed $value) : bool
+    public function set(mixed $key, mixed $value): bool
     {
         if (empty($key) || empty($value)) {
             return false;
@@ -86,7 +84,7 @@ class Session
     /**
      * Armazena um valor na sessão.
      */
-    public function get(mixed $key) : mixed
+    public function get(mixed $key): mixed
     {
         if (empty($key)) {
             return false;
@@ -98,7 +96,7 @@ class Session
     /**
      * Armazena um valor na sessão.
      */
-    public function unset(mixed $key) : mixed
+    public function unset(mixed $key): mixed
     {
         if (empty($key)) {
             return false;
@@ -126,7 +124,7 @@ class Session
     /**
      * Retorna uma variável da sessão.
      */
-    public function getValue(string $var = null) : string|array
+    public function getValue(string $var = null): string | array
     {
         if (isset($_SESSION[$var])) {
             return $_SESSION[$var];
@@ -136,9 +134,9 @@ class Session
     }
 
     /**
-     * Retorna uma variável da sessão do usuário
+     * Retorna uma variável da sessão do usuário.
      */
-    public function getUserData(string $var = null) : string|array
+    public function getUserData(string $var = null): string | array
     {
         if (isset($_SESSION[SessionConstant::USER_DATA][$var])) {
             return $_SESSION[SessionConstant::USER_DATA][$var];
@@ -148,7 +146,7 @@ class Session
     }
 
     /**
-     * Destrói os dados da sessão
+     * Destrói os dados da sessão.
      */
     public function freeSession(): void
     {

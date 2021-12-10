@@ -39,7 +39,7 @@ class AuthGateway extends GatewayAbstract
     /**
      * Register user.
      */
-    public function registerUser(string $fullname, string $email, string $password) : bool
+    public function registerUser(string $fullname, string $email, string $password): bool
     {
         $config = $this->container->get(ServiceContainer::APPLICATION_CONFIG);
         $config = $config->getConfig(ConfigConstant::AUTH);

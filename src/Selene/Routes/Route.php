@@ -25,37 +25,37 @@ class Route
     protected MiddlewareInterface $middleware;
 
     /**
-     * Identificador do grupo de rotas
+     * Identificador do grupo de rotas.
      */
     private string $groupIdentifier;
 
     /**
-     * Agrupamento nomeado de middlewares
+     * Agrupamento nomeado de middlewares.
      */
     private array $groupMiddleware = [];
 
     /**
-     * Quantidade Rotas adicionadas
+     * Quantidade Rotas adicionadas.
      */
     private int $countRoutes = 0;
 
     /**
-     * Route Controller
+     * Route Controller.
      */
     private mixed $controller;
 
     /**
-     * Route Action
+     * Route Action.
      */
     private string $action;
 
     /**
-     * Framework Request Object
+     * Framework Request Object.
      */
     private Request $request;
 
     /**
-     * Fila de rotas
+     * Fila de rotas.
      */
     private array $queue = [];
 

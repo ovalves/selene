@@ -15,7 +15,7 @@ use Selene\Routes\RouteConstant;
  */
 class Put extends HttpAbstract
 {
-    public function __invoke(string $groupIdentifier, array $queue, string $resource, mixed $callback = null) : array
+    public function __invoke(string $groupIdentifier, array $queue, string $resource, mixed $callback = null): array
     {
         return $this->resolve(RouteConstant::PUT, $groupIdentifier, $queue, $resource, $callback);
     }

@@ -6,9 +6,9 @@
  * @since       2019-07-01
  */
 
-use Selene\Log\Logger;
 use Selene\App;
 use Selene\Container\ServiceContainer;
+use Selene\Log\Logger;
 use Selene\Redirect\Redirect;
 
 if (!function_exists('app')) {
@@ -36,6 +36,7 @@ if (!function_exists('container')) {
     function container(mixed $abstract, array $dependencies = []): mixed
     {
         $app = \Selene\App\Factory::getInstance();
+
         return $app->container()->set(
             $abstract,
             $dependencies

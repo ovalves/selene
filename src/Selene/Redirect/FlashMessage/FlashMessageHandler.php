@@ -12,8 +12,8 @@ use Selene\Session\Session;
 
 final class FlashMessageHandler
 {
-    protected const FLASH_KEYS = '61b23cf1d31372.37961493';
-    protected const FLASH_HEADER = '61b23d0ace20f4.98927377';
+    private const FLASH_KEYS = '61b23cf1d31372.37961493';
+    private const FLASH_HEADER = '61b23d0ace20f4.98927377';
     private ?array $messageKeys = [];
     private ?array $flashHeaders = [];
     private bool $stateKeep = false;
@@ -26,8 +26,8 @@ final class FlashMessageHandler
 
         register_shutdown_function([$this, 'stateKeeper']);
 
-        $this->messageKeys =& $this->session->get(self::FLASH_KEYS);
-        $this->flashHeaders =& $this->session->get(self::FLASH_HEADER);
+        $this->messageKeys = &$this->session->get(self::FLASH_KEYS);
+        $this->flashHeaders = &$this->session->get(self::FLASH_HEADER);
 
         if (isset($this->flashHeaders)) {
             foreach ($this->flashHeaders as $header) {
@@ -70,6 +70,7 @@ final class FlashMessageHandler
         if (in_array($key, $this->getFlashKeys())) {
             return $this->session->get($key);
         }
+
         return null;
     }
 

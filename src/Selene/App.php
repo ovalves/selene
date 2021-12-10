@@ -15,11 +15,11 @@ use Selene\Container\Container;
 use Selene\Container\ServiceContainer;
 use Selene\Loader\AppLoader;
 use Selene\Middleware\Middleware;
+use Selene\Redirect\Redirect;
 use Selene\Render\View;
 use Selene\Request\Request;
 use Selene\Routes\Route;
 use Selene\Session\Session;
-use Selene\Redirect\Redirect;
 
 final class App
 {

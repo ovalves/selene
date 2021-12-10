@@ -47,6 +47,7 @@ final class Auth implements MiddlewareInterface
 
         if (!$auth->isAuthenticated()) {
             $request->setUri($auth->redirectToLoginPage());
+
             return (new Response())
                         ->withStatus(401, 'unauthorized')
                         ->withRedirectTo($auth->redirectToLoginPage())

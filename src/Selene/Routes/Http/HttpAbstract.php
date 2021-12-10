@@ -24,7 +24,7 @@ abstract class HttpAbstract
      *
      * @param mixed $callback
      */
-    public function resolve($routeType, string $groupIdentifier, array $queue, string $resource, $callback = null) : array
+    public function resolve($routeType, string $groupIdentifier, array $queue, string $resource, $callback = null): array
     {
         if (empty($routeType)) {
             throw new RouteException('Método HTTP desconhecido', 404);

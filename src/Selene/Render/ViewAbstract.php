@@ -9,10 +9,10 @@
 namespace Selene\Render;
 
 use Psr\Container\ContainerInterface;
-use Selene\Render\Compiler\PluginCompiler;
-use Selene\Render\Compiler\TemplateCompiler;
 use Selene\Config\ConfigConstant;
 use Selene\Container\ServiceContainer;
+use Selene\Render\Compiler\PluginCompiler;
+use Selene\Render\Compiler\TemplateCompiler;
 
 /**
  * Renderiza as views da aplicação

@@ -40,7 +40,7 @@ final class TemplateCompiler
     /**
      * Executa os compiladores de construção da template engine.
      *
-     * @param  string $content
+     * @param string $content
      */
     public function compilerTemplate(PluginCompiler $compiler, string $file, $content, array &$variables)
     {
