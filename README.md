@@ -90,4 +90,4 @@ Para mais exemplos, acesse https://github.com/ovalves/selene-skeleton.
 
 ## Licença
 
-O Selene framework é licenciado usa a licença MIT license. Veja [License File](LICENSE) para maiores informações.
+O Selene framework é usa a licença MIT license. Veja [License File](LICENSE) para maiores informações.
