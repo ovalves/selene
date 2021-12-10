@@ -2,7 +2,7 @@
 
 O Selene é uma micro-framework PHP.
 
-Selene foi desenvolvido, para tornar mais simples as tarefas comuns utilizadas na maioria dos projetos da web, selene possui:
+Selene foi desenvolvido para tornar mais simples as tarefas comuns utilizadas na maioria dos projetos da web, selene possui:
 
 - Sistema de MVC
 - Sistema de roteamento
