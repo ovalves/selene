@@ -73,7 +73,7 @@ $app->route()->group('auth', function () use ($app) {
 
     /*
     |--------------------------------------------------------------------------
-    | Mapeamento de método HTTP da request com a solicita~ HTTP de solicitação
+    | Mapeamento de método HTTP da request com a solicitação HTTP do cliente
     |--------------------------------------------------------------------------
     */
     $app->route()->get('/', 'HomeController@index');
@@ -82,8 +82,8 @@ $app->route()->group('auth', function () use ($app) {
     $app->route()->delete('/show/{id}', 'HomeController@show');
     $app->route()->post('/show', 'HomeController@login');
 })->run();
-
 ```
+
 ## Exemplos
 
 Para mais exemplos, acesse https://github.com/ovalves/selene-skeleton.
