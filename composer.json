@@ -16,6 +16,7 @@
         "psr-15"
     ],
     "require": {
+        "php": "^8.0",
         "fig/http-message-util": "^1.1.2",
         "psr/container": "^1.0",
         "psr/http-message": "^1.0.1",
