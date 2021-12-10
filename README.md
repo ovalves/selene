@@ -81,7 +81,8 @@ $app->route()->group('auth', function () use ($app) {
     $app->route()->update('/show/{id}', 'HomeController@show');
     $app->route()->delete('/show/{id}', 'HomeController@show');
     $app->route()->post('/show', 'HomeController@login');
-->run();
+})->run();
+
 ```
 ## Exemplos
 
