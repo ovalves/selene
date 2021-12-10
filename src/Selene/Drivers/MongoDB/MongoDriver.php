@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright   2019 - Selene
+ * @copyright   2021 - Selene
  * @author      Vinicius Oliveira <vinicius_o.a@live.com>
  * @category    Micro Framework
  * @since       2021-12-09
