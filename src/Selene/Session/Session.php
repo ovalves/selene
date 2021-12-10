@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Selene\Config\ConfigConstant;
 
 /**
- * Gerencia o registro da seção.
+ * Gerencia o registro da sessão.
  */
 class Session
 {
@@ -70,7 +70,7 @@ class Session
     }
 
     /**
-     * Armazena um valor na seção.
+     * Armazena um valor na sessão.
      */
     public function set(mixed $key, mixed $value) : bool
     {
@@ -84,7 +84,7 @@ class Session
     }
 
     /**
-     * Armazena um valor na seção.
+     * Armazena um valor na sessão.
      */
     public function get(mixed $key) : mixed
     {
@@ -96,7 +96,7 @@ class Session
     }
 
     /**
-     * Armazena um valor na seção.
+     * Armazena um valor na sessão.
      */
     public function unset(mixed $key) : mixed
     {
@@ -108,7 +108,7 @@ class Session
     }
 
     /**
-     * Armazena um array de valores na seção.
+     * Armazena um array de valores na sessão.
      */
     public function setValue(array $data): bool
     {
@@ -124,7 +124,7 @@ class Session
     }
 
     /**
-     * Retorna uma variável da seção.
+     * Retorna uma variável da sessão.
      */
     public function getValue(string $var = null) : string|array
     {
@@ -148,7 +148,7 @@ class Session
     }
 
     /**
-     * Destrói os dados da seção
+     * Destrói os dados da sessão
      */
     public function freeSession(): void
     {
