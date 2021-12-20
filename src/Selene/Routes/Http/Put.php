@@ -11,21 +11,12 @@ namespace Selene\Routes\Http;
 use Selene\Routes\RouteConstant;
 
 /**
- * Reponsável por adicionar action put a fila do roteador
+ * Reponsável por adicionar action put a fila do roteador.
  */
 class Put extends HttpAbstract
 {
-    /**
-     * Adiciona uma rota a fila de rotas
-     *
-     * @param array $queue
-     * @param string $resource
-     * @param mixed $callback
-     *
-     * @return array
-     */
-    public function __invoke(array $queue, string $resource, $callback = null) : array
+    public function __invoke(string $groupIdentifier, array $queue, string $resource, mixed $callback = null): array
     {
-        return $this->resolve(RouteConstant::PUT, $queue, $resource, $callback);
+        return $this->resolve(RouteConstant::PUT, $groupIdentifier, $queue, $resource, $callback);
     }
 }

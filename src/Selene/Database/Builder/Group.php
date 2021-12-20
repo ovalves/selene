@@ -9,19 +9,19 @@
 namespace Selene\Database\Builder;
 
 /**
- * Responsavel por criar as clausulas where
+ * Responsavel por criar as clausulas where.
  */
 final class Group
 {
     /**
-     * Guarda os dados da clausula
+     * Guarda os dados da clausula.
      *
      * @var array
      */
-    protected $groupString = '';
+    private $groupString = '';
 
     /**
-     * Construtor
+     * Construtor.
      *
      * @param string $join
      */
@@ -35,9 +35,7 @@ final class Group
     }
 
     /**
-     * Cria a clausula where
-     *
-     * @return void
+     * Cria a clausula where.
      */
     private function make(string $group) : void
     {
@@ -45,9 +43,7 @@ final class Group
     }
 
     /**
-     * Retorna a string contendo a clausula where
-     *
-     * @return string
+     * Retorna a string contendo a clausula where.
      */
     public function getParsedString() : string
     {

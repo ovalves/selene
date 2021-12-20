@@ -12,8 +12,14 @@ use PDO;
 use Selene\Config\ApplicationConfig;
 use Selene\Config\ConfigConstant;
 
+/**
+ * Responsável por criar uma conexão com a base de dados.
+ */
 final class Connection
 {
+    /**
+     * Recebe o nome do conector de BD e instância o objeto PDO.
+     */
     public function open(ApplicationConfig $appConfig, string $dbType = DatabaseConstant::DEFAULT_DB): PDO
     {
         $appConfig = $appConfig->getConfig(ConfigConstant::DATABASE);

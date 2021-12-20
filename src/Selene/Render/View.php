@@ -14,19 +14,14 @@ namespace Selene\Render;
  */
 class View extends ViewAbstract
 {
-    /**
-     * Renderiza uma view.
-     */
-    public function render(string $file): self
+    public function render(string $file, array $vars): self
     {
         try {
             if (empty($file)) {
                 throw new ViewException('Error - View not found');
             }
 
-            /*
-             * @todo verificar se o template está no diretório de cache antes de compilar
-             */
+            $this->assignTemplateVars($vars);
             $this->make($file);
 
             return $this;

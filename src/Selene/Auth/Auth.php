@@ -11,13 +11,12 @@ namespace Selene\Auth;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Selene\Config\ConfigConstant;
-use Selene\Session\Session;
-use Selene\Auth\AuthConstant;
-use Selene\Session\SessionConstant;
 use Selene\Container\ServiceContainer;
+use Selene\Session\Session;
+use Selene\Session\SessionConstant;
 
 /**
- * Trata as solicitaçoes de autenticacao do framework
+ * Trata as solicitaçoes de autenticacao do framework.
  */
 class Auth
 {
@@ -27,24 +26,22 @@ class Auth
     protected $container;
 
     /**
-     * Guarda o objeto de sessão
+     * Guarda o objeto de sessão.
      *
      * @var Session
      */
     protected $session;
 
     /**
-     * Guarda os dados do user
+     * Guarda os dados do user.
      *
      * @var mixed
      */
     protected $user;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param ContainerInterface $container
-     * @param Session $session
      * @return void
      */
     public function __construct(ContainerInterface $container, Session $session)
@@ -59,21 +56,17 @@ class Auth
     }
 
     /**
-     * Seta os dados da requisição de autenticacao
-     *
-     * @param ServerRequestInterface $request
-     * @return self
+     * Seta os dados da requisição de autenticacao.
      */
     public function setRequest(ServerRequestInterface $request) : self
     {
         $this->request = $request;
+
         return $this;
     }
 
     /**
-     * Verifica se o user está autenticado
-     *
-     * @return boolean
+     * Verifica se o user está autenticado.
      */
     public function isAuthenticated() : bool
     {
@@ -87,10 +80,10 @@ class Auth
             $config = $this->applicationConfig->getConfig(ConfigConstant::SESSION);
             $this->session->setValue(
                 [
-                    SessionConstant::UPDATED_AT      => strtotime("now"),
-                    SessionConstant::CREATED_AT      => strtotime("now"),
+                    SessionConstant::UPDATED_AT => strtotime('now'),
+                    SessionConstant::CREATED_AT => strtotime('now'),
                     SessionConstant::EXPIRATION_TIME => strtotime("+ {$config[ConfigConstant::SESSION_EXPIRATION_TIME]} seconds"),
-                    SessionConstant::REFRESH_TIME    => strtotime("+ {$config[ConfigConstant::SESSION_REFRESH_TIME]} seconds")
+                    SessionConstant::REFRESH_TIME => strtotime("+ {$config[ConfigConstant::SESSION_REFRESH_TIME]} seconds"),
                 ]
             );
         }
@@ -99,11 +92,7 @@ class Auth
     }
 
     /**
-     * Autentica user
-     *
-     * @param string $email
-     * @param string $password
-     * @return boolean
+     * Autentica user.
      */
     public function authenticate(string $email, string $password) : bool
     {
@@ -111,20 +100,16 @@ class Auth
         $this->user = $this->findByEmail($email);
 
         if ($this->user) {
-            $storedPassword = $this->user[0]["password"];
+            $storedPassword = $this->user[0]['password'];
         }
 
-        return (bool) ($this->verifyPassword($password, $storedPassword)) && ($this->user !== null);
+        return (bool) ($this->verifyPassword($password, $storedPassword)) && (null !== $this->user);
     }
 
     /**
-    * Registra o usuário
-    *
-    * @param string $email
-    * @param string $password
-    * @return bool
+     * Registra o usuário.
     */
-    public function registerUser(string $email, string $password) : bool
+    public function registerUser(string $fullname, string $email, string $password): bool
     {
         $storeInDatabase = \sodium_crypto_pwhash_str(
             $password,
@@ -133,61 +118,66 @@ class Auth
         );
 
         $authGateway = $this->container->get(AuthConstant::AUTH_TABLE);
-        return (bool) $authGateway->registerUser($email, $storeInDatabase);
+
+        return (bool) $authGateway->registerUser($fullname, $email, $storeInDatabase);
     }
 
     /**
-     * Desloga o user autenticado
-     *
-     * @return void
+     * Retorna o user autenticado.
      */
-    public function logout() : void
+    public function getUser(): mixed
     {
         if ($this->session->hasSession()) {
-            $this->session->freeSession();
+            return $this->user;
         }
     }
 
     /**
-     * Retorna a página de login
-     *
-     * @return string
+     * Desloga o user autenticado.
+     */
+    public function logout(): bool
+    {
+        if ($this->session->hasSession()) {
+            $this->session->freeSession();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Retorna a página de login.
      */
     public function redirectToLoginPage() : string
     {
         $config = $this->applicationConfig->getConfig(ConfigConstant::AUTH);
+
         return $config[ConfigConstant::AUTH_LOGIN_URL];
     }
 
     /**
-     * Find user by email
-     *
-     * @param string $email
-     * @return array
+     * Find user by email.
      */
     protected function findByEmail(string $email) : array
     {
         $authGateway = $this->container->get(AuthConstant::AUTH_TABLE);
+
         return $authGateway->findByEmail($email);
     }
 
     /**
-     * Generate fake password
-     *
-     * @return string
+     * Generate fake password.
      */
     protected function generateFakePassword($password) : string
     {
         $genericSecretKey = random_bytes(32);
+
         return sodium_crypto_generichash($password, $genericSecretKey);
     }
 
     /**
-     * Verifica o password
-     *
-     * @param string $password
-     * @param string $storedPassword
-     * @return boolean
+     * Verifica o password.
      */
     protected function verifyPassword(string $password, string $storedPassword) : bool
     {
@@ -198,11 +188,12 @@ class Auth
         $config = $this->applicationConfig->getConfig(ConfigConstant::SESSION);
         $this->session->setValue(
             [
-                SessionConstant::USER_ID         => $this->user[0]["user_id"],
-                SessionConstant::UPDATED_AT      => strtotime("now"),
-                SessionConstant::CREATED_AT      => strtotime("now"),
+                SessionConstant::USER_ID => $this->user[0]['user_id'],
+                SessionConstant::USER_DATA => $this->user[0],
+                SessionConstant::UPDATED_AT => strtotime('now'),
+                SessionConstant::CREATED_AT => strtotime('now'),
                 SessionConstant::EXPIRATION_TIME => strtotime("+ {$config[ConfigConstant::SESSION_EXPIRATION_TIME]} seconds"),
-                SessionConstant::REFRESH_TIME    => strtotime("+ {$config[ConfigConstant::SESSION_REFRESH_TIME]} seconds")
+                SessionConstant::REFRESH_TIME => strtotime("+ {$config[ConfigConstant::SESSION_REFRESH_TIME]} seconds"),
             ]
         );
 

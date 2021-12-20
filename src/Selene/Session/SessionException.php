@@ -8,6 +8,11 @@
 
 namespace Selene\Session;
 
-class SessionException extends \Exception
+use Exception;
+
+/**
+ * Exception das views.
+ */
+class SessionException extends Exception
 {
 }

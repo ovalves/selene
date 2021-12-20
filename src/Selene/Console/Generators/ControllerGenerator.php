@@ -13,29 +13,27 @@ use Selene\Filesystem\FilesystemException;
 class ControllerGenerator extends GeneratorAbstract
 {
     /**
-     * Define the controller directory
+     * Define the controller directory.
      */
-    const GENERATOR_DIRECTORY = 'Controllers';
+    public const GENERATOR_DIRECTORY = 'Controllers';
 
     /**
-     * Define the prefix of controller name
+     * Define the prefix of controller name.
      */
-    const CONTROLLER_CLASS_NAME_PREFIX = '__class_name__';
+    public const CONTROLLER_CLASS_NAME_PREFIX = '__class_name__';
 
     /**
-     * Define controller default stub
+     * Define controller default stub.
      */
-    const CONTROLLER_STUB = __DIR__.'/Stubs/Controllers/controller.stub';
+    public const CONTROLLER_STUB = __DIR__.'/Stubs/Controllers/controller.stub';
 
     /**
-     * Define controller resources stub
+     * Define controller resources stub.
      */
-    const CONTROLLER_STUB_RESOURCES = __DIR__.'/Stubs/Controllers/controller_resources.stub';
+    public const CONTROLLER_STUB_RESOURCES = __DIR__.'/Stubs/Controllers/controller_resources.stub';
 
     /**
-     * Generate default controller
-     *
-     * @return void
+     * Generate default controller.
      */
     public function makeController() : void
     {
@@ -53,9 +51,7 @@ class ControllerGenerator extends GeneratorAbstract
     }
 
     /**
-     * Generate resources controller
-     *
-     * @return void
+     * Generate resources controller.
      */
     public function makeControllerWithResources() : void
     {

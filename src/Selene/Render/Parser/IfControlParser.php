@@ -9,77 +9,76 @@
 namespace Selene\Render\Parser;
 
 /**
- * Responsável por fazer o parser das tags if`s usada no template
+ * Responsável por fazer o parser das tags if`s usada no template.
  */
 trait IfControlParser
 {
     /**
-     * Guarda os dados do template que serão compilados
+     * Guarda os dados do template que serão compilados.
      *
      * @var array
      */
     private $matches = [];
 
     /**
-     * Define a regex de busca das tags if do template
+     * Define a regex de busca das tags if do template.
      *
      * @var string
      */
-    private $matchIfTags = '/\{{2}\s*(if|endif|elseif|else)\s*(.+?)\s*\}{2}/';
+    private $matchIfTags = '/{% ?\s*(if|endif|elseif|else)\s*(.+?)\s*\%}/';
 
     /**
-     * Define a regex para busca das variaveis de avaliaçao
+     * Define a regex para busca das variaveis de avaliaçao.
      *
      * @var string
      */
     private $matchControlVariable = '/\$([a-zA-Z0-9_\-\(\)\.]+)/';
 
     /**
-     * Define a regex para busca do tipo de avaliacao a ser feita
+     * Define a regex para busca do tipo de avaliacao a ser feita.
      *
      * @var string
      */
     private $matchControlEvaluate = '/([==|===|!=|!==|>|<|&&|\/||\/])+/';
 
     /**
-     * Define a regex de busca do parametro a ser avaliado
+     * Define a regex de busca do parametro a ser avaliado.
      *
      * @var string
      */
     private $matchParamToCompare = '/(.\w+(\'|\"){1}\)\s*\}{2})$/';
 
     /**
-     * Define a string de sanitizacao do parametro de comparacao
+     * Define a string de sanitizacao do parametro de comparacao.
      *
      * @var string
      */
     private $toCompareSanitize = "\'\"\)\(\}\" ";
 
     /**
-     * Define as condições da estrutura de controle if
+     * Define as condições da estrutura de controle if.
      *
      * @var array
      */
     private $controlTypes = [
         ParserConstant::IF_OPEN_TAG,
-        ParserConstant::ELSEIF_OPEN_TAG
+        ParserConstant::ELSEIF_OPEN_TAG,
     ];
 
     /**
-     * Define as condições da estrutura de controle if
+     * Define as condições da estrutura de controle if.
      *
      * @var array
      */
     private $controlEndTypes = [
         ParserConstant::IF_CLOSE_TAG   => ';',
-        ParserConstant::ELSE_CLOSE_TAG => ':'
+        ParserConstant::ELSE_CLOSE_TAG => ':',
     ];
 
     /**
-     * Compila as tags if`s usadas no template
+     * Compila as tags if`s usadas no template.
      *
      * @param string $content
-     * @return string
      */
     protected function parserIfControl($content) : string
     {
@@ -135,10 +134,7 @@ trait IfControlParser
     }
 
     /**
-     * Retorna a variavel que será usada para a comparacao no parser do if
-     *
-     * @param string $condition
-     * @return string
+     * Retorna a variavel que será usada para a comparacao no parser do if.
      */
     private function getIfControlVariable(string $condition) : string
     {
@@ -151,10 +147,7 @@ trait IfControlParser
     }
 
     /**
-     * Retorna o tipo de avaliador que deve ser usado no parser do if
-     *
-     * @param string $condition
-     * @return string
+     * Retorna o tipo de avaliador que deve ser usado no parser do if.
      */
     private function getIfControlEvaluate(string $condition) : string
     {
@@ -167,10 +160,7 @@ trait IfControlParser
     }
 
     /**
-     * Retorna o parametro a ser comparado no parser do if
-     *
-     * @param string $condition
-     * @return string
+     * Retorna o parametro a ser comparado no parser do if.
      */
     private function getIfControlToCompare(string $condition) : string
     {

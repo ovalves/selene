@@ -6,8 +6,13 @@
  * @since       2019-03-17
  */
 
-namespace Selene\Routes;
+namespace Selene\Request;
 
-class RequestException extends \Exception
+use Exception;
+
+/**
+ * Exception da request.
+ */
+class RequestException extends Exception
 {
 }

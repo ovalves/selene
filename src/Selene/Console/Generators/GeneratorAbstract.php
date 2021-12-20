@@ -13,80 +13,71 @@ use Selene\Filesystem\Filesystem;
 class GeneratorAbstract
 {
     /**
-     * Define application rootPath
+     * Define application rootPath.
      *
      * @var string
      */
     protected $rootPath;
 
     /**
-     * Define generator directory
+     * Define generator directory.
      *
      * @var string
      */
     protected $directory;
 
     /**
-     * Define generator stub file
+     * Define generator stub file.
      *
      * @var string
      */
     protected $stub;
 
     /**
-     * Define Filesystem Object
+     * Define Filesystem Object.
      *
      * @var Filesystem
      */
     protected $filesystem;
 
     /**
-     * Define generator class name
+     * Define generator class name.
      *
      * @var string
      */
     protected $className;
 
     /**
-     * Constructor
-     *
-     * @param string $rootPath
+     * Constructor.
      */
     public function __construct(string $rootPath)
     {
         $this->rootPath = $rootPath;
-        $this->filesystem = new Filesystem;
+        $this->filesystem = new Filesystem();
     }
 
     /**
-     * Define generator directory
-     *
-     * @param string $directory
-     * @return self
+     * Define generator directory.
      */
     public function setGeneratorDirectory(string $directory) : self
     {
         $this->directory = $directory;
+
         return $this;
     }
 
     /**
-     * Define generator class name
-     *
-     * @param string $className
-     * @return self
+     * Define generator class name.
      */
     public function setClassName(string $className) : self
     {
         $this->className = $className;
+
         return $this;
     }
 
     /**
-     * Change the name of class
-     *
-     * @param string $search
-     * @return void
+     * Change the name of class.
      */
     public function changeClassNameByPrefix(string $search) : void
     {
@@ -94,9 +85,7 @@ class GeneratorAbstract
     }
 
     /**
-     * Determine if the generator directory exists
-     *
-     * @return boolean
+     * Determine if the generator directory exists.
      */
     public function directoryExists() : bool
     {
@@ -106,9 +95,7 @@ class GeneratorAbstract
     }
 
     /**
-     * Create the generator directory
-     *
-     * @return boolean
+     * Create the generator directory.
      */
     public function makeDirectory() : bool
     {
@@ -119,22 +106,17 @@ class GeneratorAbstract
     }
 
     /**
-     * Determine if the file exists
-     *
-     * @return boolean
+     * Determine if the file exists.
      */
     public function fileExists() : bool
     {
         return $this->filesystem->exists(
-            $this->rootPath.DIRECTORY_SEPARATOR.$this->directory.DIRECTORY_SEPARATOR.$this->className.".php"
+            $this->rootPath.DIRECTORY_SEPARATOR.$this->directory.DIRECTORY_SEPARATOR.$this->className.'.php'
         );
     }
 
     /**
-     * Open the generator file stub
-     *
-     * @param string $stub
-     * @return void
+     * Open the generator file stub.
      */
     public function openStub(string $stub) : void
     {
@@ -142,19 +124,20 @@ class GeneratorAbstract
     }
 
     /**
-     * Create the generator file
+     * Create the generator file.
      *
      * @return void
      */
     public function createFile()
     {
         if (!$this->filesystem->isWritable(
-            $this->rootPath.DIRECTORY_SEPARATOR.$this->directory)) {
-            throw new FilesystemException("Directory is not Writable");
+            $this->rootPath.DIRECTORY_SEPARATOR.$this->directory
+        )) {
+            throw new FilesystemException('Directory is not Writable');
         }
 
         $handle = $this->filesystem->put(
-            $this->rootPath.DIRECTORY_SEPARATOR.$this->directory.DIRECTORY_SEPARATOR.$this->className.".php",
+            $this->rootPath.DIRECTORY_SEPARATOR.$this->directory.DIRECTORY_SEPARATOR.$this->className.'.php',
             $this->stub
         );
     }

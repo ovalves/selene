@@ -19,12 +19,11 @@ trait RequestFilesAwareTrait
      * These values MAY be prepared from $_FILES or the message body during
      * instantiation, or MAY be injected via withUploadedFiles().
      *
-     * @return array An array tree of UploadedFileInterface instances; an empty
-     *     array MUST be returned if no data is present.
+     * @return array an array tree of UploadedFileInterface instances; an empty
+     *               array MUST be returned if no data is present
      */
     public function getUploadedFiles()
     {
-
     }
 
     /**
@@ -34,12 +33,11 @@ trait RequestFilesAwareTrait
      * immutability of the message, and MUST return an instance that has the
      * updated body parameters.
      *
-     * @param array $uploadedFiles An array tree of UploadedFileInterface instances.
+     * @param  array                     $uploadedFiles an array tree of UploadedFileInterface instances
      * @return static
-     * @throws \InvalidArgumentException if an invalid structure is provided.
+     * @throws \InvalidArgumentException if an invalid structure is provided
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
-
     }
 }

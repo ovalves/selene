@@ -9,26 +9,21 @@
 namespace Selene\Database\Builder;
 
 use Selene\Database\Transaction;
-use Selene\Database\DatabaseConstant;
-use Selene\Database\Builder\Select;
-use Selene\Database\Builder\Insert;
 
 /**
- * Responsavel por executar os diferentes tipos de statement
+ * Responsavel por executar os diferentes tipos de statement.
  */
 abstract class Expression
 {
     /**
-     * Guarda a transação ativa
+     * Guarda a transação ativa.
      *
      * @var Transaction
      */
     protected $transaction;
 
     /**
-     * Constructor
-     *
-     * @param Transaction $transaction
+     * Constructor.
      */
     public function __construct(Transaction $transaction)
     {
@@ -36,31 +31,30 @@ abstract class Expression
     }
 
     /**
-     * Guarda o nome da tabela
+     * Guarda o nome da tabela.
      *
      * @var string
      */
     protected $table;
 
     /**
-     * Guarda o parâmetro da query a ser executada
+     * Guarda o parâmetro da query a ser executada.
      *
      * @var string
      */
     protected $param;
 
     /**
-     * Guarda os campos da clausula
+     * Guarda os campos da clausula.
      *
      * @var array
      */
     protected $fields;
 
     /**
-     * Retorna uma instancia da classe select
+     * Retorna uma instancia da classe select.
      *
      * @param mixed $fields
-     * @return Select
      */
     public function select($fields) : Select
     {
@@ -68,10 +62,7 @@ abstract class Expression
     }
 
     /**
-     * Retorna uma instancia da classe insert
-     *
-     * @param array $fields
-     * @return Insert
+     * Retorna uma instancia da classe insert.
      */
     public function insert(array $fields) : Insert
     {
@@ -79,9 +70,7 @@ abstract class Expression
     }
 
     /**
-     * Retorna uma instancia da classe Delete
-     *
-     * @return Delete
+     * Retorna uma instancia da classe Delete.
      */
     public function delete() : Delete
     {
@@ -89,9 +78,7 @@ abstract class Expression
     }
 
     /**
-     * Retorna uma instancia da classe Update
-     *
-     * @return Update
+     * Retorna uma instancia da classe Update.
      */
     public function update(array $fields) : Update
     {

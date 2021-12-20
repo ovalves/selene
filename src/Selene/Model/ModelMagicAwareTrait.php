@@ -11,14 +11,14 @@ namespace Selene\Model;
 trait ModelMagicAwareTrait
 {
     /**
-     * array contendo os dados do objeto
+     * array contendo os dados do objeto.
      *
      * @var array
      */
     protected $data;
 
     /**
-     * Seta um valor para um propriedade da model
+     * Seta um valor para um propriedade da model.
      *
      * @return mixed
      */
@@ -33,7 +33,7 @@ trait ModelMagicAwareTrait
     }
 
     /**
-     * Retorna uma propriedade da objeto da model
+     * Retorna uma propriedade da objeto da model.
      *
      * @return mixed
      */
@@ -50,9 +50,7 @@ trait ModelMagicAwareTrait
     }
 
     /**
-     * Verifica se a propriedade existe no objeto
-     *
-     * @return bool
+     * Verifica se a propriedade existe no objeto.
      */
     protected function __isset($prop) : bool
     {
@@ -60,11 +58,9 @@ trait ModelMagicAwareTrait
     }
 
     /**
-     * Parseia o método mágico requerido pela model
+     * Parseia o método mágico requerido pela model.
      *
-     * @param string $type
      * @param string $value
-     * @return string
      */
     protected function parseMagicMethodName(string $type, string $prop) : string
     {
@@ -72,22 +68,22 @@ trait ModelMagicAwareTrait
     }
 
     /**
-     * Altera uma propriedade do objeto
+     * Altera uma propriedade do objeto.
      *
      * @param mixed $prop
      * @param mixed $value
-     *
-     * @return bool
      */
     protected function changeProperty($prop, $value) : bool
     {
         if (\is_null($value)) {
             unset($this->data[$prop]);
+
             return false;
         }
 
         $this->data[$prop] = $value;
         $this->$prop       = $value;
+
         return true;
     }
 }

@@ -1,70 +1,93 @@
-## About Selene Microframework
+## Selene Framework
 
-Selene is a PHP micro-framework that helps you quickly write simple web applications.
+O Selene é uma micro-framework PHP.
 
-Selene attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+Selene foi desenvolvido para tornar mais simples as tarefas comuns utilizadas na maioria dos projetos da web, selene possui:
 
-- Routing engine
-- Dependency injection container
-- Session Manager
-- Database ORM
-- Template Engine
-- Middleware engine
+- Sistema de MVC
+- Sistema de roteamento
+- Sistema de injeção de dependência
+- Gerenciamento de sessão
+- Autenticação de usuário
+- Query Builder para banco de dados Mysql e MongoDB.
+- Sistema de template engine
+- Sistema de Middleware
+- Sistema de redirecionamento de usuário
+- Gerenciamento do sistema de arquivos
+- Gerenciamento de Logs
 
-## Installation
+## Instalação
 
-It's recommended that you use [Composer](https://getcomposer.org/) to install Selene.
+É recomendável que você use [Composer](https://getcomposer.org/) para instalar selene.
 
 ```bash
-$ composer require vindite/selene "dev-master@dev"
+$ composer require ovalves/selene "dev-master@dev"
 ```
 
-This will install Selene and all required dependencies. Selene requires PHP 7.2 or newer.
+Isso instalará Selene e todas as suas dependências. Selene requer PHP 8.0 ou superior.
 
-## Usage
+## Uso básico
 
-Create an index.php file with the following contents:
+Crie um arquivo index.php com o seguinte conteúdo:
 
 ```php
 <?php
 
 require 'vendor/autoload.php';
 
-// Loading your application folders
-$loader = new Selene\Loader\AppLoader;
-$loader->addDirectory('App/Controllers');
-$loader->addDirectory('App/Models');
-$loader->addDirectory('App/Gateway');
-$loader->addDirectory('App/Config');
-$loader->load();
+/*
+|--------------------------------------------------------------------------
+| Obtendo uma instância de Selene Framework
+|--------------------------------------------------------------------------
+|
+| '/var/www/html/app/' é o mapeamento da raiz da nossa aplicação
+*/
+$app = Selene\App\Factory::create('/var/www/html/app/');
 
-// Getting an instance of Selene framework
-$app = Selene\App::getInstance();
+/*
+|--------------------------------------------------------------------------
+| Usando o roteador para registrar as rotas da sua aplicação
+|--------------------------------------------------------------------------
+| No caso abaixo, estamos criando um grupo nomeado 'auth'
+|
+| A criação de grupo de rotas serve para facilitar a utilização dos middlewares
+*/
+$app->route()->group('auth', function () use ($app) {
 
-// Using the router to register your application routes
-// In this case we are using the authentication middleware
-$app->route()->middleware([
-    new Selene\Middleware\Handler\Auth
-])->group(function () use ($app) {
+    /*
+    |--------------------------------------------------------------------------
+    | Neste caso, estamos adicionando o middleware de autentição
+    |--------------------------------------------------------------------------
+    | Esse middleware será executado em todas as rotas que pertencerem a esse grupo
+    */
+    $app->route()->middleware([new Selene\Middleware\Handler\Auth]);
 
-    // This route responds as callback function
+    /*
+    |--------------------------------------------------------------------------
+    | Esta rota responde como um callable
+    |--------------------------------------------------------------------------
+    */
     $app->route()->get('/callable', function () use ($app) {
         $app->json('Hello World!!!');
     });
 
-    // Mapping requested http method with request http path
+    /*
+    |--------------------------------------------------------------------------
+    | Mapeamento de método HTTP da request com a solicitação HTTP do cliente
+    |--------------------------------------------------------------------------
+    */
     $app->route()->get('/', 'HomeController@index');
     $app->route()->get('/show/{id}', 'HomeController@show');
-    $app->route()->get('/store', 'HomeController@store');
-    $app->route()->get('/login', 'HomeController@login');
-    $app->route()->post('/login', 'HomeController@login');
-    $app->route()->get('/logout', 'HomeController@logout');
+    $app->route()->update('/show/{id}', 'HomeController@show');
+    $app->route()->delete('/show/{id}', 'HomeController@show');
+    $app->route()->post('/show', 'HomeController@login');
 })->run();
 ```
-## Examples
 
-Please see https://github.com/vindite/selene-skeleton for more examples.
+## Exemplos
 
-## License
+Para mais exemplos, acesse https://github.com/ovalves/selene-skeleton.
 
-The Selene Microframework is licensed under the MIT license. See [License File](LICENSE) for more information.
+## Licença
+
+O Selene framework é usa a licença MIT license. Veja [License File](LICENSE) para maiores informações.

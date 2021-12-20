@@ -8,15 +8,10 @@
 
 namespace Selene\Console;
 
-use Selene\Console\Commands;
-use Selene\Console\Generators;
-
 class Solvr
 {
     /**
-     * Constructor
-     *
-     * @param string $rootPath
+     * Constructor.
      */
     public function __construct(string $rootPath)
     {
@@ -24,27 +19,25 @@ class Solvr
     }
 
     /**
-     * Define console commands
+     * Define console commands.
      *
      * @var array
      */
     protected $commands = [
         'controllerCommand' => [
-            Commands\controllerCommand::class => Generators\ControllerGenerator::class
-        ]
+            Commands\controllerCommand::class => Generators\ControllerGenerator::class,
+        ],
     ];
 
     /**
-     * Define instantiaded console commands
+     * Define instantiaded console commands.
      *
      * @var array
      */
     protected $instantiateCommands = [];
 
     /**
-     * instantiate console comands and generator commands
-     *
-     * @return array
+     * instantiate console comands and generator commands.
      */
     public function getSolvrCommands() : array
     {

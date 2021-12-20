@@ -10,10 +10,12 @@ namespace Selene;
 
 use Psr\Container\ContainerInterface;
 use Selene\Auth\Auth;
+use Selene\Config\ConfigConstant;
 use Selene\Container\Container;
 use Selene\Container\ServiceContainer;
 use Selene\Loader\AppLoader;
 use Selene\Middleware\Middleware;
+use Selene\Redirect\Redirect;
 use Selene\Render\View;
 use Selene\Request\Request;
 use Selene\Routes\Route;
@@ -98,6 +100,14 @@ final class App
     }
 
     /**
+     * Retorna o objeto de redirect.
+     */
+    public function redirect(): Redirect
+    {
+        return $this->container->get(ServiceContainer::REDIRECT);
+    }
+
+    /**
      * Retorna o objeto de autenticação.
      *
      * @return Selene\Auth\Auth
@@ -137,16 +147,19 @@ final class App
     private function make(): void
     {
         if (is_null($this->container)) {
-            throw new \Exception('Uma instância do ContainerInterface é requerida');
+            throw new Exception('Uma instância do ContainerInterface é requerida');
         }
 
         $this->init();
+        $this->makeRequest();
         $this->makeMiddleware();
         $this->makeRouter();
         $this->makeSession();
+        $this->makeRedirect();
         $this->makeAuth();
         $this->makeView();
         $this->makeErrorhandler();
+        $this->injectAppRootPathOnView();
         $this->injectViewOnRouterDispatcher();
     }
 
@@ -165,6 +178,22 @@ final class App
 
         $this->container->setPrefix(ServiceContainer::APPLICATION_CONFIG)->set(
             \Selene\Config\ApplicationConfig::class
+        );
+    }
+
+    /**
+     * Criando o container da request e suas dependencias.
+     */
+    private function makeRequest(): void
+    {
+        $this->container->setPrefix(ServiceContainer::REQUEST)->set(
+            \Selene\Request\Request::class,
+            [
+                $_GET,
+                $_POST,
+                $_REQUEST,
+                $_SERVER,
+            ]
         );
     }
 
@@ -200,6 +229,7 @@ final class App
         $this->container->setPrefix(ServiceContainer::ROUTE)->set(
             \Selene\Routes\Route::class,
             [
+                $this->container->get(ServiceContainer::REQUEST),
                 $this->container->get(ServiceContainer::MIDDLEWARE),
             ]
         );
@@ -222,9 +252,26 @@ final class App
     {
         $config = $this->container()->get(ServiceContainer::APPLICATION_CONFIG);
 
-        if ($config->getConfig('ENABLE_SESSION_CONTAINER')) {
+        if ($config->getConfig(ConfigConstant::ENABLE_SESSION_CONTAINER)) {
             $this->container->setPrefix(ServiceContainer::SESSION)->set(
                 \Selene\Session\Session::class
+            );
+        }
+    }
+
+    /**
+     * Criando o objeto de redirect e suas dependencias.
+     */
+    private function makeRedirect(): void
+    {
+        $config = $this->container()->get(ServiceContainer::APPLICATION_CONFIG);
+
+        if ($config->getConfig(ConfigConstant::ENABLE_SESSION_CONTAINER)) {
+            $this->container->setPrefix(ServiceContainer::REDIRECT)->set(
+                \Selene\Redirect\Redirect::class,
+                [
+                    $this->container->get(ServiceContainer::SESSION),
+                ]
             );
         }
     }
@@ -238,7 +285,7 @@ final class App
     {
         $config = $this->container()->get(ServiceContainer::APPLICATION_CONFIG);
 
-        if ($config->getConfig('ENABLE_AUTH_CONTAINER')) {
+        if ($config->getConfig(ConfigConstant::ENABLE_AUTH_CONTAINER)) {
             $this->container->setPrefix(ServiceContainer::AUTH)->set(
                 \Selene\Auth\Auth::class,
                 [
@@ -256,6 +303,16 @@ final class App
         $whoops = new \Whoops\Run();
         $whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler());
         $whoops->register();
+    }
+
+    /**
+     * Seta o path root da aplicação.
+     */
+    private function injectAppRootPathOnView(): void
+    {
+        $request = $this->container->get(ServiceContainer::REQUEST);
+        $view = $this->container->get(ServiceContainer::VIEW);
+        $view->setRootPath($request->getDocumentRoot());
     }
 
     /**

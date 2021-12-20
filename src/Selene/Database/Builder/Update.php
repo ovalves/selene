@@ -8,26 +8,23 @@
 
 namespace Selene\Database\Builder;
 
+use PDOStatement;
 use Selene\Database\DatabaseConstant;
 use Selene\Database\Grammar\GrammarAbstract;
-use Selene\Database\Grammar\GrammarException;
 use Selene\Database\Grammar\GrammarAwareTrait;
-use Selene\Database\Builder\Where;
-use Selene\Database\Builder\Join;
-use PDOStatement;
+use Selene\Database\Grammar\GrammarException;
 
 /**
- * Responsavel por executar os statement de select
+ * Responsavel por executar os statement de select.
  */
 final class Update extends GrammarAbstract
 {
     use GrammarAwareTrait;
 
     /**
-     * Executa a query
+     * Executa a query.
      *
      * @param array $whereClause
-     * @return PDOStatement
      */
     public function execute() : PDOStatement
     {
@@ -46,33 +43,31 @@ final class Update extends GrammarAbstract
                 '__TABLENAME__',
                 '__JOIN__',
                 '__FIELDS__',
-                '__WHERE__'
+                '__WHERE__',
             ],
             [
                 $this->table,
                 $join->getParsedString(),
                 $this->makeSetClause(),
-                $where->getParsedString()
+                $where->getParsedString(),
             ],
             $this->grammar[DatabaseConstant::UPDATE]
         );
 
         if (empty($stringSql)) {
-            throw new GrammarException("Erro ao parser os dados da query");
+            throw new GrammarException('Erro ao parser os dados da query');
         }
 
         $stmt = $this->transaction->open()->prepare($stringSql);
         if (!$stmt->execute($bindParams)) {
-            throw new GrammarException("Erro ao executar o statement");
+            throw new GrammarException('Erro ao executar o statement');
         }
 
         return $stmt;
     }
 
     /**
-     * Cria a clausula do set usada no update
-     *
-     * @return string
+     * Cria a clausula do set usada no update.
      */
     private function makeSetClause() : string
     {
@@ -82,7 +77,7 @@ final class Update extends GrammarAbstract
         foreach ($setClauses as $key => $value) {
             $setString .= "{$key} = {$value}";
             if (next($setClauses)) {
-                $setString .= ", ";
+                $setString .= ', ';
             }
         }
 
@@ -90,9 +85,7 @@ final class Update extends GrammarAbstract
     }
 
     /**
-     * Retorna o arrau com os dados do combine entre os valores e o bind do update
-     *
-     * @return array
+     * Retorna o arrau com os dados do combine entre os valores e o bind do update.
      */
     private function getBindUpdateValues() : array
     {

@@ -8,6 +8,11 @@
 
 namespace Selene\Filesystem;
 
-class FileNotFoundException extends \Exception
+use Exception;
+
+/**
+ * Exception das views.
+ */
+class FileNotFoundException extends Exception
 {
 }

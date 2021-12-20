@@ -9,7 +9,7 @@
 namespace Selene\Config;
 
 /**
- * Interface para gerenciamento dos arquivos de configuração do framework
+ * Interface para gerenciamento dos arquivos de configuração do framework.
  */
 interface ConfigInterface
 {

@@ -9,12 +9,12 @@
 namespace  Selene\Auth;
 
 /**
- * Define as constantes usadas na auth
+ * Define as constantes usadas na auth.
  */
 class AuthConstant
 {
     /**
-     * Define o nome da tabela de auth
+     * Define o nome da tabela de auth.
      */
-    const AUTH_TABLE = 'auth_table';
+    public const AUTH_TABLE = 'auth_table';
 }

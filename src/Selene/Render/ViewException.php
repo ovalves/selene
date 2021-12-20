@@ -8,6 +8,11 @@
 
 namespace Selene\Render;
 
-class ViewException extends \Exception
+use Exception;
+
+/**
+ * Exception das views.
+ */
+class ViewException extends Exception
 {
 }

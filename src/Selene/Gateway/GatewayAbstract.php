@@ -13,17 +13,16 @@ use Selene\Database\Builder\Expression;
 
 abstract class GatewayAbstract extends Expression
 {
+    use GatewayDatabaseConnectorAwareTrait {
+        GatewayDatabaseConnectorAwareTrait::__construct as private gatewayDatabaseConnector;
+    }
     /**
      * @var ContainerInterface
      */
     protected $container;
 
-    use GatewayDatabaseConnectorAwareTrait {
-        GatewayDatabaseConnectorAwareTrait::__construct as private gatewayDatabaseConnector;
-    }
-
     /**
-     * Constructor
+     * Constructor.
      */
     final public function __construct(ContainerInterface $container)
     {
